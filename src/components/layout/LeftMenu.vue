@@ -9,15 +9,21 @@
       :collapse="$store.state.foldMenu">
         <el-menu-item index="1">
           <i class="el-icon-menu"></i>
-          <span slot="title">首页</span>
+          <span slot="title">
+            <router-link to="/">首页</router-link>
+          </span>
         </el-menu-item>
         <el-menu-item index="2">
           <i class="el-icon-menu"></i>
-          <span slot="title">组件</span>
+          <span slot="title">
+            <router-link to="components">组件</router-link>
+          </span>
         </el-menu-item>
         <el-menu-item index="3">
           <i class="el-icon-document"></i>
-          <span slot="title">Table</span>
+          <span slot="title">
+            <router-link to="components">组件</router-link>
+          </span>
         </el-menu-item>
         <el-menu-item index="4">
           <i class="el-icon-setting"></i>

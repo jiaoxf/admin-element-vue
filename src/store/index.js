@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    foldMenu: false
+    foldMenu: false,
+    permissionsShow: true
   },
   mutations: {
     flodMenu(state) {
       state.foldMenu = !state.foldMenu;
+    },
+    choosePermissions(state) {
+      state.permissionsShow = false;
     }
   },
   actions: {

@@ -5,9 +5,11 @@
       <left-menu />
       <el-container>
         <el-main>
-          <router-view />
+          <div class="main-content">
+            <router-view />
+          </div>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <!-- <el-footer>Footer</el-footer> -->
       </el-container>
     </el-container>
   </div>
@@ -45,6 +47,12 @@ export default {
     color: #333;
     text-align: center;
     line-height: 160px;
+    .main-content{
+      padding: 20px;
+      background: #fff;
+      border-radius: 6px;
+      min-height: calc(100vh - 100px);
+    }
   }
   
   body > .el-container {
