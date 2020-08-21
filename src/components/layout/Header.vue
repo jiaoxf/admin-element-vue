@@ -2,7 +2,7 @@
   <div class='header'>
     <el-header>
       <div class="header-title">
-        思源科技
+        XX科技
       </div>
       <div class="unfold" >
         <i class="unfold-icon" :class="[ $store.state.foldMenu ? 'el-icon-s-unfold': 'el-icon-s-fold']" @click="flagFold"></i>
