@@ -1,8 +1,9 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
 html,
 body,
 div,
@@ -67,4 +68,11 @@ a {
     text-decoration: none;
 }
 
-
+.element-container{
+  padding: 20px;
+  .content-box{
+    display: flex;
+    flex-wrap: wrap;
+    margin:10px 0;
+  }
+}

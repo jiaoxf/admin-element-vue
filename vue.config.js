@@ -1,5 +1,16 @@
+const WebpackBar = require('webpackbar');
 module.exports = {
   publicPath: '/',
+  configureWebpack() {
+    return {
+      plugins: [
+        new WebpackBar({
+          color: "#f90",
+          name:"vue-admin-element"
+        }),
+      ],
+    };
+  },
   devServer: {
     // https: true, // https
     open: true,

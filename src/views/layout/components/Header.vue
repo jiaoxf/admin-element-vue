@@ -1,9 +1,6 @@
 <template>
   <div class='header'>
     <el-header>
-      <div class="header-title">
-        XX科技
-      </div>
       <div class="unfold" >
         <i class="unfold-icon" :class="[ $store.state.foldMenu ? 'el-icon-s-unfold': 'el-icon-s-fold']" @click="flagFold"></i>
       </div>
@@ -12,9 +9,9 @@
       class="el-menu-demo" 
       mode="horizontal" 
       @select="handleSelect" 
-      background-color="#0060af" 
-      text-color="#fff" 
-      active-text-color="#fff"
+      background-color="#fff" 
+      text-color="#3D80FF" 
+      active-text-color="#3D80FF"
       >
         <el-menu-item index="1">处理中心</el-menu-item>
         <el-submenu index="2">
@@ -82,21 +79,15 @@ export default {
   padding:0;
 }
 .header{
-  background: #0060af;
-  .header-title{
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-    width: $aside-width;
-    line-height: 60px;
-  }
+  background: #fff;
+  
   .unfold{
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 20px;
     .unfold-icon{
-      color: #fff;
+      /* color: #fff; */
       font-size: 1.5em;
       cursor: pointer;
     }

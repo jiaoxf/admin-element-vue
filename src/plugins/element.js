@@ -10,7 +10,7 @@ import './../scss/element-variables.scss'
 Vue.use(
   ElementUI, 
   { 
-    size: 'small',
+    // size: 'small',
     zIndex: 3000,
     locale
   }

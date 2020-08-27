@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <Header/>
     <el-container>
       <left-menu />
       <el-container>
         <el-main>
+          <Header/>
           <div class="main-content">
             <router-view />
           </div>
@@ -17,10 +17,10 @@
 
 <script>
 
-import LeftMenu from '@/components/layout/LeftMenu'
-import Header from '@/components/layout/Header.vue'
+import LeftMenu from '@/views/layout/components/LeftMenu'
+import Header from '@/views/layout/components/Header'
 export default {
-  name: "Home",
+  name: "Layout",
   components: {
     LeftMenu,
     Header
@@ -46,9 +46,10 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /* line-height: 160px; */
+    padding: 0;
     .main-content{
-      padding: 20px;
+      margin:20px;
       background: #fff;
       border-radius: 6px;
       min-height: calc(100vh - 100px);
