@@ -54,9 +54,17 @@ const routes = [
       {
         path: 'Table',
         name: 'Table',
-        component: () => import ('@/views/Components/table'),
+        component: () => import ('@/views/Components/Table'),
         meta: {
           title: '表格'
+        }
+      },
+      {
+        path: 'Form',
+        name: 'Form',
+        component: () => import('@/views/Components/Form'),
+        meta: {
+          title: '表单'
         }
       }
     ],
