@@ -52,7 +52,7 @@ const routes = [
         },
       },
       {
-        path: 'Table',
+        path: 'table',
         name: 'Table',
         component: () => import ('@/views/Components/Table'),
         meta: {
@@ -60,11 +60,20 @@ const routes = [
         }
       },
       {
-        path: 'Form',
+        path: 'form',
         name: 'Form',
         component: () => import('@/views/Components/Form'),
         meta: {
           title: '表单'
+        }
+      }, 
+      {
+        path: 'dialog',
+        name: 'Dialog',
+        component: () =>
+          import ('@/views/Components/Dialog'),
+        meta: {
+          title: '弹框'
         }
       }
     ],

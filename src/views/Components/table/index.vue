@@ -23,7 +23,6 @@
             文档
           </a>
         </el-divider>
-        
         <!-- 常用表格 -->
         <common-table
           :isLoading="isLoading"

@@ -97,7 +97,7 @@
               <img width="100%" :src="ruleForm.dialogImageUrl" alt="">
             </el-dialog>
           </el-form-item>
-          <el-form-item label="嘉宾" required>
+          <el-form-item label="嘉宾" required class="form-item-style">
             <el-row :gutter="10">
               <el-col :span="10">
                 <el-form-item
@@ -124,20 +124,18 @@
                   }"
                 >
                   <el-row :gutter="10">
-                    <el-col :span="20">
+                    <el-col :span="18">
                       <el-input v-model="domain.value1"></el-input>
-                      
                     </el-col>
-                    <el-col :span="4">
-                        <el-button @click.prevent="removeDomain(domain)">删除</el-button>
+                    <el-col :span="6" class="flex">
+                        <el-button type="primary" icon="el-icon-plus" @click="addDomain" circle></el-button>
+                        <el-button v-show="index != 0 " type="danger" icon="el-icon-delete" @click.prevent="removeDomain(domain)" circle></el-button>
                     </el-col>
                   </el-row>
-                  
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form-item>
-          <el-button @click="addDomain">新增域名</el-button>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -235,7 +233,8 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.ruleForm.file = "";
-      this.$refs.upload.clearFiles();
+      console.log(this.$refs)
+      this.$refs.uploadElement.clearFiles();
     },
     handleRemove(file) {
       console.log(file);
@@ -287,6 +286,11 @@ export default {
   ::v-deep.el-upload-list--picture-card .el-upload-list__item{
     width: 120px;
     height: 120px;
+  }
+  .form-item-style{
+    .el-form-item{
+      margin-bottom: 20px;
+    }
   }
 }
 
