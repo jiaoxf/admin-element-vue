@@ -75,6 +75,15 @@ const routes = [
         meta: {
           title: '弹框'
         }
+      }, 
+      {
+        path: 'steps',
+        name: 'Steps',
+        component: () =>
+          import ('@/views/Components/Steps'),
+        meta: {
+          title: '步骤条'
+        }
       }
     ],
   },

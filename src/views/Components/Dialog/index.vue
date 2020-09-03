@@ -52,6 +52,18 @@
           </el-divider>
           <message-prompt />
         </div>
+        <div class="content-box">
+          <el-divider content-position="left">
+            消息通知
+            <a
+              target="_blank"
+              href="https://element.eleme.cn/#/zh-CN/component/notification"
+            >
+              文档
+            </a>
+          </el-divider>
+          <message-prompt />
+        </div>
       </el-col>
     </el-row>
   </div>

@@ -1,30 +1,12 @@
 <template>
   <div class='index-content'>
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
-        <div class="first-box">
-          销售额
-          22222
+      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" v-for="i in 4" :key="i" class="card-box">
+        <div class="card-item">
+          {{ i }}
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
-        <div class="second-box">
-          销售额
-          22222
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
-        <div class="three-box">
-          销售额
-          22222
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
-        <div class="four-box">
-          销售额
-          22222
-        </div>
-      </el-col>
+      
     </el-row>
     <el-row :gutter="20">
       <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
@@ -79,31 +61,37 @@ export default {
 .index-content{
   padding: 0;
   margin: 0;
-  .first-box, .second-box, .three-box, .four-box{
+  .card-box{
     border-radius: 10px;
     margin: 10px 0;
     height: 160px;
-  }
-  .first-box{
-    background: #659999;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #f4791f, #659999);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #f4791f, #659999); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  }
-  .second-box{
-    background: #56CCF2;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    &:nth-child(1){
+      background: #659999; 
+      background: -webkit-linear-gradient(to right, #f4791f, #659999); 
+      background: linear-gradient(to right, #f4791f, #659999); 
+    }
+    &:nth-child(2){
+      background: #56CCF2;  
+      background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  
+      background: linear-gradient(to right, #2F80ED, #56CCF2); 
+    }
+    &:nth-child(3){
+      background: #BE93C5;  
+      background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);  
+      background: linear-gradient(to right, #7BC6CC, #BE93C5);  
+    }
+    &:nth-child(4){
+      background: #ff4b1f;  
+      background: -webkit-linear-gradient(to right, #ff9068, #ff4b1f);  
+      background: linear-gradient(to right, #ff9068, #ff4b1f); 
+    }
   }
   .three-box{
-    background: #BE93C5;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #7BC6CC, #BE93C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
 
   }
   .four-box{
-    background: #ff4b1f;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ff9068, #ff4b1f);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #ff9068, #ff4b1f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
   }
   .el-carousel__item{
     border-radius: 10px;

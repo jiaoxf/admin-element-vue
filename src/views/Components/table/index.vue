@@ -2,13 +2,6 @@
   <div class="element-container">
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="component-content">
-        <el-input
-          v-model.number='count'
-          onkeyup="this.value=this.value.replace(/[^\d]/g,'');"
-          type='text'
-          maxlength="4"
-          @blur="aaa"
-          />
         <el-alert
           title="复杂table表格暂时不开放"
           type="warning"
@@ -42,8 +35,6 @@
             文档
           </a>
         </el-divider>
-
-
     <!-- <complex-table
       :data="data"
       :option="option"
@@ -71,6 +62,7 @@ export default {
   },
   data() {
     return {
+      input:'',
       count:0,
       isLoading: true,
       tableData:[

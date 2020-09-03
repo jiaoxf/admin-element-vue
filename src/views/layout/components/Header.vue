@@ -77,6 +77,11 @@ export default {
 ::v-deep.el-header{
   display: flex;
   padding:0;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  background: #fff;
+  z-index: 999;
 }
 .header{
   background: #fff;

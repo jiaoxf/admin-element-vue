@@ -2,9 +2,9 @@
   <div class="home">
     <el-container>
       <left-menu />
+      <Header/>
       <el-container>
         <el-main>
-          <Header/>
           <div class="main-content">
             <router-view />
           </div>
@@ -40,14 +40,25 @@ export default {
     color: #333;
     text-align: center;
     line-height: 200px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 60px;
+    bottom: 0;
   }
   
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
+    /* text-align: center; */
     /* line-height: 160px; */
     padding: 0;
+    position: absolute;
+    left: 230px;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    overflow-y: scroll;
     .main-content{
       margin:20px;
       background: #fff;
