@@ -20,11 +20,11 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://login-test.ciftis.org.cn',
-        // secure: false,  // https接口，配置参数
-        // changeOrigin: true,  //是否跨域
-        // pathRewrite:{
-            // '^/api2/':'/'
-        // }
+        secure: false,  // https接口，配置参数
+        changeOrigin: true,  //是否跨域
+        pathRewrite:{
+            '^/api2/':'/'
+        }
       }
     },
     historyApiFallback: true

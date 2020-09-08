@@ -114,7 +114,7 @@
   </div>
 </template>
 <script>
-import elIcon from '@/components/component/ELIcon'
+import ElIcon from '@/components/component/ElIcon'
 import IconFont from '@/components/component/IconFont'
 export default {
   name: 'name',
@@ -122,7 +122,7 @@ export default {
 
   },
   components: {
-    elIcon,
+    ElIcon,
     IconFont
   },
   data() {

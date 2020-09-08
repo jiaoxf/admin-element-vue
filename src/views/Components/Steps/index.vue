@@ -103,7 +103,6 @@ export default {
   watch: {},
   methods: {
     last() {
-      if (this.active-- < 0) this.active = 1;
       switch (this.active) {
         case 1:
           this.currentTab = 'First'
@@ -117,6 +116,7 @@ export default {
         default:
           break;
       }
+      if (this.active-- < 0) this.active = 1;
       
     },
     next() {
@@ -128,22 +128,8 @@ export default {
         flag = this.$refs[this.currentTabComponent].validateForm()
       }
       if(flag){
-        switch (this.active) {
-          case 0:
-            this.currentTab = 'First'
-            break;
-          case 1:
-            this.currentTab = 'Second'
-            break;
-          case 2:
-            this.currentTab = 'Third'
-            break;
-          default:
-            break;
-        }
         
       } */
-      if (this.active++ > 2) this.active = 1;
       switch (this.active) {
         case 1:
           this.currentTab = 'First'
@@ -157,6 +143,7 @@ export default {
         default:
           break;
       }
+      if (this.active++ > 2) this.active = 1;
     },
     submit() {
       this.$confirm('保存数据, 是否继续?', '提示', {
