@@ -81,6 +81,12 @@ export default {
     MessagePrompt
   },
   data() {
+    var checkAge = (rule, value, callback) => {
+      console.log(value)
+      if (!value) {
+        return callback(new Error('年龄不能为空'));
+      }
+    };
     return {
       dialogFormVisible: false,  
       formEditType:'edit',
@@ -103,6 +109,9 @@ export default {
         ],
         phoneNumber: [
           { required: true, message: "请输入用户手机号", trigger: "blur" }
+        ],
+        ageNum: [
+          { validator: checkAge, trigger: 'blur', required: true }
         ]
       },
       formData: {
@@ -112,7 +121,8 @@ export default {
         userPermissions: "",
         userGroup: "",
         phoneNumber: "",
-        description: ""
+        description: "",
+        ageNum:"",
       },
       formLabel: [
         {
@@ -159,6 +169,13 @@ export default {
           type: "Input",
           label: "用户手机号",
           prop: "phoneNumber",
+          width: "120px",
+          isFormItemShow: true
+        },
+        {
+          type: "Input",
+          label: "年龄",
+          prop: "ageNum",
           width: "120px",
           isFormItemShow: true
         },
@@ -225,11 +242,17 @@ export default {
     },
     validateTrue(data) {
       if (this.formEditType === "add") {
-        console.log(data)
+        this.$message({
+          message: '这是表单提交的数据' + JSON.stringify(data),
+          type: 'success'
+        });
         this.addInfo(data)
       } else if (this.formEditType === "edit") {
+        this.$message({
+          message: '这是表单提交的数据' + JSON.stringify(data),
+          type: 'success'
+        });
         this.editInfo(data)
-        console.log(data)
       }
       this.dialogFormVisible = false;
     },
