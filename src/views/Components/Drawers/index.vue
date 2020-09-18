@@ -5,98 +5,44 @@
       <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="16" class="component-content">
         <div class="content-box">
           <el-divider content-position="left">
-            常用对话框
+            表单抽屉
             <a
               target="_blank"
-              href="https://element.eleme.cn/#/zh-CN/component/dialog"
+              href="https://element.eleme.cn/#/zh-CN/component/drawer"
             >
               文档
             </a>
           </el-divider>
-          <el-button type="primary" @click="openDialog('add')">新增</el-button>
-          <el-button type="primary" @click="openDialog('edit')">编辑</el-button>
-          <form-dialog
-            ref="dialog"
+          <el-button type="text" @click="openDrawer('add')">新增嵌套 Form 的 Drawer</el-button>
+          <el-button type="text" @click="openDrawer('edit')">编辑嵌套 Form 的 Drawer</el-button>
+          <form-drawer
+            ref="drawer"
             :rules="rules"
-            :dialogFormVisible="dialogFormVisible"
+            :drawerFormVisible="drawerFormVisible"
             :formEditType="formEditType"
-            :formWidth="formWidth"
             :searchData="formData"
             :formLabel="formLabel"
             @validateTrue="validateTrue"
             @validateFalse="validateFalse"
-            @closeDialogFunc="closeDialog"
-          ></form-dialog>
-        </div>
-        <div class="content-box">
-          <el-divider content-position="left">
-            Message 弹框
-            <a
-              target="_blank"
-              href="https://element.eleme.cn/#/zh-CN/component/message-box"
-            >
-              文档
-            </a>
-          </el-divider>
-          <el-button type="primary" @click="openMessage()">常用</el-button>
-        </div>
-        <div class="content-box">
-          <el-divider content-position="left">
-            消息提示
-            <a
-              target="_blank"
-              href="https://element.eleme.cn/#/zh-CN/component/message"
-            >
-              文档
-            </a>
-          </el-divider>
-          <message-prompt />
-        </div>
-        <div class="content-box">
-          <el-divider content-position="left">
-            消息通知
-            <a
-              target="_blank"
-              href="https://element.eleme.cn/#/zh-CN/component/notification"
-            >
-              文档
-            </a>
-          </el-divider>
-          <message-prompt />
-        </div>
-        <div class="content-box">
-          <el-divider content-position="left">
-            弹出框
-            <a
-              target="_blank"
-              href="https://element.eleme.cn/#/zh-CN/component/popover"
-            >
-              文档
-            </a>
-          </el-divider>
-          <popover-prompt />
+            @closeDrawerFunc="closeDrawer"
+          ></form-drawer>
         </div>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import FormDialog from './Dialog'
-import MessagePrompt from './Message'
-import PopoverPrompt from './Popover'
+import FormDrawer from './FormDrawer'
 export default {
   name: 'name',
   props: {
     
   },
   components: {
-    FormDialog,
-    MessagePrompt,
-    PopoverPrompt
+    FormDrawer
   },
   data() {
     var checkAge = (rule, value, callback) => {
-      console.log(value)
       if (!value) {
         return callback(new Error('年龄不能为空'));
       }else {
@@ -104,7 +50,7 @@ export default {
       }
     };
     return {
-      dialogFormVisible: false,  
+      drawerFormVisible: false,  
       formEditType:'edit',
       formWidth: 'line', // line: 竖排布局    不传参则是并列排版
       rules: {
@@ -227,15 +173,13 @@ export default {
   },
   mounted() {
     this.selectVal()
-    console.log(this.$refs.dialog)
-    console.log(this.$children)
   },
   computed: {},
   watch: {},
   methods: {
-    openDialog(text){
+    openDrawer(text){
       this.formEditType = text;
-      this.dialogFormVisible = true;
+      this.drawerFormVisible = true;
     },
     selectVal(row){
       console.log(row)
@@ -270,7 +214,7 @@ export default {
         });
         this.editInfo(data)
       }
-      this.dialogFormVisible = false;
+      this.drawerFormVisible = false;
     },
     addInfo(infoData){
       console.log(infoData)
@@ -280,10 +224,10 @@ export default {
       console.log(infoData)
     },
     validateFalse() {
-      this.dialogFormVisible = true;
+      this.drawerFormVisible = true;
     },
-    closeDialog(newDialogFormVisible) {
-      this.dialogFormVisible = newDialogFormVisible;
+    closeDrawer(newdrawerFormVisible) {
+      this.drawerFormVisible = newdrawerFormVisible;
     },
     openMessage(){
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {

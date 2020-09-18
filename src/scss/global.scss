@@ -82,3 +82,21 @@ a {
 .el-message-box{
   border-radius: 12px;
 }
+:focus {
+  outline: 0;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.ml-10{
+  margin-left: 10px;
+}
+.mr-10{
+  margin-right: 10px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.el-drawer{
+  width: 460px!important;
+}

@@ -84,6 +84,15 @@ const routes = [
         meta: {
           title: '步骤条'
         }
+      }, 
+      {
+        path: 'drawers',
+        name: 'Drawers',
+        component: () =>
+          import ('@/views/Components/Drawers'),
+        meta: {
+          title: '抽屉'
+        }
       }
     ],
   },
