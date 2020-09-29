@@ -55,6 +55,21 @@
           <el-button type="primary" :loading="true">加载中</el-button>
           <el-button type="text">纯文本按钮</el-button>
           <el-button type="text" disabled>纯文本按钮</el-button>
+          <el-row>
+            <el-button round>默认按钮</el-button>
+            <el-button size="medium" round>中等按钮</el-button>
+            <el-button size="small" round>小型按钮</el-button>
+            <el-button size="mini" round>超小按钮</el-button>
+          </el-row>
+          <el-button-group>
+            <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+            <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          </el-button-group>
+          <el-button-group style="margin-left: 20px;">
+            <el-button type="primary" icon="el-icon-edit"></el-button>
+            <el-button type="primary" icon="el-icon-share"></el-button>
+            <el-button type="primary" icon="el-icon-delete"></el-button>
+          </el-button-group>
         </div>
         <div class="content-box">
           <el-divider content-position="left">
@@ -135,6 +150,12 @@ export default {
     .el-button,
     {
       margin: 5px;
+    }
+    .el-button-group{
+      margin:5px;
+      .el-button{
+        margin: 0;
+      }
     }
   }
 }

@@ -1,6 +1,5 @@
 <template>
   <div class="element-container">
-    
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="16" class="component-content">
         <div class="content-box">

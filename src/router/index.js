@@ -93,7 +93,47 @@ const routes = [
         meta: {
           title: '抽屉'
         }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () =>
+          import ('@/views/Components/Tree'),
+        meta: {
+          title: '树结构'
+        }
       }
+    ],
+  },
+  {
+    path: '/function',
+    component: Layout,
+    hidden: true,
+    redirect: '',
+    meta: {
+      title: '常用函数',
+      icon: 'el-icon-chat-line-square',
+      // permissions: ['admin']  // 权限
+    },
+    children: [
+      {
+        path: 'button',
+        name: 'Button',
+        component: () =>
+          import ('@/views/Components/Button'),
+        meta: {
+          title: '按钮',
+        },
+      },
+      {
+        path: 'button',
+        name: 'Button',
+        component: () =>
+          import ('@/views/Components/Button'),
+        meta: {
+          title: '按钮',
+        },
+      },
     ],
   },
 ]
