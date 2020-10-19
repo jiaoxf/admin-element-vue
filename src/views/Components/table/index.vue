@@ -112,6 +112,7 @@ export default {
           param: 'status', 
           align: 'center',
           render:  (row) => {
+            console.log(row)
             if (row.status === 0) {
               // return '<el-tag type="danger">未审核</el-tag>';
               return '未审核'
