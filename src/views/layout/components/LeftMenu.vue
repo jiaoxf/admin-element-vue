@@ -1,18 +1,21 @@
 <template>
   <div class='left-aside'>
     <el-aside width="100%" height="100%">
-      <div class="header-title">
-        <!-- <i class="el-icon-share"></i> -->
-        XX科技
-      </div>
+      
       <el-menu
-      class="el-menu-vertical-demo"
-      @open="handleOpen" 
-      background-color="#3D80FF"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      @close="handleClose" 
-      :collapse="$store.state.foldMenu">
+        class="el-menu-vertical-demo"
+        @open="handleOpen" 
+        background-color="#3D80FF"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        @close="handleClose" 
+        :collapse-transition="false"
+        :collapse="$store.state.foldMenu"
+      >
+        <div class="header-title">
+          <icon-font name="vue" style="padding:0" :iconStyle="{ width: '1.5rem', 'height': '1.5rem'}"/>
+          XX科技xxxxx
+        </div>
         <template v-for="item in $router.options.routes">
           <router-link v-if="item.children.length===1 && !item.children[0].children && !item.alwaysShow" :to="'/'+item.children[0].path" :key="item.children[0].name">
             <el-menu-item index="2">
@@ -41,6 +44,7 @@
 </template>
 <script>
 // import SideMenu from '@/views/layout/components/SideMenu'
+import IconFont from '@/components/component/IconFont'
 export default {
   name: 'name',
   props: {
@@ -48,6 +52,7 @@ export default {
   },
   components: {
     // SideMenu
+    IconFont
   },
   data() {
     return {
@@ -88,7 +93,7 @@ export default {
   text-align: left;
 }
 .el-menu--collapse{
-  width: 100%;
+  width: 64px;
   height:100vh;
 }
 .left-aside{
@@ -104,6 +109,8 @@ export default {
     line-height: 60px;
     height: 60px;
     overflow: hidden;
+    text-align: left;
+    padding: 0 20px;
   }
   .el-menu{
     border-right: none;

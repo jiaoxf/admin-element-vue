@@ -3,7 +3,7 @@
     <el-container>
       <left-menu />
       <Header/>
-      <el-container>
+      <el-container style="margin-top:60px">
         <el-main>
           <div class="main-content">
             <router-view />
@@ -53,10 +53,7 @@ export default {
     /* text-align: center; */
     /* line-height: 160px; */
     padding: 0;
-    position: absolute;
-    left: 230px;
-    right: 0;
-    top: 60px;
+    position: relative;
     bottom: 0;
     overflow-y: scroll;
     .main-content{
