@@ -96,23 +96,26 @@ export default {
   methods: {
     handleCheckChange(data, checked, indeterminate) {
       console.log(data, checked, indeterminate);
-      // if()
-      this.checkTree = data.label;
+      this.getCheckedNodes()
     },
     getCheckedNodes() {
-      console.log(this.$refs.tree.getCheckedNodes());
+      console.log(this.$refs.tree.getCheckedNodes()); 
+      this.checkTree = this.$refs.tree.getCheckedNodes();
     },
     getCheckedKeys() {
       console.log(this.$refs.tree.getCheckedKeys());
     },
     setCheckedNodes() {
-      this.$refs.tree.setCheckedNodes([{
-        id: 5,
-        label: '二级 2-1'
-      }, {
-        id: 9,
-        label: '三级 1-1-1'
-      }]);
+      this.$refs.tree.setCheckedNodes([
+        {
+          id: 5,
+          label: '二级 2-1'
+        }, 
+        {
+          id: 9,
+          label: '三级 1-1-1'
+        }
+      ]);
     },
     setCheckedKeys() {
       this.$refs.tree.setCheckedKeys([3]);
@@ -121,7 +124,6 @@ export default {
       this.$refs.tree.setCheckedKeys([]);
     }
   },
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang='scss' scoped>

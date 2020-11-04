@@ -102,6 +102,15 @@ const routes = [
         meta: {
           title: '树结构'
         }
+      },
+      {
+        path: 'richtext',
+        name: 'Richtext',
+        component: () =>
+          import ('@/views/Components/Richtext'),
+        meta: {
+          title: '富文本编辑器'
+        }
       }
     ],
   },

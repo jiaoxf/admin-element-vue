@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    第三部
+    第三步
   </div>
 </template>
 <script>

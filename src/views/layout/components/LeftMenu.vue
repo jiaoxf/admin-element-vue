@@ -125,5 +125,9 @@ export default {
       }
     }
   }
+  .el-menu-item.is-active {
+    border-left: 6px solid #ffd04b;
+    background: #6681FA!important;
+  }
 }
 </style>

@@ -50,14 +50,14 @@
                     @click="handleAdd(node, data)">
                   </el-button>
                   <!-- 编辑 -->
-                  <el-button icon="el-icon-edit" 
+                  <el-button v-if="data.id !== 0" icon="el-icon-edit" 
                     size="mini"
                     circle 
                     type="info"
                     @click="handleEdit(node, data)">
                   </el-button>
                   <!-- 删除 -->
-                  <el-button icon="el-icon-delete" 
+                  <el-button v-if="data.id !== 0" icon="el-icon-delete" 
                     size="mini"
                     circle 
                     type="danger"
@@ -223,14 +223,17 @@ export default {
       console.log('tree drop: ', dropNode.label, dropType);
     },
     allowDrop(draggingNode, dropNode, type) {
-      if (dropNode.data.label === '二级 3-1') {
-        return type !== 'inner';
-      } else {
+      console.log(dropNode, type)
+      if(dropNode.level == 0){
+        return false;
+      }else {
         return true;
       }
     },
     allowDrag(draggingNode) {
-      return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+      // 当拖拽节点为顶级节点不允许拖拽
+      // return draggingNode.data.label.indexOf('顶级') === -1;
+      return draggingNode.data.id !== 0;
     },
     handleDelete(_node, _data){// 删除节点
       console.log(_node, _data)
