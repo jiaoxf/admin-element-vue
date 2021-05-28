@@ -9,10 +9,9 @@ import locale from 'element-ui/lib/locale/lang/zh-CN' // 中文
 import '@/scss/element-variables.scss'
 
 Vue.use(
-  ElementUI, 
-  { 
-    // size: 'small',
-    zIndex: 3000,
-    locale
-  }
+	ElementUI, {
+		// size: 'small',
+		zIndex: 3000,
+		locale
+	}
 )

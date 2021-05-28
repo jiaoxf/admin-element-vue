@@ -1,7 +1,7 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html,
@@ -47,56 +47,65 @@ header,
 nav,
 audio,
 video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 body {
-    line-height: 1;
+	line-height: 1;
 }
 
 ol,
 ul {
-    list-style: none;
+	list-style: none;
 }
 
 a {
-    text-decoration: none;
+	text-decoration: none;
 }
 
-.element-container{
-  padding: 20px;
-  .content-box{
-    display: flex;
-    flex-wrap: wrap;
-    margin:10px 0;
-  }
+.element-container {
+	padding: 20px;
+
+	.content-box {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 10px 0;
+	}
 }
-.flex{
-  display: flex;
+
+.flex {
+	display: flex;
 }
-.el-message-box{
-  border-radius: 12px;
+
+.el-message-box {
+	border-radius: 12px;
 }
+
 :focus {
-  outline: 0;
+	outline: 0;
 }
-.mt-10{
-  margin-top: 10px;
+
+.mt-10 {
+	margin-top: 10px;
 }
-.ml-10{
-  margin-left: 10px;
+
+.ml-10 {
+	margin-left: 10px;
 }
-.mr-10{
-  margin-right: 10px;
+
+.mr-10 {
+	margin-right: 10px;
 }
-.mb-10{
-  margin-bottom: 10px;
+
+.mb-10 {
+	margin-bottom: 10px;
 }
-.el-drawer{
-  width: 460px!important;
+
+.el-drawer {
+	width: 460px !important;
 }

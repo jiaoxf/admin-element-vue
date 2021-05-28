@@ -9,269 +9,290 @@
 $base: ".vab";
 
 @mixin scrollbar {
-  max-height: 88vh;
-  margin-bottom: 0.5vh;
-  overflow-y: auto;
+	max-height: 88vh;
+	margin-bottom: 0.5vh;
+	overflow-y: auto;
 
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-  }
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background: transparent;
+	}
 
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(144, 147, 153, 0.3);
-    border-radius: 10px;
-  }
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(144, 147, 153, 0.3);
+		border-radius: 10px;
+	}
 
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(144, 147, 153, 0.3);
-  }
+	&::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(144, 147, 153, 0.3);
+	}
 }
 
 @mixin base-scrollbar {
-  &::-webkit-scrollbar {
-    width: 13px;
-    height: 13px;
-  }
+	&::-webkit-scrollbar {
+		width: 13px;
+		height: 13px;
+	}
 
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
-    background-clip: padding-box;
-    border: 3px solid transparent;
-    border-radius: 7px;
-  }
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(0, 0, 0, 0.4);
+		background-clip: padding-box;
+		border: 3px solid transparent;
+		border-radius: 7px;
+	}
 
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+	&::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
 
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
+	&::-webkit-scrollbar-track {
+		background-color: transparent;
+	}
 
-  &::-webkit-scrollbar-track:hover {
-    background-color: #f8fafc;
-  }
+	&::-webkit-scrollbar-track:hover {
+		background-color: #f8fafc;
+	}
 }
 
 img {
-  object-fit: cover;
+	object-fit: cover;
 }
 
 a {
-  color: $base-color-blue;
-  text-decoration: none;
-  cursor: pointer;
+	color: $base-color-blue;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 html {
-  body {
-    position: relative;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    font-size: $base-font-size-default;
-    color: #2c3e50;
-    background: #f6f8f9;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	body {
+		position: relative;
+		height: 100vh;
+		padding: 0;
+		margin: 0;
+		font-family: Avenir, Helvetica, Arial, sans-serif;
+		font-size: $base-font-size-default;
+		color: #2c3e50;
+		background: #f6f8f9;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 
-    @include base-scrollbar;
+		@include base-scrollbar;
 
-    div {
-      @include base-scrollbar;
-    }
+		div {
+			@include base-scrollbar;
+		}
 
-    svg,
-    i {
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+		svg,
+		i {
+			&:hover {
+				opacity: 0.8;
+			}
+		}
 
-    /* el-tag开始 */
-    .el-tag + .el-tag {
-      margin-left: 10px;
-    }
+		/* el-tag开始 */
+		.el-tag+.el-tag {
+			margin-left: 10px;
+		}
 
-    /* el-tag结束 */
+		/* el-tag结束 */
 
-    /* markdown编辑器开始 */
-    .editor-toolbar {
-      .no-mobile,
-      .fa-question-circle {
-        display: none;
-      }
-    }
+		/* markdown编辑器开始 */
+		.editor-toolbar {
 
-    /* markdown编辑器结束 */
+			.no-mobile,
+			.fa-question-circle {
+				display: none;
+			}
+		}
 
-    /* 间隔线开始 */
-    .el-divider--horizontal {
-      margin: 10px 0 25px 0;
+		/* markdown编辑器结束 */
 
-      .el-divider__text {
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        line-height: 20px;
-      }
-    }
+		/* 间隔线开始 */
+		.el-divider--horizontal {
+			margin: 10px 0 25px 0;
 
-    /* 间隔线结束 */
+			.el-divider__text {
+				display: -webkit-box;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				line-height: 20px;
+			}
+		}
 
-    /* 大图展示开始 */
-    .el-image-viewer {
-      &__close {
-        .el-icon-circle-close {
-          color: $base-color-white;
-        }
-      }
-    }
+		/* 间隔线结束 */
 
-    /* 大图展示结束 */
+		/* 大图展示开始 */
+		.el-image-viewer {
+			&__close {
+				.el-icon-circle-close {
+					color: $base-color-white;
+				}
+			}
+		}
 
-    .vue-admin-beautiful-wrapper {
-      .app-main-container {
-        @include base-scrollbar;
+		/* 大图展示结束 */
 
-        > [class*="-container"] {
-          padding: $base-padding;
-          background: $base-color-white;
-        }
-      }
-    }
+		.vue-admin-beautiful-wrapper {
+			.app-main-container {
+				@include base-scrollbar;
 
-    /* 进度条开始 */
-    #nprogress {
-      position: fixed;
-      z-index: $base-z-index;
+				>[class*="-container"] {
+					padding: $base-padding;
+					background: $base-color-white;
+				}
+			}
+		}
 
-      .bar {
-        background: $base-color-blue !important;
-      }
+		/* 进度条开始 */
+		#nprogress {
+			position: fixed;
+			z-index: $base-z-index;
 
-      .peg {
-        box-shadow: 0 0 10px $base-color-blue, 0 0 5px $base-color-blue !important;
-      }
-    }
+			.bar {
+				background: $base-color-blue !important;
+			}
 
-    /* 进度条结束 */
+			.peg {
+				box-shadow: 0 0 10px $base-color-blue, 0 0 5px $base-color-blue !important;
+			}
+		}
 
-    /* 表格开始 */
+		/* 进度条结束 */
 
-    .el-table {
-      .el-table__body-wrapper {
-        @include base-scrollbar;
-      }
+		/* 表格开始 */
 
-      th {
-        background: #f5f7fa;
-      }
+		.el-table {
+			.el-table__body-wrapper {
+				@include base-scrollbar;
+			}
 
-      td,
-      th {
-        position: relative;
-        box-sizing: border-box;
-        padding: 7.5px 0;
+			th {
+				background: #f5f7fa;
+			}
 
-        .cell {
-          font-size: $base-font-size-default;
-          font-weight: normal;
-          color: #606266;
+			td,
+			th {
+				position: relative;
+				box-sizing: border-box;
+				padding: 7.5px 0;
 
-          .el-image {
-            width: 50px;
-            height: 50px;
-            border-radius: $base-border-radius;
-          }
-        }
-      }
-    }
+				.cell {
+					font-size: $base-font-size-default;
+					font-weight: normal;
+					color: #606266;
 
-    /* 表格结束 */
+					.el-image {
+						width: 50px;
+						height: 50px;
+						border-radius: $base-border-radius;
+					}
+				}
+			}
+		}
 
-    /* 分页开始 */
-    .el-pagination {
-      padding: 2px 5px;
-      margin: 15px 0 0 0;
-      font-weight: normal;
-      color: $base-color-black;
-      text-align: center;
-    }
+		/* 表格结束 */
 
-    /* 分页结束 */
+		/* 分页开始 */
+		.el-pagination {
+			padding: 2px 5px;
+			margin: 15px 0 0 0;
+			font-weight: normal;
+			color: $base-color-black;
+			text-align: center;
+		}
 
-    /* 菜单开始 */
-    .el-menu.el-menu--popup.el-menu--popup-right-start {
-      @include scrollbar;
-    }
+		/* 分页结束 */
 
-    .el-menu.el-menu--popup.el-menu--popup-bottom-start {
-      @include scrollbar;
-    }
+		/* 菜单开始 */
+		.el-menu.el-menu--popup.el-menu--popup-right-start {
+			@include scrollbar;
+		}
 
-    .el-submenu__title i {
-      color: $base-color-white;
-    }
+		.el-menu.el-menu--popup.el-menu--popup-bottom-start {
+			@include scrollbar;
+		}
 
-    /* 菜单结束 */
+		.el-submenu__title i {
+			color: $base-color-white;
+		}
 
-    /* 弹窗开始 */
+		/* 菜单结束 */
 
-    .el-dialog,
-    .el-message-box {
-      &__body {
-        border-top: 1px solid $base-border-color;
+		/* 弹窗开始 */
 
-        .el-form {
-          padding-right: 30px;
-        }
-      }
+		.el-dialog,
+		.el-message-box {
+			&__body {
+				border-top: 1px solid $base-border-color;
 
-      &__footer {
-        padding: $base-padding;
-        text-align: right;
-        border-top: 1px solid $base-border-color;
-      }
+				.el-form {
+					padding-right: 30px;
+				}
+			}
 
-      &__content {
-        padding: 20px 20px 20px 20px;
-      }
-    }
+			&__footer {
+				padding: $base-padding;
+				text-align: right;
+				border-top: 1px solid $base-border-color;
+			}
 
-    /* 弹窗结束 */
+			&__content {
+				padding: 20px 20px 20px 20px;
+			}
+		}
 
-    /* 卡片开始 */
-    .el-card {
-      margin-bottom: 15px;
+		/* 弹窗结束 */
 
-      &__body {
-        padding: $base-padding;
-      }
-    }
+		/* 卡片开始 */
+		.el-card {
+			margin-bottom: 15px;
 
-    /* 卡片结束 */
+			&__body {
+				padding: $base-padding;
+			}
+		}
 
-    /* 下拉树样式-----------开始 */
-    .select-tree-popper {
-      .el-scrollbar {
-        .el-scrollbar__view {
-          .el-select-dropdown__item {
-            height: auto;
-            max-height: 274px;
-            padding: 0;
-            overflow-y: auto;
-            line-height: 26px;
-          }
-        }
-      }
-    }
+		/* 卡片结束 */
 
-    /* 下拉树样式-----------结束 */
-  }
+		/* 下拉树样式-----------开始 */
+		.select-tree-popper {
+			.el-scrollbar {
+				.el-scrollbar__view {
+					.el-select-dropdown__item {
+						height: auto;
+						max-height: 274px;
+						padding: 0;
+						overflow-y: auto;
+						line-height: 26px;
+					}
+				}
+			}
+		}
+
+		/* 下拉树样式-----------结束 */
+		/* Input开始 */
+		.no-input {
+			input {
+				background: none;
+				outline: none;
+				border: none;
+
+				.el-input__inner {
+					background: #fff !important;
+				}
+			}
+
+		}
+
+		.el-input.is-disabled .el-input__inner {
+			background: #fff
+		}
+
+
+		/* Input结束 */
+	}
 }

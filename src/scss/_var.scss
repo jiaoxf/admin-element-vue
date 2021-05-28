@@ -1,5 +1,5 @@
 @charset "utf-8";
-$--color-primary: #FE8C01;
+$--color-primary: #1cd39b;
 $aside-width: 230px;
 $header-height: 52px;
 $fontColor: #333333;
@@ -20,15 +20,11 @@ $--pagination-font-size: 14px;
 //table
 $--table-row-hover-background:rgba(254, 140, 1, 0.08);
 $--table-border-color: #E4E9F0;
-/**
- * @copyright chuzhixin 1204505056@qq.com
- * @description 全局主题变量配置，VIP文档内提供多种好看的配色方案（ant-design风格、layui风格、iview风格），请查看VIP文档主题配置篇
- */
 
 /* stylelint-disable */
 
 //框架默认主题色
-$base-color-default: #1890ff;
+$base-color-default: #1cd39b;
 //默认层级
 $base-z-index: 999;
 //横向布局纵向布局时菜单背景色
@@ -78,7 +74,7 @@ $base-tag-item-height: 34px;
 //菜单li标签的高度
 $base-menu-item-height: 50px;
 //app-main的高度
-$base-app-main-height: calc( 100vh - #{$base-nav-bar-height} - #{$base-tags-bar-height} - #{$base-padding} - #{$base-padding} - 55px - 30px);
+$base-app-main-height: calc(100vh - #{$base-nav-bar-height} - #{$base-tags-bar-height} - #{$base-padding} - #{$base-padding} - 55px - 30px);
 //纵向布局时左侧导航未折叠时的宽度
 $base-left-menu-width: 256px;
 //纵向布局时左侧导航未折叠时右侧内容的宽度
@@ -91,9 +87,10 @@ $base-right-content-width-min: calc(100% - #{$base-left-menu-width-min});
 $base-transition: all 0.2s;
 //默认动画时长
 $base-transition-time: 0.2s;
+
 :export {
-    //菜单文字颜色变量导出
-    menu-color: $base-menu-color; //菜单选中文字颜色变量导出
-    menu-color-active: $base-menu-color-active; //菜单背景色变量导出
-    menu-background: $base-menu-background;
+	//菜单文字颜色变量导出
+	menu-color: $base-menu-color; //菜单选中文字颜色变量导出
+	menu-color-active: $base-menu-color-active; //菜单背景色变量导出
+	menu-background: $base-menu-background;
 }
