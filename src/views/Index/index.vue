@@ -1,106 +1,264 @@
 <template>
-    <div class="index-content">
-        <el-row :gutter="20">
-            <el-col
-                :xs="24"
-                :sm="24"
-                :md="12"
-                :lg="6"
-                :xl="6"
-                v-for="i in 4"
-                :key="i"
-                class="card-box"
-            >
-                <div class="card-item">
-                    {{ i }}
-                </div>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-            <el-col :xs="16" :sm="16" :md="16" :lg="16" :xl="16" :offset="4">
-                <el-carousel :interval="4000" type="card" height="200px">
-                    <el-carousel-item v-for="item in 6" :key="item">
-                        <h3 class="medium">{{ item }}</h3>
-                    </el-carousel-item>
-                </el-carousel>
-            </el-col>
-            <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        </el-row>
-    </div>
+	<div class="index-container">
+		<el-row :gutter="20">
+			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+				<el-alert v-if="noticeList[0]" :closable="noticeList[0].closable">
+					<div style="display: flex; align-items: center; justify-content: center">
+						<a target="_blank" href="https://github.com/chuzhixin/vue-admin-beautiful">
+							<img
+								style="margin-right: 10px"
+								src="https://img.shields.io/github/stars/chuzhixin/vue-admin-beautiful?style=flat-square&label=Stars&logo=github"
+							/>
+						</a>
+						<p v-html="noticeList[0].title"></p>
+					</div>
+				</el-alert>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+				<el-card shadow="never" style="postion:relative">
+					<div slot="header">
+						<span>授权数</span>
+					</div>
+					<div class="bottom">
+						<span>
+							总授权数:
+						</span>
+					</div>
+					<!-- <basics-echarts id="canvans" :propOption="optionObj" /> -->
+				</el-card>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+				<el-card shadow="never">
+					<div slot="header">
+						<span>授权数</span>
+					</div>
+					<div class="bottom">
+						<span>
+							总授权数:
+						</span>
+					</div>
+				</el-card>
+			</el-col>
+
+			<el-col
+				v-for="(item, index) in iconList"
+				:key="index"
+				:xs="12"
+				:sm="6"
+				:md="3"
+				:lg="3"
+				:xl="3"
+			>
+				<router-link to="#" target="_blank">
+					<el-card class="icon-panel" shadow="never">
+						<p>{{ item.title }}</p>
+					</el-card>
+				</router-link>
+			</el-col>
+		</el-row>
+	</div>
 </template>
+
 <script>
 export default {
-    name: 'name',
-    props: {},
-    //import引入的组件需要注入到对象中才能使用
-    components: {},
-    data() {
-        return {};
-    },
-    //监听属性 类似于data概念
-    computed: {},
-    //监控data中的数据变化
-    watch: {},
-    //方法集合
-    methods: {},
-    created() {},
-    mounted() {},
-    beforeCreate() {}, //生命周期 - 创建之前
-    beforeMount() {}, //生命周期 - 挂载之前
-    updated() {}, //生命周期 - 更新之后
-    activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-};
+	name: 'Index',
+	components: {},
+	data() {
+		return {
+			timer: 0,
+			updateTime: process.env.VUE_APP_UPDATE_TIME,
+			nodeEnv: process.env.NODE_ENV,
+			config1: {
+				startVal: 0,
+				endVal: 0,
+				decimals: 0,
+				prefix: '',
+				suffix: '',
+				separator: ',',
+				duration: 8000
+			},
+			config2: {
+				startVal: 0,
+				endVal: 0,
+				decimals: 0,
+				prefix: '',
+				suffix: '',
+				separator: ',',
+				duration: 8000
+			},
+			config3: {
+				startVal: 0,
+				endVal: 0,
+				decimals: 0,
+				prefix: '',
+				suffix: '',
+				separator: ',',
+				duration: 8000
+			},
+
+			//更新日志
+			reverse: true,
+			activities: [],
+			noticeList: [],
+			//其他信息
+			userAgent: navigator.userAgent,
+			//卡片图标
+			iconList: [
+				{
+					icon: 'video',
+					title: '视频播放器',
+					link: '/vab/player',
+					color: '#ffc069'
+				},
+				{
+					icon: 'table',
+					title: '表格',
+					link: '/vab/table/comprehensiveTable',
+					color: '#5cdbd3'
+				},
+				{
+					icon: 'laptop-code',
+					title: '源码',
+					link: 'https://github.com/chuzhixin/vue-admin-beautiful',
+					color: '#b37feb'
+				},
+				{
+					icon: 'book',
+					title: '书籍',
+					link: '',
+					color: '#69c0ff'
+				},
+				{
+					icon: 'bullhorn',
+					title: '公告',
+					link: '',
+					color: '#ff85c0'
+				},
+				{
+					icon: 'gift',
+					title: '礼物',
+					link: '',
+					color: '#ffd666'
+				},
+
+				{
+					icon: 'balance-scale-left',
+					title: '公平的世界',
+					link: '',
+					color: '#ff9c6e'
+				},
+				{
+					icon: 'coffee',
+					title: '休息一下',
+					link: '',
+					color: '#95de64'
+				}
+			]
+		}
+	},
+	created() {},
+	beforeDestroy() {
+		clearInterval(this.timer)
+	},
+	mounted() {},
+	methods: {
+		handleClick(e) {
+			this.$baseMessage(`点击了${e.name},这里可以写跳转`)
+		},
+		handleChangeTheme() {
+			this.$baseEventBus.$emit('theme')
+		}
+	}
+}
 </script>
 <style lang="scss" scoped>
-//@import url(); 引入公共css类
-.index-content {
-    padding: 0;
-    margin: 0;
-    .card-box {
-        border-radius: 10px;
-        margin: 10px 0;
-        height: 160px;
-        &:nth-child(1) {
-            background: #659999;
-            background: -webkit-linear-gradient(to right, #f4791f, #659999);
-            background: linear-gradient(to right, #f4791f, #659999);
-        }
-        &:nth-child(2) {
-            background: #56ccf2;
-            background: -webkit-linear-gradient(to right, #2f80ed, #56ccf2);
-            background: linear-gradient(to right, #2f80ed, #56ccf2);
-        }
-        &:nth-child(3) {
-            background: #be93c5;
-            background: -webkit-linear-gradient(to right, #7bc6cc, #be93c5);
-            background: linear-gradient(to right, #7bc6cc, #be93c5);
-        }
-        &:nth-child(4) {
-            background: #ff4b1f;
-            background: -webkit-linear-gradient(to right, #ff9068, #ff4b1f);
-            background: linear-gradient(to right, #ff9068, #ff4b1f);
-        }
-    }
+.index-container {
+	padding: 0 !important;
+	margin: 0 !important;
+	background: #e9eef3 !important;
 
-    .el-carousel__item {
-        border-radius: 10px;
-        height: 220px;
-    }
-    .el-carousel__item h3 {
-        color: #475669;
-        font-size: 14px;
-        opacity: 0.75;
-        line-height: 220px;
-        margin: 0;
-    }
+	::v-deep {
+		.el-alert {
+			padding: $base-padding;
 
-    .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
-    }
+			&--info.is-light {
+				min-height: 82px;
+				padding: $base-padding;
+				margin-bottom: 15px;
+				color: #909399;
+				background-color: $base-color-white;
+				border: 1px solid #ebeef5;
+			}
+		}
+		.el-card {
+			border-radius: 10px;
+		}
+		.el-card__body {
+			.echarts {
+				width: 100%;
+				height: 115px;
+			}
+		}
+	}
+	.card {
+		::v-deep {
+			.el-card__body {
+				.echarts {
+					width: 100%;
+					height: 305px;
+				}
+			}
+		}
+	}
 
-    .el-carousel__item:nth-child(2n + 1) {
-        background-color: #d3dce6;
-    }
+	/* .bottom {
+		padding-top: 20px;
+		margin-top: 5px;
+		color: #595959;
+		text-align: left;
+		border-top: 1px solid $base-border-color;
+	} */
+
+	.table {
+		width: 100%;
+		color: #666;
+		border-collapse: collapse;
+		background-color: #fff;
+
+		td {
+			position: relative;
+			min-height: 20px;
+			padding: 9px 15px;
+			font-size: 14px;
+			line-height: 20px;
+			border: 1px solid #e6e6e6;
+
+			&:nth-child(odd) {
+				width: 20%;
+				text-align: right;
+				background-color: #f7f7f7;
+			}
+		}
+	}
+
+	.icon-panel {
+		height: 117px;
+		text-align: center;
+		cursor: pointer;
+
+		svg {
+			font-size: 40px;
+		}
+
+		p {
+			margin-top: 10px;
+		}
+	}
+
+	.bottom-btn {
+		button {
+			margin: 5px 10px 15px 0;
+		}
+	}
 }
 </style>

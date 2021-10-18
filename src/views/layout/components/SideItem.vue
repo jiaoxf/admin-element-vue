@@ -1,20 +1,20 @@
 <template>
-    <div class=""></div>
+	<div class=""></div>
 </template>
 <script>
 export default {
-    name: 'name',
-    props: {},
-    components: {},
-    data() {
-        return {};
-    },
-    created() {},
-    mounted() {},
-    computed: {},
-    watch: {},
-    methods: {},
-};
+	name: 'name',
+	props: {},
+	components: {},
+	data() {
+		return {}
+	},
+	created() {},
+	mounted() {},
+	computed: {},
+	watch: {},
+	methods: {}
+}
 </script>
 <style lang="scss" scoped>
 /* @import ''; // 引入公共css类*/

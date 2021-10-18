@@ -1,24 +1,27 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Layout from '@/views/layout';
+import Layout from '@/views/layout'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+	{
 		path: '/',
 		component: Layout,
 		hidden: true,
 		redirect: 'index',
-		children: [{
-			path: 'index',
-			name: 'Index',
-			component: () => import('@/views/Index/index'),
-			meta: {
-				title: '首页',
-				icon: 'el-icon-s-home',
-				affix: true,
-			},
-		}, ],
+		children: [
+			{
+				path: 'index',
+				name: 'Index',
+				component: () => import('@/views/Index/index'),
+				meta: {
+					title: '首页',
+					icon: 'el-icon-s-home',
+					affix: true
+				}
+			}
+		]
 	},
 	{
 		path: '/components',
@@ -27,25 +30,25 @@ const routes = [{
 		redirect: 'button',
 		meta: {
 			title: '组件',
-			icon: 'el-icon-s-grid',
+			icon: 'el-icon-s-grid'
 			// permissions: ['admin']  // 权限
 		},
-		children: [{
+		children: [
+			{
 				path: 'button',
 				name: 'Button',
-				component: () =>
-					import('@/views/Components/Button'),
+				component: () => import('@/views/Components/Button'),
 				meta: {
-					title: '按钮',
-				},
+					title: '按钮'
+				}
 			},
 			{
 				path: 'icon',
 				name: 'Icon',
 				component: () => import('@/views/Components/Icon'),
 				meta: {
-					title: '图标',
-				},
+					title: '图标'
+				}
 			},
 			{
 				path: 'table',
@@ -66,8 +69,7 @@ const routes = [{
 			{
 				path: 'dialog',
 				name: 'Dialog',
-				component: () =>
-					import('@/views/Components/Dialog'),
+				component: () => import('@/views/Components/Dialog'),
 				meta: {
 					title: '弹框'
 				}
@@ -75,8 +77,7 @@ const routes = [{
 			{
 				path: 'steps',
 				name: 'Steps',
-				component: () =>
-					import('@/views/Components/Steps'),
+				component: () => import('@/views/Components/Steps'),
 				meta: {
 					title: '步骤条'
 				}
@@ -84,8 +85,7 @@ const routes = [{
 			{
 				path: 'drawers',
 				name: 'Drawers',
-				component: () =>
-					import('@/views/Components/Drawers'),
+				component: () => import('@/views/Components/Drawers'),
 				meta: {
 					title: '抽屉'
 				}
@@ -93,8 +93,7 @@ const routes = [{
 			{
 				path: 'tree',
 				name: 'Tree',
-				component: () =>
-					import('@/views/Components/Tree'),
+				component: () => import('@/views/Components/Tree'),
 				meta: {
 					title: '树结构'
 				}
@@ -102,13 +101,12 @@ const routes = [{
 			{
 				path: 'richtext',
 				name: 'Richtext',
-				component: () =>
-					import('@/views/Components/Richtext'),
+				component: () => import('@/views/Components/Richtext'),
 				meta: {
 					title: '富文本编辑器'
 				}
 			}
-		],
+		]
 	},
 	{
 		path: '/function',
@@ -117,28 +115,27 @@ const routes = [{
 		redirect: '',
 		meta: {
 			title: '常用函数',
-			icon: 'el-icon-chat-line-square',
+			icon: 'el-icon-chat-line-square'
 			// permissions: ['admin']  // 权限
 		},
-		children: [{
+		children: [
+			{
 				path: 'button',
 				name: 'Button',
-				component: () =>
-					import('@/views/Components/Button'),
+				component: () => import('@/views/Components/Button'),
 				meta: {
-					title: '按钮',
-				},
+					title: '按钮'
+				}
 			},
 			{
 				path: 'button',
 				name: 'Button',
-				component: () =>
-					import('@/views/Components/Button'),
+				component: () => import('@/views/Components/Button'),
 				meta: {
-					title: '按钮',
-				},
-			},
-		],
+					title: '按钮'
+				}
+			}
+		]
 	}
 ]
 

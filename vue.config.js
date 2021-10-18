@@ -1,4 +1,4 @@
-const WebpackBar = require('webpackbar');
+const WebpackBar = require('webpackbar')
 // const path = require('path');
 module.exports = {
 	publicPath: '/',
@@ -6,17 +6,16 @@ module.exports = {
 		return {
 			plugins: [
 				new WebpackBar({
-					color: "#1cd39b",
-					name: "Panda Admin"
-				}),
-			],
-		};
+					color: '#1cd39b',
+					name: 'Panda Admin'
+				})
+			]
+		}
 	},
 	chainWebpack: config => {
 		const oneOfsMap = config.module.rule('scss').oneOfs.store
 		oneOfsMap.forEach(item => {
-			item
-				.use('sass-resources-loader')
+			item.use('sass-resources-loader')
 				.loader('sass-resources-loader')
 				.options({
 					// 要公用的scss的路径
@@ -31,18 +30,18 @@ module.exports = {
 		// host: 'localhost',
 		// port: 3000,
 		// 跨域
-		proxy: {
+		/* proxy: {
 			'/api': {
-				target: 'http://login-test.ciftis.org.cn',
+				target: '',
 				secure: false, // https接口，配置参数
 				changeOrigin: true, //是否跨域
 				pathRewrite: {
 					'^/api2/': '/'
 				}
 			}
-		},
+		}, */
 		historyApiFallback: true
-	},
+	}
 	/* resolve: {
 	  alias: {
 	    // 设置路径代理

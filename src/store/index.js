@@ -10,10 +10,10 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		flodMenu(state) {
-			state.foldMenu = !state.foldMenu;
+			state.foldMenu = !state.foldMenu
 		},
 		choosePermissions(state) {
-			state.permissionsShow = false;
+			state.permissionsShow = false
 		}
 	},
 	actions: {},
