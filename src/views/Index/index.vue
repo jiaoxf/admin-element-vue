@@ -14,32 +14,6 @@
 					</div>
 				</el-alert>
 			</el-col>
-			<el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-				<el-card shadow="never" style="postion:relative">
-					<div slot="header">
-						<span>授权数</span>
-					</div>
-					<div class="bottom">
-						<span>
-							总授权数:
-						</span>
-					</div>
-					<!-- <basics-echarts id="canvans" :propOption="optionObj" /> -->
-				</el-card>
-			</el-col>
-			<el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-				<el-card shadow="never">
-					<div slot="header">
-						<span>授权数</span>
-					</div>
-					<div class="bottom">
-						<span>
-							总授权数:
-						</span>
-					</div>
-				</el-card>
-			</el-col>
-
 			<el-col
 				v-for="(item, index) in iconList"
 				:key="index"
@@ -54,6 +28,30 @@
 						<p>{{ item.title }}</p>
 					</el-card>
 				</router-link>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+				<el-card shadow="never">
+					<div slot="header">
+						<span>授权数</span>
+					</div>
+					<div class="bottom">
+						<span>
+							总授权数:
+						</span>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+				<el-card shadow="never">
+					<div slot="header">
+						<span>授权数</span>
+					</div>
+					<div class="bottom">
+						<span>
+							总授权数:
+						</span>
+					</div>
+				</el-card>
 			</el-col>
 		</el-row>
 	</div>

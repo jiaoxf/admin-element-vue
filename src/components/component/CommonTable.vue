@@ -25,6 +25,9 @@
 					<span v-else-if="item.num">
 						{{ ++scope.$index }}
 					</span>
+					<span v-else-if="item.formatter">
+						{{ item.formatter(scope.row, scope.column) }}
+					</span>
 					<span v-else>{{ scope.row[item.param] }}</span>
 				</template>
 			</el-table-column>

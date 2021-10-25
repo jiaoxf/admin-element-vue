@@ -66,7 +66,8 @@ html {
 		height: 100vh;
 		padding: 0;
 		margin: 0;
-		font-family: Avenir, Helvetica, Arial, sans-serif;
+		font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft Yahei', 'Hiragino Sans GB',
+		'Heiti SC', 'WenQuanYi Micro Hei', sans-serif;
 		font-size: $base-font-size-default;
 		color: #2c3e50;
 		background: #f6f8f9;
@@ -173,7 +174,7 @@ html {
 			th {
 				position: relative;
 				box-sizing: border-box;
-				padding: 7.5px 0;
+				// padding: 7.5px 0;
 
 				.cell {
 					font-size: $base-font-size-default;
@@ -211,9 +212,7 @@ html {
 			@include scrollbar;
 		}
 
-		.el-submenu__title i {
-			color: $base-color-white;
-		}
+
 
 		/* 菜单结束 */
 

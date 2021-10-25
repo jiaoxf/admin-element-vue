@@ -6,8 +6,8 @@
 					class="el-menu-vertical-demo"
 					@open="handleOpen"
 					:default-active="activeMenu"
-					background-color="#1cd39b"
-					text-color="#fff"
+					background-color="#fff"
+					text-color="#151933"
 					active-text-color="#fff"
 					@close="handleClose"
 					collapse-transition
@@ -32,8 +32,9 @@
 							:key="item.children[0].name"
 						>
 							<el-menu-item index="2">
-								<i :class="item.children[0].meta.icon"></i>
+								<i :class="item.children[0].meta.icon" class="icon-color"></i>
 								<span
+									class="oneTitle"
 									slot="title"
 									v-if="item.children[0].meta && item.children[0].meta.title"
 								>
@@ -43,8 +44,12 @@
 						</router-link>
 						<el-submenu v-else :index="item.name || item.path" :key="item.name">
 							<template slot="title">
-								<i :class="item.meta.icon"></i>
-								<span slot="title" v-if="item.meta && item.meta.title">
+								<i :class="item.meta.icon" class="icon-color"></i>
+								<span
+									class="oneTitle"
+									slot="title"
+									v-if="item.meta && item.meta.title"
+								>
 									{{ item.meta.title }}
 								</span>
 							</template>
@@ -131,7 +136,7 @@ export default {
 }
 .left-aside {
 	/* height: calc(100vh - 60px) ; */
-	background: $--color-primary;
+	/* background: $--color-primary; */
 	position: fixed;
 	.header-title {
 		position: relative;
@@ -149,6 +154,7 @@ export default {
 	.el-menu {
 		border-right: none;
 	}
+
 	.el-menu-vertical-demo {
 		::v-deep.el-menu-item {
 			a {
@@ -158,9 +164,35 @@ export default {
 			}
 		}
 	}
+	.el-menu-item {
+		margin: 10px;
+		border-radius: 8px;
+	}
+	::v-deep .el-submenu__title {
+		margin: 10px;
+		border-radius: 10px;
+	}
+	::v-deep .el-submenu__title:hover {
+		background: #fff !important;
+	}
+	::v-deep .el-submenu__icon-arrow {
+		font-size: 18px;
+		font-weight: 1000;
+	}
+	.el-submenu {
+		.el-menu-item {
+			height: 42px;
+			line-height: 42px;
+			text-align: center;
+			span {
+				/* color: #afadb9; */
+				font-weight: 600;
+			}
+		}
+	}
 	.el-menu-item.is-active {
-		border-right: 6px solid #fff;
-		background: #000 !important;
+		background: #1cd39b !important;
+		color: #fff !important;
 	}
 	::v-deep .el-menu-item-group__title {
 		padding: 0;
@@ -168,9 +200,25 @@ export default {
 	::v-deep .el-scrollbar__wrap {
 		height: 100vh;
 		margin: 0 !important;
+		background: #fff;
 	}
 	.horizontal-collapse-transition {
 		transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+	}
+	.oneTitle {
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.icon-color {
+		font-size: 1.5rem;
+		color: #bdbdbd;
+		margin-right: 10px;
+	}
+	.el-menu-item:focus,
+	.el-menu-item:hover {
+		outline: none;
+		background-color: #1cd39b !important;
+		color: #fff !important;
 	}
 }
 </style>

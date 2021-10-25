@@ -24,7 +24,16 @@
 						文档
 					</a>
 				</el-divider>
-				<complex-table :data="data" :option="option" ref="table"></complex-table>
+				<complex-table
+					:data="complexData"
+					:option="option"
+					ref="table"
+					:pagination="pagination"
+					:table-label="complexLabel"
+					:table-option="complexOption"
+					@edit="edit"
+					@deleteBtn="deleteBtn"
+				></complex-table>
 			</el-col>
 		</el-row>
 	</div>
@@ -45,6 +54,7 @@ export default {
 			input: '',
 			count: 0,
 			isLoading: true,
+			// 表格简单配置
 			tableData: [
 				{
 					id: '1',
@@ -75,7 +85,6 @@ export default {
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
-
 				{
 					id: '1',
 					name: '焦学峰',
@@ -158,6 +167,30 @@ export default {
 							return '禁用'
 						}
 					}
+				},
+				{
+					label: '审核状态',
+					param: 'status',
+					align: 'center',
+					formatter: (row, column) => {
+						console.log(row)
+						if (row.status === 0) {
+							return "<span style='color:red'>哈哈</span>"
+						} else if (row.status === 1) {
+							return '审核通过'
+						} else if (row.status === 2) {
+							return '审核不通过'
+						} else {
+							return '禁用'
+						}
+						/* switch (row.status) {
+							case 0:
+								return '<span style="color:red">哈哈</span>'
+								break
+							default:
+								break
+						} */
+					}
 				}
 			],
 			tableOption: {
@@ -174,69 +207,126 @@ export default {
 				pageSize: 10,
 				pageSizes: [5, 10, 20]
 			},
-			// 表格数据
-			data: [
-				{
-					name: '张三',
-					sex: '男',
-					status: '1',
-					family: '北京市',
-					operation: '0',
-					select: '0'
-				},
-				{
-					name: '李四',
-					sex: '女',
-					status: '0',
-					family: '天津市',
-					operation: '1',
-					select: '1'
-				},
-				{
-					name: '李333',
-					sex: '女',
-					status: '2',
-					family: '上海市',
-					operation: '1',
-					select: '2'
-				},
-				{
-					name: '李333',
-					sex: '女',
-					status: '2',
-					family: '上海市',
-					operation: '1',
-					select: '2'
-				},
-				{
-					name: '李333',
-					sex: '女',
-					status: '2',
-					family: '上海市',
-					operation: '1',
-					select: '2'
-				},
-				{
-					name: '李333',
-					sex: '女',
-					status: '2',
-					family: '上海市',
-					operation: '1',
-					select: '2'
-				},
-				{
-					name: '李333',
-					sex: '女',
-					status: '2',
-					family: '上海市',
-					operation: '1',
-					select: '2'
-				}
-			],
 			// 表格简单配置 loading stripe斑马纹等等
 			option: {
 				mutiSelect: true,
 				stripe: true
+			},
+			// 复杂表格相关数据
+			complexLabel: [
+				{
+					label: '序号',
+					num: '1',
+					width: '80',
+					align: 'center'
+				},
+				{
+					label: '名字',
+					param: 'name',
+					align: 'center'
+				},
+				{
+					label: '性别',
+					param: 'sex',
+					align: 'center'
+				},
+				{
+					label: '审核状态',
+					param: 'status',
+					align: 'center',
+					render: row => {
+						if (row.status === 0) {
+							return '未审核'
+						} else if (row.status === 1) {
+							return '审核通过'
+						} else if (row.status === 2) {
+							return '审核不通过'
+						} else {
+							return '禁用'
+						}
+					}
+				}
+			],
+			complexData: [
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					status: 0,
+					operation: 1
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 1
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				},
+				{
+					id: '1',
+					name: '焦学峰',
+					sex: '男',
+					time: '2020-08-31 22:10:22',
+					status: 2
+				}
+			],
+			complexOption: {
+				label: '操作',
+				width: '200',
+				options: [
+					{ label: '编辑', type: 'text', methods: 'edit' },
+					{ label: '删除', type: 'text', methods: 'deleteBtn' }
+				]
 			}
 		}
 	},

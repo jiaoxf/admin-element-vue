@@ -107,8 +107,8 @@ const routes = [
 				}
 			}
 		]
-	},
-	{
+	}
+	/* {
 		path: '/function',
 		component: Layout,
 		hidden: true,
@@ -126,17 +126,9 @@ const routes = [
 				meta: {
 					title: '按钮'
 				}
-			},
-			{
-				path: 'button',
-				name: 'Button',
-				component: () => import('@/views/Components/Button'),
-				meta: {
-					title: '按钮'
-				}
 			}
 		]
-	}
+	} */
 ]
 
 const router = new VueRouter({
