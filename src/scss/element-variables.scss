@@ -1,5 +1,5 @@
 @charset "utf-8";
-@import './_var.scss';
+@import './variables.scss';
 /* Transition
 -------------------------- */
 
@@ -63,7 +63,7 @@ $--color-warning-lighter: mix($--color-white, $--color-warning, 90%);
 $--color-danger-lighter: mix($--color-white, $--color-danger, 90%);
 $--color-info-lighter: mix($--color-white, $--color-info, 90%);
 /// color|1|Font Color|2
-$--color-text-primary: #303133;
+$--color-text-primary: #000;
 /// color|1|Font Color|2
 $--color-text-regular: #606266;
 /// color|1|Font Color|2
@@ -419,7 +419,7 @@ $--input-font-size: $--font-size-base;
 /// color||Color|0
 $--input-font-color: $--color-text-regular;
 /// height||Other|4
-$--input-width: 140px;
+// $--input-width: 140px;
 /// height||Other|4
 $--input-height: 40px;
 $--input-border: $--border-base;

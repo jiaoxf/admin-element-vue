@@ -214,7 +214,7 @@ export default {
 		}
 	},
 
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	activated() {}
 }
 </script>
 <style lang="scss" scoped>
@@ -224,5 +224,8 @@ export default {
 }
 ::v-deep .el-select {
 	width: 200px;
+}
+.dialog-footer {
+	text-align: center;
 }
 </style>

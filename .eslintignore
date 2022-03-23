@@ -1,5 +1,4 @@
 /dist/
 /script/
-
-/iconfont/iconfont.js
+src/assets/iconfont/iconfont.js
 /node_modules/

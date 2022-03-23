@@ -1,48 +1,56 @@
 const WebpackBar = require('webpackbar')
 // const path = require('path');
 module.exports = {
-	publicPath: '/',
-	configureWebpack() {
-		return {
-			plugins: [
-				new WebpackBar({
-					color: '#1cd39b',
-					name: 'Panda Admin'
-				})
-			]
-		}
-	},
-	chainWebpack: config => {
-		const oneOfsMap = config.module.rule('scss').oneOfs.store
-		oneOfsMap.forEach(item => {
-			item.use('sass-resources-loader')
-				.loader('sass-resources-loader')
-				.options({
-					// 要公用的scss的路径
-					resources: './src/scss/_var.scss'
-				})
-				.end()
-		})
-	},
-	devServer: {
-		// https: true, // https
-		open: true,
-		// host: 'localhost',
-		// port: 3000,
-		// 跨域
-		/* proxy: {
+    publicPath: './',
+    configureWebpack() {
+        return {
+            plugins: [
+                new WebpackBar({
+                    color: '#0062ab',
+                    name: 'LOMON-LAND'
+                })
+            ]
+        }
+    },
+    chainWebpack: config => {
+        const oneOfsMap = config.module.rule('scss').oneOfs.store
+        oneOfsMap.forEach(item => {
+            item.use('sass-resources-loader')
+                .loader('sass-resources-loader')
+                .options({
+                    // 要公用的scss的路径
+                    resources: './src/scss/variables.scss'
+                })
+                .end()
+        })
+    },
+    css: {
+        loaderOptions: {
+            less: {
+                javascriptEnabled: true
+            }
+        }
+    },
+
+    devServer: {
+        // https: true, // https
+        open: true,
+        // host: 'localhost',
+        // port: 3000,
+        // 跨域
+        /* proxy: {
 			'/api': {
-				target: '',
+				target: 'http://www.cdraindrop.top',
 				secure: false, // https接口，配置参数
 				changeOrigin: true, //是否跨域
 				pathRewrite: {
-					'^/api2/': '/'
+					'^/api': 'http://www.cdraindrop.top'
 				}
 			}
 		}, */
-		historyApiFallback: true
-	}
-	/* resolve: {
+        historyApiFallback: true
+    }
+    /* resolve: {
 	  alias: {
 	    // 设置路径代理
 	    '@': resolve('src'),

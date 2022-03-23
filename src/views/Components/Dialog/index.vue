@@ -291,7 +291,6 @@ export default {
 			}
 		},
 		selectVal(row) {
-			console.log(row)
 			let selectList = [
 				{
 					label: '第一项',

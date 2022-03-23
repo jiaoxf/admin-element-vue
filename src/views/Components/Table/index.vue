@@ -58,7 +58,7 @@ export default {
 			tableData: [
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 0,
@@ -66,63 +66,63 @@ export default {
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 1
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
@@ -173,9 +173,8 @@ export default {
 					param: 'status',
 					align: 'center',
 					formatter: (row, column) => {
-						console.log(row)
 						if (row.status === 0) {
-							return "<span style='color:red'>哈哈</span>"
+							return ''
 						} else if (row.status === 1) {
 							return '审核通过'
 						} else if (row.status === 2) {
@@ -197,14 +196,14 @@ export default {
 				label: '操作',
 				width: '200',
 				options: [
-					{ label: '编辑', type: 'primary', icon: 'el-icon-view', methods: 'edit' },
-					{ label: '删除', type: 'danger', icon: 'el-icon-delete', methods: 'deleteBtn' }
+					{ label: '编辑', type: 'primary',  methods: 'edit' },
+					{ label: '删除', type: 'text', methods: 'deleteBtn' }
 				]
 			},
 			pagination: {
 				total: 430,
 				pageIndex: 1,
-				pageSize: 10,
+				pageSize: 20,
 				pageSizes: [5, 10, 20]
 			},
 			// 表格简单配置 loading stripe斑马纹等等
@@ -250,28 +249,28 @@ export default {
 			complexData: [
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					status: 0,
 					operation: 1
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 1
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
@@ -279,42 +278,42 @@ export default {
 
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
 				},
 				{
 					id: '1',
-					name: '焦学峰',
+					name: '张三',
 					sex: '男',
 					time: '2020-08-31 22:10:22',
 					status: 2
@@ -333,9 +332,9 @@ export default {
 	created() {
 		this.init()
 	},
-	//监听属性 类似于data概念
+
 	computed: {},
-	//监控data中的数据变化
+
 	watch: {},
 	methods: {
 		init() {
@@ -348,7 +347,6 @@ export default {
 		},
 		aaa() {
 			if (this.count === '') {
-				alert(1)
 			}
 			console.log(this.count)
 		},
@@ -373,7 +371,7 @@ export default {
 	},
 
 	mounted() {},
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	activated() {}
 }
 </script>
 <style lang="scss" scoped>

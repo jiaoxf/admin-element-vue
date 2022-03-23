@@ -211,14 +211,14 @@ export default {
 			}
 		}
 	},
-	//监听属性 类似于data概念
+
 	computed: {},
-	//监控data中的数据变化
+
 	watch: {},
 	methods: {},
 	created() {},
 	mounted() {},
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	activated() {}
 }
 </script>
 <style lang="scss" scoped>

@@ -1,19 +1,5 @@
 <template>
 	<div class="table">
-		<el-form :inline="true" :model="formInline" class="demo-form-inline">
-			<el-form-item label="审批人">
-				<el-input v-model="formInline.user" placeholder="审批人"></el-input>
-			</el-form-item>
-			<el-form-item label="活动区域">
-				<el-select v-model="formInline.region" placeholder="活动区域">
-					<el-option label="区域一" value="shanghai"></el-option>
-					<el-option label="区域二" value="beijing"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="onSubmit">查询</el-button>
-			</el-form-item>
-		</el-form>
 		<el-table id="iTable" v-loading="mTable.loading" :data.sync="data" :stripe="mTable.stripe">
 			<el-table-column v-if="mTable.mutiSelect" type="selection" width="55"></el-table-column>
 			<el-table-column
@@ -26,11 +12,21 @@
 				:sortable="item.sortable ? 'custom' : false"
 			>
 				<template slot-scope="scope">
-					<span v-if="item.render">
-						{{ item.render(scope.row, scope.column) }}
-					</span>
-					<span v-else-if="item.num">
-						{{ ++scope.$index }}
+					<span v-if="item.render">{{ item.render(scope.row, scope.column) }}</span>
+					<span v-else-if="item.num">{{ ++scope.$index }}</span>
+					<span v-else-if="item.param == 'roleName'">{{ scope.row.roleName || '无' }}</span>
+					<span v-else-if="item.options">
+						<el-button
+							v-for="(item, index) in scope.row.btnOption.options"
+							v-show="item.showBtn"
+							:key="index"
+							:type="item.type"
+							:disabled="item.disabled"
+							:icon="item.icon"
+							:style="item.style"
+							@click="handleButton(item.methods, scope.row)"
+							size="mini"
+						>{{ item.label }}</el-button>
 					</span>
 					<span v-else>{{ scope.row[item.param] }}</span>
 				</template>

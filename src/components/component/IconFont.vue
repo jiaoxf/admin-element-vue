@@ -21,8 +21,8 @@ export default {
 			type: Object,
 			default: () => {
 				return {
-					width: '2rem',
-					height: '2rem'
+					width: '18px',
+					height: '18px'
 				}
 			}
 		}
@@ -31,25 +31,25 @@ export default {
 	data() {
 		return {}
 	},
-	//监听属性 类似于data概念
+
 	computed: {
 		iconTag() {
 			return `#icon-${this.name}`
 		}
 	},
-	//监控data中的数据变化
+
 	watch: {},
 	methods: {},
 	created() {},
 	mounted() {},
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	activated() {}
 }
 </script>
 <style lang="scss" scoped>
 //@import url(); 引入公共css类
 .icon-font {
-	display: inline-block;
-	padding: 20px;
+	display: inline-flex;
+	align-items: center;
 	.icon {
 		vertical-align: -0.15em;
 		fill: currentColor;

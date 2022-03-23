@@ -82,6 +82,17 @@ a {
 	display: flex;
 }
 
+.flex-align-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.flex-align {
+    display: flex;
+    align-items: center;
+}
+
+
 .el-message-box {
 	border-radius: 12px;
 }
@@ -109,3 +120,31 @@ a {
 .el-drawer {
 	width: 460px !important;
 }
+
+.truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.margin-auto{
+	margin: auto
+}
+
+.page-container{
+	padding: 30px;
+	.page-header{
+		padding-bottom: 20px;
+		border-bottom: 1px solid #eee;
+	}
+	.page-body{
+		padding-top: 20px;
+	}
+	.page-btn{
+		display: flex;
+		justify-content: flex-end;
+	}
+	.page-table{
+		margin-top: 20px;
+	}
+}
+

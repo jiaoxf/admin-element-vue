@@ -4,9 +4,7 @@
 			<el-col class="component-content">
 				<el-divider content-position="left">
 					常用表单
-					<a target="_blank" href="https://element.eleme.cn/#/zh-CN/component/table">
-						文档
-					</a>
+					<a target="_blank" href="https://element.eleme.cn/#/zh-CN/component/table">文档</a>
 				</el-divider>
 				<el-form
 					:model="ruleForm"
@@ -41,11 +39,7 @@
 						<el-col class="line" :span="2">-</el-col>
 						<el-col :span="11" style="padding:0;">
 							<el-form-item prop="date2">
-								<el-time-picker
-									placeholder="选择时间"
-									v-model="ruleForm.date2"
-									style="width: 100%;"
-								></el-time-picker>
+								<el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
 							</el-form-item>
 						</el-col>
 					</el-form-item>
@@ -70,24 +64,12 @@
 						<el-input type="textarea" v-model="ruleForm.desc"></el-input>
 					</el-form-item>
 					<el-form-item label="添加图片" prop="file" ref="uploadElement">
-						<el-upload
-							action="#"
-							list-type="picture-card"
-							:auto-upload="false"
-							:on-change="onChange"
-						>
+						<el-upload action="#" list-type="picture-card" :auto-upload="false" :on-change="onChange">
 							<i slot="default" class="el-icon-plus"></i>
 							<div slot="file" slot-scope="{ file }">
-								<img
-									class="el-upload-list__item-thumbnail"
-									:src="file.url"
-									alt=""
-								/>
+								<img class="el-upload-list__item-thumbnail" :src="file.url" alt />
 								<span class="el-upload-list__item-actions">
-									<span
-										class="el-upload-list__item-preview"
-										@click="handlePictureCardPreview(file)"
-									>
+									<span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
 										<i class="el-icon-zoom-in"></i>
 									</span>
 									<span
@@ -108,67 +90,49 @@
 							</div>
 						</el-upload>
 						<el-dialog :visible.sync="ruleForm.dialogVisible">
-							<img width="100%" :src="ruleForm.dialogImageUrl" alt="" />
+							<img width="100%" :src="ruleForm.dialogImageUrl" alt />
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label="嘉宾" required class="form-item-style">
-						<el-row :gutter="10">
-							<el-col :span="10">
-								<el-form-item
-									v-for="(domain, index) in ruleForm.domains"
-									label-width="0px"
-									:key="domain.key"
-									:prop="'domains.' + index + '.value'"
-									:rules="{
-										required: true,
-										message: '域名不能为空',
-										trigger: 'blur'
-									}"
-								>
-									<el-input v-model="domain.value"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="10">
-								<el-form-item
-									label-width="0px"
-									class="second-box"
-									v-for="(domain, index) in ruleForm.domains"
-									:key="domain.key"
-									:prop="'domains.' + index + '.value1'"
-									:rules="{
-										required: true,
-										message: 'xxxx不能为空',
-										trigger: 'blur'
-									}"
-								>
-									<el-row :gutter="10">
-										<el-col :span="18">
-											<el-input v-model="domain.value1"></el-input>
-										</el-col>
-										<el-col :span="6" class="flex">
-											<el-button
-												type="primary"
-												icon="el-icon-plus"
-												@click="addDomain"
-												circle
-											></el-button>
-											<el-button
-												v-show="index != 0"
-												type="danger"
-												icon="el-icon-delete"
-												@click.prevent="removeDomain(domain)"
-												circle
-											></el-button>
-										</el-col>
-									</el-row>
-								</el-form-item>
-							</el-col>
-						</el-row>
+						<div class="multi-input" v-for="(domain, index) in ruleForm.domains" :key="domain.key">
+							<el-form-item
+								style="width:140px"
+								label-width="0px"
+								:prop="'domains.' + index + '.value'"
+								:rules="{
+									required: true,
+									message: '域名不能为空',
+									trigger: 'blur'
+								}"
+							>
+								<el-input v-model="domain.value"></el-input>
+							</el-form-item>
+							<el-form-item
+								style="width:140px;margin-left: 15px;"
+								label-width="0px"
+								class="second-box"
+								:prop="'domains.' + index + '.value1'"
+								:rules="{
+									required: true,
+									message: 'xxxx不能为空',
+									trigger: 'blur'
+								}"
+							>
+								<el-input v-model="domain.value1"></el-input>
+							</el-form-item>
+							<el-button style="height: 32px;margin-left: 10px;" type="primary" icon="el-icon-plus" @click="addDomain" circle></el-button>
+							<el-button
+								style="height: 32px;"
+								v-show="index != 0"
+								type="danger"
+								icon="el-icon-delete"
+								@click.prevent="removeDomain(domain)"
+								circle
+							></el-button>
+						</div>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="submitForm('ruleForm')">
-							立即创建
-						</el-button>
+						<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
 						<el-button @click="resetForm('ruleForm')">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -233,8 +197,8 @@ export default {
 			}
 		}
 	},
-	created() {},
-	mounted() {},
+	created() { },
+	mounted() { },
 	computed: {},
 	watch: {},
 	methods: {
@@ -253,7 +217,7 @@ export default {
 			this.$refs[formName].resetFields()
 			this.ruleForm.file = ''
 			console.log(this.$refs)
-			this.$refs.uploadElement.clearFiles()
+			// this.$refs['uploadElement'].clearFiles()
 		},
 		handleRemove(file) {
 			console.log(file)
@@ -290,7 +254,7 @@ export default {
 			}
 		}
 	},
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	activated() { }
 }
 </script>
 <style lang="scss" scoped>
@@ -307,9 +271,39 @@ export default {
 		height: 120px;
 	}
 	.form-item-style {
+		display: flex;
+		::v-deep .el-form-item__content {
+			margin-left: 0 !important;
+			.multi-input {
+				display: flex;
+				.second-box {
+					display: flex;
+				}
+			}
+		}
 		.el-form-item {
 			margin-bottom: 20px;
 		}
 	}
 }
 </style>
+
+//@import url(); 引入公共css类
+.demo-ruleForm {
+	width: 580px;
+	text-align: left;
+	::v-deep.el-upload--picture-card {
+		width: 120px;
+		height: 120px;
+	}
+	::v-deep.el-upload-list--picture-card .el-upload-list__item {
+		width: 120px;
+		height: 120px;
+	}
+	.form-item-style {
+		display: flex;
+		.el-form-item {
+			margin-bottom: 20px;
+		}
+	}
+}

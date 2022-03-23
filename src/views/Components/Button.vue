@@ -102,18 +102,18 @@ export default {
 			// buttonName:'添加'
 		}
 	},
-	//监听属性 类似于data概念
 	computed: {},
-	//监控data中的数据变化
 	watch: {},
 	//方法集合
 	methods: {},
 	created() {},
-	mounted() {},
-	beforeCreate() {}, //生命周期 - 创建之前
-	beforeMount() {}, //生命周期 - 挂载之前
-	updated() {}, //生命周期 - 更新之后
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+	mounted() {
+		this.$api.demo.login({aa: 'SSS'})
+	},
+	beforeCreate() {},
+	beforeMount() {},
+	updated() {},
+	activated() {}
 }
 </script>
 <style lang="scss" scoped>

@@ -1,224 +1,292 @@
 <template>
-	<div class="left-aside">
-		<el-aside width="100%" height="100%">
-			<el-scrollbar wrap-class="scrollbar-wrapper">
-				<el-menu
-					class="el-menu-vertical-demo"
-					@open="handleOpen"
-					:default-active="activeMenu"
-					background-color="#fff"
-					text-color="#151933"
-					active-text-color="#fff"
-					@close="handleClose"
-					collapse-transition
-					:collapse="$store.state.foldMenu"
-				>
-					<div class="header-title">
-						<icon-font
-							name="vue"
-							style="padding:0"
-							:iconStyle="{ width: '1.5rem', height: '1.5rem' }"
-						/>
-						Panda Admin
-					</div>
-					<template v-for="item in $router.options.routes">
-						<router-link
-							v-if="
-								item.children.length === 1 &&
-									!item.children[0].children &&
-									!item.alwaysShow
-							"
-							:to="'/' + item.children[0].path"
-							:key="item.children[0].name"
-						>
-							<el-menu-item index="2">
-								<i :class="item.children[0].meta.icon" class="icon-color"></i>
-								<span
-									class="oneTitle"
-									slot="title"
-									v-if="item.children[0].meta && item.children[0].meta.title"
-								>
-									{{ item.children[0].meta.title }}
-								</span>
-							</el-menu-item>
-						</router-link>
-						<el-submenu v-else :index="item.name || item.path" :key="item.name">
-							<template slot="title">
-								<i :class="item.meta.icon" class="icon-color"></i>
-								<span
-									class="oneTitle"
-									slot="title"
-									v-if="item.meta && item.meta.title"
-								>
-									{{ item.meta.title }}
-								</span>
-							</template>
-							<el-menu-item-group v-for="(child, i) in item.children" :key="i">
-								<sidebar-menu
-									:is-nest="true"
-									class="nest-menu"
-									v-if="child.children && child.children.length > 0"
-									:routes="[child]"
-									:key="child.path"
-								></sidebar-menu>
-								<router-link :to="item.path + '/' + child.path" :key="child.name">
-									<el-menu-item :index="item.path + '/' + child.path">
-										<span slot="title" v-if="child.meta && child.meta.title">
-											{{ child.meta.title }}
-										</span>
-									</el-menu-item>
-								</router-link>
-							</el-menu-item-group>
-						</el-submenu>
-					</template>
-				</el-menu>
-			</el-scrollbar>
-		</el-aside>
-	</div>
+    <div class="left-aside">
+        <el-aside width="100%" height="100%" class="sidebar-container">
+            <el-scrollbar wrap-class="scrollbar-wrapper">
+                <el-menu
+                    v-if="menuList"
+                    class="el-menu-vertical-demo"
+                    @open="handleOpen"
+                    :default-active="activeMenu"
+                    background-color="#0062ab"
+                    text-color="#fff"
+                    active-text-color="#0099FF"
+                    @close="handleClose"
+                    :collapse-transition="false"
+                    mode="vertical"
+					unique-opened
+                    :collapse="$store.state.app.foldMenu"
+                >
+                    <div class="header-title">
+                        <div class="header-title-logo">
+                            <img src="../../../assets/logo.png" alt="" />
+                        </div>
+                        <span class="header-title-text">龙蟒大地MES系统</span>
+                    </div>
+                    <sidebar-item
+                        v-for="(route, index) in permission_routes"
+                        :key="index"
+                        :item="route"
+                        :base-path="route.path"
+                    />
+                </el-menu>
+            </el-scrollbar>
+        </el-aside>
+    </div>
 </template>
 <script>
-// import SideMenu from '@/views/layout/components/SideMenu'
-import IconFont from '@/components/component/IconFont'
+import { mapGetters } from 'vuex'
+import SidebarItem from './SidebarItem.vue'
+
 export default {
-	name: 'name',
-	props: {},
-	components: {
-		// SideMenu
-		IconFont
-	},
-	data() {
-		return {
-			// isCollapse: true,
-		}
-	},
-	//监听属性 类似于data概念
-	computed: {
-		activeMenu() {
-			const route = this.$route
-			const { meta, path } = route
-			if (meta.activeMenu) {
-				return meta.activeMenu
-			}
-			return path
-		}
-	},
-	//监控data中的数据变化
-	watch: {},
-	//方法集合
-	methods: {
-		handleOpen(key, keyPath) {
-			console.log(key, keyPath)
-		},
-		handleClose(key, keyPath) {
-			console.log(key, keyPath)
-		}
-	},
-	created() {},
-	mounted() {
-		console.log(this.$router.options.routes)
-	},
-	beforeCreate() {}, //生命周期 - 创建之前
-	beforeMount() {}, //生命周期 - 挂载之前
-	updated() {}, //生命周期 - 更新之后
-	activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+    name: 'name',
+    props: {},
+    components: {
+        SidebarItem
+    },
+    data() {
+        return {
+            // isCollapse: true,
+            menuList: []
+        }
+    },
+    computed: {
+        ...mapGetters(['permission_routes']),
+        /* routes() {
+            return this.$store.getters.permission_routes
+        }, */
+        activeMenu() {
+            const route = this.$route
+            const { meta, path } = route
+            if (meta.activeMenu) {
+                return meta.activeMenu
+            }
+            return path
+        }
+    },
+
+    watch: {
+        '$router.options.routes': function(options) {
+            console.log(n)
+        }
+    },
+    //方法集合
+    methods: {
+        handleOpen(key, keyPath) {
+            // console.log(key, keyPath)
+        },
+        handleClose(key, keyPath) {
+            // console.log(key, keyPath)
+        }
+    },
+    created() {},
+    mounted() {
+        let list = [
+            {
+                id: 1000100020002,
+                pid: 100010002,
+                path: '/productionPlanMgmt',
+                name: 'ProductionPlanMgmt',
+                component: 'layout',
+                redirect: '',
+                hidden: 'false',
+                meta: {
+                    title: '生产计划管理',
+                    icon: 'shengchanjihua'
+                },
+                children: [
+                    {
+                        id: 10001000200020000,
+                        pid: 1000100020002,
+                        path: '/productionYear',
+                        name: 'ProductionYear',
+                        component: 'ProductionMgmt/ProductionPlan/Year',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '年生产计划',
+                            icon: 'yewuniandu'
+                        },
+                        children: [
+                            {
+                                path: '/productionYear',
+                                name: 'ProductionYear',
+                                component: 'ProductionMgmt/ProductionPlan/Year',
+                                redirect: '',
+                                hidden: 'false',
+                                meta: {
+                                    title: '年生产计划',
+                                    icon: 'yewuniandu'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 10001000200020002,
+                        pid: 1000100020002,
+                        path: 'productionMonth',
+                        name: 'ProductionMonth',
+                        component: 'ProductionMgmt/ProductionPlan/Month',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '月生产计划',
+                            icon: 'yue'
+                        },
+                        children: []
+                    }
+                ]
+            },
+            {
+                id: 1000100020003,
+                pid: 100010002,
+                path: '/commandDispatch',
+                name: 'CommandDispatch',
+                component: 'layout',
+                redirect: '/commandDispatch/instruct',
+                hidden: 'false',
+                meta: {
+                    title: '生产指挥调度',
+                    icon: 'zhihuitiaodu'
+                },
+                children: [
+                    {
+                        id: 10001000200030000,
+                        pid: 1000100020003,
+                        path: 'classify',
+                        name: 'Classify',
+                        component: 'ProductionMgmt/CommandDispatch/Classify',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '指令分类',
+                            icon: 'fenlei'
+                        },
+                        children: []
+                    },
+                    {
+                        id: 10001000200030002,
+                        pid: 1000100020003,
+                        path: 'instruct',
+                        name: 'Instruct',
+                        component: 'ProductionMgmt/CommandDispatch/Instruct',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '调度指令',
+                            icon: 'zhilingguanli'
+                        },
+                        children: []
+                    }
+                ]
+            },
+            {
+                id: 1000100020004,
+                pid: 100010002,
+                path: '/statistics',
+                name: 'Statistics',
+                component: 'layout',
+                redirect: '',
+                hidden: 'false',
+                meta: {
+                    title: '生产统计',
+                    icon: 'tubiao_shengchantongji'
+                },
+                children: [
+                    {
+                        id: 10001000200040000,
+                        pid: 1000100020004,
+                        path: 'yield',
+                        name: 'Yield',
+                        component: 'ProductionMgmt/Statistics/Yield',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '日产量统计',
+                            icon: 'shengchanliangtongji'
+                        },
+                        children: []
+                    },
+                    {
+                        id: 10001000200040002,
+                        pid: 1000100020004,
+                        path: 'tendency',
+                        name: 'Tendency',
+                        component: 'ProductionMgmt/Statistics/Tendency',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '统计趋势',
+                            icon: 'qushi'
+                        },
+                        children: []
+                    }
+                ]
+            },
+            {
+                id: 1000100020005,
+                pid: 100010002,
+                path: '/reportMgmt',
+                name: 'ReportMgmt',
+                component: 'layout',
+                redirect: '',
+                hidden: 'false',
+                meta: {
+                    title: '报警管理',
+                    icon: 'alarm'
+                },
+                children: [
+                    {
+                        id: 10001000200050000,
+                        pid: 1000100020005,
+                        path: 'information',
+                        name: 'Information',
+                        component: 'ProductionMgmt/ReportMgmt/Information',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '指标报警信息',
+                            icon: 'baojingxinxi'
+                        },
+                        children: []
+                    },
+                    {
+                        id: 10001000200050002,
+                        pid: 1000100020005,
+                        path: 'record',
+                        name: 'Record',
+                        component: 'ProductionMgmt/ReportMgmt/Record',
+                        redirect: '',
+                        hidden: 'false',
+                        meta: {
+                            title: '指标报警记录',
+                            icon: 'baojingjilu'
+                        },
+                        children: []
+                    }
+                ]
+            }
+        ]
+        // this.menuList = this.$store.state.user.leftMenu
+    },
+    beforeCreate() {},
+    beforeMount() {},
+    updated() {},
+    activated() {}
 }
 </script>
 <style lang="scss" scoped>
-//@import url(); 引入公共css类
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-	width: $aside-width;
-	min-height: 100vh;
-	text-align: left;
+@import '@/scss/variables.scss';
+.header-title-logo {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 }
-.el-menu--collapse {
-	width: 64px;
-	height: 100vh;
-}
-.left-aside {
-	/* height: calc(100vh - 60px) ; */
-	/* background: $--color-primary; */
-	position: fixed;
-	.header-title {
-		position: relative;
-		color: #fff;
-		font-size: 20px;
-		font-weight: 700;
-		/* width: $aside-width; */
-		background: $--color-primary;
-		line-height: 60px;
-		height: 60px;
-		text-align: left;
-		padding: 0 20px;
-		overflow: hidden;
-	}
-	.el-menu {
-		border-right: none;
-	}
-
-	.el-menu-vertical-demo {
-		::v-deep.el-menu-item {
-			a {
-				display: inline-block;
-				height: 100%;
-				width: 90%;
-			}
-		}
-	}
-	.el-menu-item {
-		margin: 10px;
-		border-radius: 8px;
-	}
-	::v-deep .el-submenu__title {
-		margin: 10px;
-		border-radius: 10px;
-	}
-	::v-deep .el-submenu__title:hover {
-		background: #fff !important;
-	}
-	::v-deep .el-submenu__icon-arrow {
-		font-size: 18px;
-		font-weight: 1000;
-	}
-	.el-submenu {
-		.el-menu-item {
-			height: 42px;
-			line-height: 42px;
-			text-align: center;
-			span {
-				/* color: #afadb9; */
-				font-weight: 600;
-			}
-		}
-	}
-	.el-menu-item.is-active {
-		background: #1cd39b !important;
-		color: #fff !important;
-	}
-	::v-deep .el-menu-item-group__title {
-		padding: 0;
-	}
-	::v-deep .el-scrollbar__wrap {
-		height: 100vh;
-		margin: 0 !important;
-		background: #fff;
-	}
-	.horizontal-collapse-transition {
-		transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
-	}
-	.oneTitle {
-		font-size: 16px;
-		font-weight: 700;
-	}
-	.icon-color {
-		font-size: 1.5rem;
-		color: #bdbdbd;
-		margin-right: 10px;
-	}
-	.el-menu-item:focus,
-	.el-menu-item:hover {
-		outline: none;
-		background-color: #1cd39b !important;
-		color: #fff !important;
-	}
+.header-title-text {
+    color: #fff;
 }
 </style>

@@ -11,6 +11,7 @@ module.exports = {
 		parser: 'babel-eslint'
 	},
 	rules: {
+		"prettier/prettier": "off",
 		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 		// 是否需要箭头函数参数中的括号  off/on
@@ -35,7 +36,7 @@ module.exports = {
 		'comma-dangle': [2, 'never'],
 		// 强制使用 tab 缩进
 		indent: [
-			2,
+			0,
 			'tab',
 			{
 				'SwitchCase': 1
@@ -43,13 +44,7 @@ module.exports = {
 		],
 		// 关闭禁用 tab
 		'no-tabs': 0,
-		// 单行最大长度 200 字符串
-		'max-len': [
-			2,
-			{
-				code: 600
-			}
-		],
+		"no-param-reassign": 0,
 		// 禁止提前使用变量/函数
 		'no-use-before-define': [
 			2,
