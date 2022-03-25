@@ -103,22 +103,23 @@ export default {
                 this.$store.commit('user/SET_MENUACTIVE', key)
                 let list = await this.$store.dispatch('user/getLeftMenu')
                 GetRouter(list)
-                if (this.$router && key == '100010006') {
-                    // this.$router.push('/dictionaries/productCode')
-					this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                } else if (this.$router && key == '100010002') {
-                    // this.$router.push('/productionYear')
-					this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                } else if (this.$router && key == '100010003') {
-                    this.$router.push('/materialRecord/materialenterArena')
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                } else if (this.$router && key == '100010004') {
-                    this.$router.push('/qualityControl/productQuality')
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                } else if (this.$router && key == '100010005') {
-                    this.$router.push('/environmentalProtection/abnormalMonitor')
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                }
+				this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // if (this.$router && key == '100010006') {
+                //     // this.$router.push('/dictionaries/productCode')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // } else if (this.$router && key == '100010002') {
+                //     // this.$router.push('/productionYear')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // } else if (this.$router && key == '100010003') {
+                //     // this.$router.push('/materialRecord/materialenterArena')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // } else if (this.$router && key == '100010004') {
+                //     // this.$router.push('/qualityControl/productQuality')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // } else if (this.$router && key == '100010005') {
+                //     // this.$router.push('/environmentalProtection/abnormalMonitor')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // }
             }
 
             // this.getLeftMenu(key, this.$store.state.userInfo.userNid)

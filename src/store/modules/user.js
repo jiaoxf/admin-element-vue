@@ -60,8 +60,8 @@ const actions = {
                         setToken(data.token)
                         setUserId(data.userNid)
                         resolve(response)
-					} else {
-						console.log(response)
+                    } else {
+                        console.log(response)
                         Message.error(response.message)
                     }
                 })
@@ -98,113 +98,6 @@ const actions = {
                     if (res.code === 'SUCCESS') {
                         // console.log(res.data)
                         let menus = res.data
-                        /* let a = {
-                            component: 'layout',
-                            hidden: 'false',
-                            id: 1,
-                            meta: '',
-                            name: 'A',
-                            path: '',
-                            pid: 100010004,
-                            redirect: '',
-                            meta: {
-                                title: '视频异常',
-                                icon: 'zhibiao',
-                                iframePath: 'http://www.cdraindrop.top'
-                            },
-                            children: [
-                                {
-                                    id: 1000100050001,
-                                    pid: 1,
-                                    path: '/A1',
-                                    name: 'A1',
-                                    component: 'FlowChart/chart',
-                                    redirect: '',
-                                    hidden: 'false',
-                                    meta: {
-                                        title: '指标异常监测1111',
-                                        icon: 'zhibiao',
-                                        iframePath: 'https://www.baidu.com'
-                                    },
-                                    children: [
-                                        {
-                                            id: 1000100050001,
-                                            pid: 1,
-                                            path: '/AA1',
-                                            name: 'AA1',
-                                            component: 'FlowChart/chart',
-                                            redirect: '',
-                                            hidden: 'false',
-                                            meta: {
-                                                title: '指标异常监测222',
-                                                icon: 'zhibiao',
-                                                iframePath: 'http://www.cdraindrop.top'
-                                            },
-                                            children: [
-                                                {
-                                                    id: 1000100050001,
-                                                    pid: 1,
-                                                    path: '/AAA1',
-                                                    name: 'AAA1',
-                                                    component: 'FlowChart/chart',
-                                                    redirect: '',
-                                                    hidden: 'false',
-                                                    meta: {
-                                                        title: '指标异常监测AAA1',
-                                                        icon: 'zhibiao',
-                                                        iframePath: 'http://www.cdraindrop.top'
-                                                    }
-                                                },
-                                                {
-                                                    id: 1000100050001,
-                                                    pid: 1,
-                                                    path: '/AAA2',
-                                                    name: 'AAA2',
-                                                    component: 'FlowChart/chart',
-                                                    redirect: '',
-                                                    hidden: 'false',
-                                                    meta: {
-                                                        title: '指标异常监测AAA2',
-                                                        icon: 'zhibiao',
-                                                        iframePath: 'https://www.baidu.com'
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            id: 1000100050001,
-                                            pid: 1,
-                                            path: '/AA2',
-                                            name: 'AA2',
-                                            component: 'FlowChart/chart',
-                                            redirect: '',
-                                            hidden: 'false',
-                                            meta: {
-                                                title: '指标异常监测222',
-                                                icon: 'zhibiao',
-                                                iframePath: 'http://www.cdraindrop.top'
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    id: 1000100050001,
-                                    pid: 1,
-                                    path: '/A2',
-                                    name: 'A2',
-                                    component: 'FlowChart/chart',
-                                    redirect: '',
-                                    hidden: 'false',
-                                    meta: {
-                                        title: '指标异常监测1111',
-                                        icon: 'zhibiao',
-                                        iframePath: 'http://www.cdraindrop.top'
-                                    }
-                                }
-                            ],
-                            hidden: 'false'
-                        }
-                        menus.push(a) */
                         console.log(menus, '获取的菜单')
                         // const arrList = getAsyncRoutes(menus)
                         sessionStorage.setItem('_c_unparseRoutes', JSON.stringify(menus))
@@ -229,6 +122,17 @@ const actions = {
                     resetRouter()
                     commit('RESET_STATE')
                     resolve()
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    },
+	getOperate({ dispatch, menuId }) {
+        return new Promise((resolve, reject) => {
+            api.getMenuOperate(menuId)
+                .then(res => {
+                    resolve(res)
                 })
                 .catch(error => {
                     reject(error)

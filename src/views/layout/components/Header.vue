@@ -124,22 +124,23 @@ export default {
                 /* console.log(this.$store.state.user.leftMenu)
 				console.log(this.$store.state.user.leftMenu[0].redirect)
 				this.$router.push(this.$store.state.user.leftMenu[0].redirect) */
-                if (this.$router && key == '100010006') {
-                    this.$router.push('/dictionaries/productCode')
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                } else if (this.$router && key == '100010002') {
-                    // this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                    this.$router.push('/productionYear')
-                } else if (this.$router && key == '100010003') {
-                    // this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                    this.$router.push('/materialRecord/materialenterArena')
-                } else if (this.$router && key == '100010004') {
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                    this.$router.push('/qualityControl/productQuality')
-                } else if (this.$router && key == '100010005') {
-                    this.$router.push('/environmentalProtection/abnormalMonitor')
-					// this.$router.push(this.$store.state.user.leftMenu[0].redirect)
-                }
+				this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // if (this.$router && key == '100010006') {
+                //     // this.$router.push('/dictionaries/productCode')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // } else if (this.$router && key == '100010002') {
+                //     // this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                //     this.$router.push('/productionYear')
+                // } else if (this.$router && key == '100010003') {
+                //     this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                //     // this.$router.push('/materialRecord/materialenterArena')
+                // } else if (this.$router && key == '100010004') {
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                //     // this.$router.push('/qualityControl/productQuality')
+                // } else if (this.$router && key == '100010005') {
+                //     // this.$router.push('/environmentalProtection/abnormalMonitor')
+				// 	this.$router.push(this.$store.state.user.leftMenu[0].redirect)
+                // }
             }
 
             // this.getLeftMenu(key, this.$store.state.userInfo.userNid)

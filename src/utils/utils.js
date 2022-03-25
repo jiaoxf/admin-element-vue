@@ -1,3 +1,4 @@
+import api from '@/api/index'
 export default {
     install: function(Vue) {
         Vue.prototype.$debounce = function(fn, delay) {
@@ -11,5 +12,16 @@ export default {
                 }
             }
         }
+    },
+    getOperate(menuId) {
+        return new Promise((resolve, reject) => {
+			api.getMenuOperate({ menuId })
+                .then(res => {
+                    resolve(res)
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
     }
 }

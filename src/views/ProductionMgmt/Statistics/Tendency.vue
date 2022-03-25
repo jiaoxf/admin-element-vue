@@ -24,7 +24,6 @@
                     </template>
                     <template slot-scope="{}" slot="planTimeSearch">
                         <el-date-picker
-                            :default-value="defaultMonth"
                             v-model="form.planTime"
                             type="month"
                             placeholder="选择生产月度"
@@ -210,6 +209,7 @@ export default {
         this.getData(month)
     },
     mounted() {
+		this.setOperate()
 		// this.form.planTime = this.timeDefault
 	},
     computed: {
@@ -217,6 +217,63 @@ export default {
     },
     watch: {},
     methods: {
+		setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                console.log(res)
+                /* this.permission = {
+                    delBtn: false,
+                    addBtn: false,
+					viewBtn: false
+                } */
+                let resultList = [
+                    {
+                        operName: '导入', //操作名称
+                        operCode: 'import' //操作代码
+                    },
+                    {
+                        operName: '新增', //操作名称
+                        operCode: 'add' //操作代码
+                    },
+                    {
+                        operName: '编辑', //操作名称
+                        operCode: 'edit' //操作代码
+                    },
+                    {
+                        operName: '导出', //操作名称
+                        operCode: 'export' //操作代码
+                    },
+                    {
+                        operName: '删除', //操作名称
+                        operCode: 'delete' //操作代码
+                    },
+                    {
+                        operName: '查看', //操作名称
+                        operCode: 'view' //操作代码
+                    }
+                ]
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1 ? (this.myAddBtn = true) : (this.myAddBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1 ? (this.myEditBtn = true) : (this.myEditBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.myDeleteBtn = true)
+                    : (this.myDeleteBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
+				// 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+						menu: false
+					}
+                }
+            })
+        },
         getData(month) {
 			let yearMonth = ''
 			if(month){

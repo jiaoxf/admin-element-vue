@@ -91,7 +91,9 @@ export default {
     props: {},
     components: {},
     data() {
+        let indexArr = []
         return {
+            reload: Math.random(),
             loading: true,
             flag: false,
             data: [],
@@ -296,7 +298,8 @@ export default {
                         prop: 'tksq',
                         icon: 'el-icon-finished',
                         formslot: true,
-                        arrow: false
+                        arrow: false,
+                        column: indexArr
                     }
                 ]
             },
@@ -393,14 +396,34 @@ export default {
                                 span: 8
                             }
                         })
+
+                        /* this.$nextTick(() => {
+                            this.option.group[1].column = this.indexArr
+                        }) */
+                        // this.option.group[1].column = this.indexArr
+                        /* setTimeout(() => {
+                            this.$refs.crud.updateDic('tksq')
+                        }, 1000) */
+                        // this.option.group[1].column = this.indexArr
+                        // this.$refs.crud.DIC.tksq = this.indexArr
+
+                        // this.$refs.crud.DIC.tksq = this.indexArr
                         this.option.group[1].column = this.indexArr
+                        this.$refs.crud.updateDic('tksq', this.indexArr)
                         this.$nextTick(() => {
                             this.$refs.crud.updateDic()
+                            console.log(this.$refs.crud.DIC.tksq)
+                            console.log(this.option.group[1].column)
                         })
-                        /* this.$nextTick(() => {
+                        setTimeout(() => {
+                            this.option.group[1].column = this.indexArr
                             this.$refs.crud.updateDic()
-
-                        }) */
+                            console.log(this.$refs.crud.DIC.tksq)
+                            console.log(this.option.group[1].column)
+                        }, 1000)
+                        /*  setTimeout(() => {
+                            this.$refs.crud.updateDic('tksq')
+                        }, 500) */
                     } else if (res.code == 'FAIL') {
                         this.$message.error(res.message)
                         this.option.group[1].column = []
@@ -549,6 +572,7 @@ export default {
             done()
         },
         viewProductIndex(projectId) {
+            // this.option.group[1].column = []
             this.indexArr = []
             this.$api
                 .getProductIndexForm({
@@ -567,17 +591,17 @@ export default {
                                 span: 8
                             }
                         })
-						// TODO
+                        // TODO
                         /* this.$nextTick(() => {
 							this.option.group[1].column = this.indexArr
                             this.$refs.crud.updateDic()
                         }) */
-                        // this.option.group[1].column = this.indexArr
-						// console.log(this.option.group[1].column)
-						// this.$set(this.option.group[1], 'column', this.indexArr)
-						/* this.option.group[1].column = this.indexArr
+                        this.option.group[1].column = this.indexArr
+                        // console.log(this.option.group[1].column)
+                        // this.$set(this.option.group[1], 'column', this.indexArr)
+                        /* this.option.group[1].column = this.indexArr
 						Object.assign({}, this.option.group[1]) */
-						this.$nextTick(() => {
+                        this.$nextTick(() => {
                             this.$refs.crud.updateDic()
                         })
                         let formList = res.data
@@ -591,13 +615,12 @@ export default {
         },
         openDialog(done, type) {
             if (['view', 'edit'].includes(type)) {
-				this.indexArr = []
                 this.viewProductIndex(this.form.id)
             } else {
-                this.option.group[1].column = []
+                /* this.option.group[1].column = []
                 this.$nextTick(() => {
                     this.$refs.crud.updateDic()
-                })
+                }) */
             }
             done()
         }

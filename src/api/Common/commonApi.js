@@ -14,6 +14,13 @@ const commonApi = {
             method: 'post',
             data: data
         })
+    },
+    getMenuOperate: data => {
+        return service({
+            url: 'web/menu/operate',
+            method: 'post',
+            data: data
+        })
     }
 }
 export default commonApi

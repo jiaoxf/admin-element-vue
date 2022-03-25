@@ -76,13 +76,15 @@
                 @row-update="handleUpdate"
                 @current-change="currentChange"
                 :page.sync="page1"
-				:table-loading="loading"
+                :table-loading="loading"
+                :permission="permission"
             >
                 <template slot-scope="{ type, size }" slot="menuLeft">
                     <el-button
                         type="primary"
                         icon="el-icon-plus"
                         :size="size"
+                        v-if="myAddBtn"
                         @click="pushDetail('add')"
                     >
                         新增</el-button
@@ -94,6 +96,7 @@
                         icon="el-icon-view"
                         :size="size"
                         @click="pushDetail('view', row)"
+                        v-if="myViewBtn"
                         >查看</el-button
                     >
                     <el-button
@@ -101,6 +104,7 @@
                         icon="el-icon-edit"
                         :size="size"
                         @click="pushDetail('edit', row)"
+                        v-if="myEditBtn"
                         >编辑</el-button
                     >
                     <el-button
@@ -108,6 +112,7 @@
                         icon="el-icon-delete"
                         :size="size"
                         @click="handleDel(row)"
+                        v-if="myDeleteBtn"
                         >删除</el-button
                     >
                 </template>
@@ -122,7 +127,8 @@ export default {
     components: {},
     data() {
         return {
-			loading: true,
+            permission: {},
+            loading: true,
             data: [],
             option: {
                 size: 'mini',
@@ -154,19 +160,19 @@ export default {
                         label: '名称',
                         prop: 'planName',
                         display: false,
-						width: 250
+                        width: 250
                     },
                     {
                         label: '版本号',
                         prop: 'version',
                         display: false,
-						width:80
+                        width: 80
                     },
                     {
                         label: '更新时间',
                         prop: 'createDate',
                         display: false,
-						width: 200
+                        width: 200
                     }
                 ]
             },
@@ -183,16 +189,81 @@ export default {
                 beginDate: '', //更新时间起
                 endDate: '', //更新时间止
                 time: ''
-            }
+            },
+            myAddBtn: false,
+            myEditBtn: false,
+            myDeleteBtn: false,
+            myViewBtn: false
         }
     },
     created() {},
     mounted() {
+        // this.getOperate(this.$route.meta.id)
+
+        // this.$store.dispatch('user/getOperate', this.$route.meta.id)
         this.getData()
+        this.setOperate()
     },
     computed: {},
     watch: {},
     methods: {
+        setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                console.log(res)
+                /* this.permission = {
+                    delBtn: false,
+                    addBtn: false,
+					viewBtn: false
+                } */
+                let resultList = [
+                    {
+                        operName: '导入', //操作名称
+                        operCode: 'import' //操作代码
+                    },
+                    {
+                        operName: '新增', //操作名称
+                        operCode: 'add' //操作代码
+                    },
+                    {
+                        operName: '编辑', //操作名称
+                        operCode: 'edit' //操作代码
+                    },
+                    {
+                        operName: '导出', //操作名称
+                        operCode: 'export' //操作代码
+                    },
+                    {
+                        operName: '删除', //操作名称
+                        operCode: 'delete' //操作代码
+                    },
+                    {
+                        operName: '查看', //操作名称
+                        operCode: 'view' //操作代码
+                    }
+                ]
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1 ? (this.myAddBtn = true) : (this.myAddBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1 ? (this.myEditBtn = true) : (this.myEditBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.myDeleteBtn = true)
+                    : (this.myDeleteBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
+				// 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+						menu: false
+					}
+                }
+            })
+        },
         getData() {
             this.$api
                 .productionYearList({
@@ -205,7 +276,7 @@ export default {
                     pageSize: 20
                 })
                 .then(res => {
-					this.loading = false
+                    this.loading = false
                     this.data = res.rows
                     this.page1.total = res.total
                 })
@@ -265,7 +336,7 @@ export default {
             done()
         },
         handleDel(form, row, index) {
-			console.log(form)
+            console.log(form)
             this.$confirm('确认是否删除, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -292,18 +363,17 @@ export default {
                 this.$router.push({
                     path: '/yearDetail'
                 })
-				sessionStorage.setItem('detailStatus', type)
+                sessionStorage.setItem('detailStatus', type)
             } else {
-				this.$router.push({
+                this.$router.push({
                     path: '/yearDetail',
                     query: {
                         status: type
                     }
                 })
-				sessionStorage.setItem('detailStatus', type)
-				sessionStorage.setItem('detailInfo', JSON.stringify(row))
+                sessionStorage.setItem('detailStatus', type)
+                sessionStorage.setItem('detailInfo', JSON.stringify(row))
             }
-
         }
     }
 }

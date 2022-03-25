@@ -50,18 +50,18 @@ router.beforeEach(async (to, from, next) => {
             next({ name: 'index' })
         } else {
             try {
-				if (store.state.user.menuActive == '') {
+				/* if (store.state.user.menuActive == '') {
 					store.state.user.menuActive = '100010002'
                     await store.commit('user/SET_MENUACTIVE', '100010002')
-                }
+                } */
                 if (store.state.user.menuNav.length == 0) {
                     await store.dispatch('user/getTopNav')
                 }
-                if (store.state.user.leftMenu.length == 0) {
+                /* if (store.state.user.leftMenu.length == 0) {
 					let list = await store.dispatch('user/getLeftMenu')
 					GetRouter(list)
 					router.push('/')
-                }
+                } */
                 // next()
                 next()
             } catch (error) {
