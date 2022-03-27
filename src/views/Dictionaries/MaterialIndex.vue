@@ -39,6 +39,10 @@ export default {
             flag: false,
             data: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 border: true,
                 columnBtn: false,
@@ -99,16 +103,57 @@ export default {
                 total: 0,
                 layout: 'total,prev,pager, next, jumper',
                 pageSize: 20
-            }
+            },
+            myExportBtn: false,
+            myImportBtn: false
         }
     },
     created() {
+		this.setOperate()
         this.getData()
     },
     mounted() {},
     computed: {},
     watch: {},
     methods: {
+		 setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         rowspan() {
             this.spanArr = []
             this.position = 0

@@ -23,6 +23,29 @@
                     :before-open="openDialog"
                     :table-loading="loading"
                 >
+					<template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
                     <template slot-scope="{ type }" slot="factoryNameForm">
                         <el-select
                             v-model="form.factoryName"
@@ -101,6 +124,10 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -323,20 +350,78 @@ export default {
             departmentsList: [],
             productList: [],
             indexStr: '',
-            productIndexList: []
+            productIndexList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
         // this.getData()
-
+		this.setOperate()
         this.getProduct()
         this.getFactory()
         this.getData()
     },
-    mounted() {},
+    mounted() {
+        /* this.option.group[1].column = [
+                            {
+                                label: '分厂名称1',
+                                prop: 'factoryName',
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请输入分厂名称',
+                                        trigger: 'blur'
+                                    }
+                                ],
+                                span: 8
+                            }
+                        ] */
+        /*  this.$nextTick(() => {
+                            this.$refs.crud.updateDic()
+                        }) */
+    },
     computed: {},
     watch: {},
     methods: {
+		setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         getProduct() {
             this.$api.commonProduct({}).then(res => {
                 this.productList = res
@@ -396,34 +481,10 @@ export default {
                                 span: 8
                             }
                         })
-
-                        /* this.$nextTick(() => {
-                            this.option.group[1].column = this.indexArr
-                        }) */
-                        // this.option.group[1].column = this.indexArr
-                        /* setTimeout(() => {
-                            this.$refs.crud.updateDic('tksq')
-                        }, 1000) */
-                        // this.option.group[1].column = this.indexArr
-                        // this.$refs.crud.DIC.tksq = this.indexArr
-
-                        // this.$refs.crud.DIC.tksq = this.indexArr
                         this.option.group[1].column = this.indexArr
-                        this.$refs.crud.updateDic('tksq', this.indexArr)
-                        this.$nextTick(() => {
+						this.$nextTick(() => {
                             this.$refs.crud.updateDic()
-                            console.log(this.$refs.crud.DIC.tksq)
-                            console.log(this.option.group[1].column)
                         })
-                        setTimeout(() => {
-                            this.option.group[1].column = this.indexArr
-                            this.$refs.crud.updateDic()
-                            console.log(this.$refs.crud.DIC.tksq)
-                            console.log(this.option.group[1].column)
-                        }, 1000)
-                        /*  setTimeout(() => {
-                            this.$refs.crud.updateDic('tksq')
-                        }, 500) */
                     } else if (res.code == 'FAIL') {
                         this.$message.error(res.message)
                         this.option.group[1].column = []
@@ -591,16 +652,7 @@ export default {
                                 span: 8
                             }
                         })
-                        // TODO
-                        /* this.$nextTick(() => {
-							this.option.group[1].column = this.indexArr
-                            this.$refs.crud.updateDic()
-                        }) */
                         this.option.group[1].column = this.indexArr
-                        // console.log(this.option.group[1].column)
-                        // this.$set(this.option.group[1], 'column', this.indexArr)
-                        /* this.option.group[1].column = this.indexArr
-						Object.assign({}, this.option.group[1]) */
                         this.$nextTick(() => {
                             this.$refs.crud.updateDic()
                         })
@@ -623,7 +675,10 @@ export default {
                 }) */
             }
             done()
-        }
+        },
+		importTing(){
+
+		}
     }
 }
 </script>

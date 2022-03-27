@@ -111,8 +111,6 @@ export default {
         },
         async handleSelect(key) {
             // console.log(key)
-            // TODO 默认第一个菜单
-
             if (key == '100010007') {
                 window.open(this.$store.state.user.menuNav[6].topath)
             } else if (this.$router && key == '100010001') {

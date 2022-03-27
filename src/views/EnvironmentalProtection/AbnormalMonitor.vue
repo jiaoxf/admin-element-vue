@@ -23,6 +23,29 @@
                     :before-open="openDialog"
 					:table-loading="loading"
                 >
+					<template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
                     <template slot-scope="{ type }" slot="factoryNameForm">
                         <el-select
                             v-model="form.factoryName"
@@ -99,12 +122,16 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
+                size: 'mini',
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
                 columnBtn: false,
                 refreshBtn: false,
-                viewBtn: true,
                 row: true,
                 span: 12,
                 searchShowBtn: false,
@@ -127,6 +154,7 @@ export default {
                         label: '分厂代码',
                         prop: 'factoryCode',
                         display: false,
+						hide: true,
                         fixed: true
                     },
                     {
@@ -140,6 +168,7 @@ export default {
                     {
                         label: '车间代码',
                         prop: 'departmentCode',
+						hide: true,
                         display: false
                     },
                     {
@@ -206,6 +235,7 @@ export default {
                                 label: '分厂代码',
                                 prop: 'factoryCode',
                                 disabled: true,
+								display: false,
                                 span: 8
                             },
                             {
@@ -222,6 +252,7 @@ export default {
                             },
                             {
                                 label: '车间代码',
+								display: false,
                                 prop: 'departmentCode',
                                 disabled: true,
                                 span: 8
@@ -317,13 +348,16 @@ export default {
             departmentsList: [],
             productList: [],
             indexStr: '',
-            productIndexList: []
+            productIndexList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
         // this.getData()
         this.getDepartment()
         this.getProduct()
+		this.setOperate()
         this.getFactory()
         this.getData()
     },
@@ -331,6 +365,44 @@ export default {
     computed: {},
     watch: {},
     methods: {
+		setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         getProduct() {
             this.$api.commonProduct({}).then(res => {
                 this.productList = res
@@ -588,7 +660,8 @@ export default {
                 })
             }
             done()
-        }
+        },
+		importTing(){}
     }
 }
 </script>

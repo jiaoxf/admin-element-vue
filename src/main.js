@@ -16,7 +16,7 @@ import img from '@/utils/img'
 
 
 Vue.use(Avue)
-// Vue.use(utils)
+Vue.use(utils)
 Vue.prototype.$echarts = function(el) {
     return echarts.init(el, null, { renderer: 'svg' })
 }

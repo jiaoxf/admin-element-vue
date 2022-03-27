@@ -61,7 +61,7 @@
                         <el-button type="text" v-show="type != 'view'" @click="generateNum"
                             >生成批次号</el-button
                         >
-                        <p class="num-tip">
+                        <p class="num-tip" v-if="type != 'view'">
                             批次号可系统生成，可输入。保存前请确保当前内容与批次号一致。
                         </p>
                     </template>
@@ -96,18 +96,13 @@
                         </el-select>
                     </template>
                     <template slot-scope="{ row }" slot="menu">
-                        <el-button icon="el-icon-check" type="text" @click="showDialog(row)"
+                        <el-button v-if="myIndexBtn" icon="el-icon-check" type="text" @click="showDialog(row)"
                             >指标</el-button
                         >
                     </template>
                 </avue-crud>
                 <el-dialog title="详情" :visible.sync="dialogVisible" width="80%">
-                    <el-descriptions
-                        class="margin-top"
-                        title="产品质量检验信息"
-                        :column="3"
-                        border
-                    >
+                    <el-descriptions class="margin-top" title="产品质量检验信息" :column="3" border>
                         <el-descriptions-item>
                             <template slot="label"> 产品名称 </template>
                             {{ productQualityInfo.productName }}
@@ -205,6 +200,7 @@ export default {
             defaults: {},
             // 质量指标数据
             indexArr: [],
+			myIndexBtn: false,
             departmentList: [],
             option: {
                 size: 'mini',
@@ -212,7 +208,7 @@ export default {
                 border: true,
                 columnBtn: false,
                 refreshBtn: false,
-                viewBtn: true,
+                viewBtn: false,
                 searchLabelWidth: 90,
                 row: true,
                 menuWidth: 300,
@@ -224,7 +220,9 @@ export default {
                 searchSpan: 8,
                 index: true,
                 indexLabel: '序号',
-                // addBtn: false,
+                addBtn: false,
+				editBtn: false,
+				delBtn: false,
                 column: [
                     {
                         label: '生产日期',
@@ -345,7 +343,7 @@ export default {
                 beginDate: '', //生产日期起
                 endDate: '', //生产日期止
                 time: [],
-				productBatchNum: ''
+                productBatchNum: ''
             },
             page1: {
                 currentPage: 1,
@@ -368,7 +366,7 @@ export default {
         this.getDepartment()
         this.getProduct()
         this.getData()
-		this.setOperate()
+        this.setOperate()
     },
     mounted() {},
     computed: {
@@ -405,61 +403,21 @@ export default {
         } */
     },
     methods: {
-		setOperate() {
+        setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
-                console.log(res)
-                /* this.permission = {
-                    delBtn: false,
-                    addBtn: false,
-					viewBtn: false
-                } */
-                let resultList = [
-                    {
-                        operName: '导入', //操作名称
-                        operCode: 'import' //操作代码
-                    },
-                    {
-                        operName: '新增', //操作名称
-                        operCode: 'add' //操作代码
-                    },
-                    {
-                        operName: '编辑', //操作名称
-                        operCode: 'edit' //操作代码
-                    },
-                    {
-                        operName: '导出', //操作名称
-                        operCode: 'export' //操作代码
-                    },
-                    {
-                        operName: '删除', //操作名称
-                        operCode: 'delete' //操作代码
-                    },
-                    {
-                        operName: '查看', //操作名称
-                        operCode: 'view' //操作代码
-                    }
-                ]
+                let resultList = res.data
                 let btnList = []
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
                 })
-                btnList.indexOf('add') > -1 ? (this.myAddBtn = true) : (this.myAddBtn = false) // 新增按钮
-                btnList.indexOf('edit') > -1 ? (this.myEditBtn = true) : (this.myEditBtn = false) // 编辑按钮
+                btnList.indexOf('add') > -1 ? (this.option.addBtn = true) : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1 ? (this.option.editBtn = true) : (this.option.editBtn = false) // 编辑按钮
                 btnList.indexOf('delete') > -1
-                    ? (this.myDeleteBtn = true)
-                    : (this.myDeleteBtn = false) // 删除按钮
-                btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
-                if (
-                    this.myEditBtn == false &&
-                    this.myViewBtn == false &&
-                    this.myDeleteBtn == false
-                ) {
-                    this.permission = {
-						menu: false
-					}
-                }
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1 ? (this.option.viewBtn = true) : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('index') > -1 ? (this.myIndexBtn = true) : (this.myIndexBtn = false) // 查看按钮
             })
         },
         getProduct() {
@@ -518,7 +476,6 @@ export default {
                 })
                 .then(res => {
                     if (res.code == 'SUCCESS') {
-                        console.log(res.data)
                         let data = res.data
                         this.form.departmentName = data.departmentName
                         this.form.departmentCode = data.departmentCode
@@ -547,7 +504,7 @@ export default {
                     this.page1.total = res.total
                 })
         },
-		 searchChange(params, done) {
+        searchChange(params, done) {
             console.log(params)
             this.searchInfo = params
             this.page1.currentPage = 1
@@ -565,7 +522,7 @@ export default {
                     batchNumber: this.searchInfo.batchNumber, //批次号
                     beginDate: this.form.time ? this.form.time[0] : '', //生产日期起
                     endDate: this.form.time ? this.form.time[1] : '', //生产日期止
-					batchNumber: this.searchInfo.productBatchNum,
+                    batchNumber: this.searchInfo.productBatchNum,
                     currPage: this.page1.currentPage,
                     pageSize: 20
                 })
@@ -588,7 +545,7 @@ export default {
             this.form.beginDate = '' //生产日期起
             this.form.endDate = '' //生产日期止
             this.form.time = ''
-			this.form.productBatchNum = ''
+            this.form.productBatchNum = ''
             this.page1.currentPage = 1
             this.getData()
         },
@@ -600,7 +557,37 @@ export default {
             console.log(row, index)
         },
         handleSave(form, done, loading) {
-            let params = {
+            this.$confirm('检查输入日产量统计数据与批次号是否一致？', '提示', {
+                confirmButtonText: '确定',
+                type: 'warning'
+            }).then(() => {
+                let params = {
+                    productionDate: form.productionDate, //生产日期
+                    productName: form.productName, //产品名称
+                    productId: form.productId, //产品编号
+                    departmentName: form.departmentName, //车间名称
+                    departmentCode: form.departmentCode, //车间代码
+                    workingShift: form.workingShift, //生产班次
+                    productBatch: form.productBatch, //生产批次
+                    productType: form.productType, //产品类型
+                    yield: form.yield, //产量
+                    measureUnit: form.measureUnit, //单位
+                    productBatchNum: form.productBatchNum // 产品批次号
+                }
+                this.$api.statisticsYieldAdd(params).then(res => {
+                    if (res.code == 'SUCCESS') {
+                        this.$message.success(res.message)
+                        this.page1.currentPage = 1
+                        this.getData()
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
+                done()
+            }).catch(() => {
+				done()
+			})
+            /* let params = {
                 productionDate: form.productionDate, //生产日期
                 productName: form.productName, //产品名称
                 productId: form.productId, //产品编号
@@ -622,7 +609,7 @@ export default {
                     this.$message.error(res.message)
                 }
             })
-            done()
+            done() */
         },
         handleUpdate(form, index, done, loading) {
             console.log(form)
@@ -718,12 +705,9 @@ export default {
         },
         // 指标查看
         showDialog(row, index) {
-            console.log(row, 'row的信息')
             this.getDayProductDetail(row)
         },
         getDayProductDetail(row) {
-            console.log(row)
-            // this.
             this.$api
                 .statisticsYieldProductTest({
                     batchNumber: row.productBatchNum
@@ -783,7 +767,6 @@ export default {
         },
         handleClose() {},
         generateNum() {
-            console.log(this.form)
             if (this.form.productId == '' || this.form.productId == undefined) {
                 this.$message.error('请选择产品名称')
                 return

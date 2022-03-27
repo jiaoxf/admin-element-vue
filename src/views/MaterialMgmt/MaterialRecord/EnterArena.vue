@@ -23,6 +23,29 @@
                     :before-open="openDialog"
                     :table-loading="loading"
                 >
+                    <template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
                     <template slot-scope="" slot="purchasedDateSearch">
                         <el-date-picker
                             v-model="form.time"
@@ -141,6 +164,10 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+                addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -157,7 +184,6 @@ export default {
                 menuSpan: 4,
                 index: true,
                 indexLabel: '序号',
-                // addBtn: false,
                 column: [
                     {
                         label: '进料日期',
@@ -284,7 +310,7 @@ export default {
                             {
                                 label: '计量单位',
                                 prop: 'measureUnit',
-								disabled: true,
+                                disabled: true,
                                 span: 8
                             },
                             {
@@ -337,7 +363,9 @@ export default {
             productIndexList: [],
             supplierNameList: [],
             meterialIndexArr: [],
-            qualityInfoList: []
+            qualityInfoList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
@@ -345,12 +373,51 @@ export default {
 
         this.getMaterial()
         this.getQualityInfo()
+        this.setOperate()
         this.getData()
     },
     mounted() {},
     computed: {},
     watch: {},
     methods: {
+        setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         getMaterial() {
             this.$api
                 .commonMaterial({
@@ -435,7 +502,7 @@ export default {
                         span: 8
                     }
                 })
-				this.option.group[1].column = this.indexArr
+                this.option.group[1].column = this.indexArr
                 this.$nextTick(() => {
                     this.$refs.crud.updateDic()
                 })
@@ -506,14 +573,14 @@ export default {
                 .forEach(key => {
                     object[key] = obj[key]
                 })
-			this.productIndexList.forEach((element, i) => {
+            this.productIndexList.forEach((element, i) => {
                 element.targetValue = ''
             })
             let materialList = []
             Object.keys(object).map(el => {
                 this.productIndexList.forEach((item, i) => {
-					materialList = this.productIndexList
-					console.log(materialList, '2222')
+                    materialList = this.productIndexList
+                    console.log(materialList, '2222')
                     if (item.targetKey == el) {
                         materialList[i] = {
                             targetName: item.targetName,
@@ -634,7 +701,10 @@ export default {
                 })
             }
             done()
-        }
+        },
+		importTing(){
+
+		}
     }
 }
 </script>

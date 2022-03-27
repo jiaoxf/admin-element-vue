@@ -23,12 +23,36 @@
                     @search-reset="resetData"
                     :before-open="beforeOpen"
                     :before-close="beforeClose"
-					:table-loading="loading"
+                    :table-loading="loading"
                 >
-                    <template slot-scope="{}" slot="productNameForm">
+                    <template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
+                    <template slot-scope="{ type }" slot="productNameForm">
                         <el-select
                             v-model="form.productName"
                             placeholder="请选择产品名称"
+							:disabled="type == 'view'"
                             value-key="productId"
                             @change="selectProduct"
                         >
@@ -53,22 +77,25 @@ export default {
     components: {},
     data() {
         return {
-			loading:true,
+            loading: true,
             flag: false,
             data: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 border: true,
                 columnBtn: false,
                 refreshBtn: false,
-                // viewBtn: true,
                 searchShowBtn: false,
                 row: true,
                 span: 24,
                 searchMenuSpan: 5,
                 dialogWidth: '40%',
                 index: true,
-				menuPosition: 'left',
+                menuPosition: 'left',
                 labelWidth: 150,
                 indexLabel: '序号',
                 // menuWidth:400,
@@ -95,7 +122,7 @@ export default {
                         label: '产品编号',
                         prop: 'productId',
                         search: true,
-						display: false
+                        display: false
                     },
                     {
                         label: '指标名称',
@@ -129,10 +156,13 @@ export default {
                 layout: 'total,prev,pager, next, jumper',
                 pageSize: 20
             },
-            type: ''
+            type: '',
+            myExportBtn: false,
+            myImportBtn: false
         }
     },
     created() {
+        this.setOperate()
         this.getData()
         this.getProduct()
     },
@@ -140,6 +170,44 @@ export default {
     computed: {},
     watch: {},
     methods: {
+        setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         beforeOpen(done, type) {
             this.type = type
             done()
@@ -187,35 +255,33 @@ export default {
             }
         },
         getData(status) {
-			this.loading = true
-			let params = {}
-			if(status){
-				params = {
-					productId: '',
+            this.loading = true
+            let params = {}
+            if (status) {
+                params = {
+                    productId: '',
                     productName: '',
                     targetName: '',
                     productSize: '',
                     currPage: this.page1.currentPage,
                     pageSize: 20
-				}
-			}else{
-				params = {
-					productId: this.form.productId,
+                }
+            } else {
+                params = {
+                    productId: this.form.productId,
                     productName: this.form.productName,
                     targetName: this.form.targetName,
                     productSize: this.form.productSize,
                     currPage: this.page1.currentPage,
                     pageSize: 20
-				}
-			}
-            this.$api
-                .productIndexList(params)
-                .then(res => {
-                    this.data = res.rows
-					this.loading = false
-                    this.page1.total = res.total
-                    this.rowspan()
-                })
+                }
+            }
+            this.$api.productIndexList(params).then(res => {
+                this.data = res.rows
+                this.loading = false
+                this.page1.total = res.total
+                this.rowspan()
+            })
         },
         resetData() {
             this.form.productId = ''
@@ -405,7 +471,10 @@ export default {
             this.form = params
             this.getData()
             done()
-        }
+        },
+		importTing(){
+
+		}
     }
 }
 </script>

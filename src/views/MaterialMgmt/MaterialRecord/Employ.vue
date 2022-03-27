@@ -22,6 +22,29 @@
                     @search-reset="resetData"
                     :table-loading="loading"
                 >
+					<template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
                     <template slot-scope="" slot="useDateSearch">
                         <el-date-picker
                             v-model="form.time"
@@ -135,6 +158,10 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -240,7 +267,9 @@ export default {
             indexStr: '',
             productIndexList: [],
             mineTypeList: [],
-            departmentsList: []
+            departmentsList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
@@ -258,57 +287,38 @@ export default {
 		setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
-                console.log(res)
-                /* this.permission = {
-                    delBtn: false,
-                    addBtn: false,
-					viewBtn: false
-                } */
-                let resultList = [
-                    {
-                        operName: '导入', //操作名称
-                        operCode: 'import' //操作代码
-                    },
-                    {
-                        operName: '新增', //操作名称
-                        operCode: 'add' //操作代码
-                    },
-                    {
-                        operName: '编辑', //操作名称
-                        operCode: 'edit' //操作代码
-                    },
-                    {
-                        operName: '导出', //操作名称
-                        operCode: 'export' //操作代码
-                    },
-                    {
-                        operName: '删除', //操作名称
-                        operCode: 'delete' //操作代码
-                    },
-                    {
-                        operName: '查看', //操作名称
-                        operCode: 'view' //操作代码
-                    }
-                ]
+                let resultList = res.data
                 let btnList = []
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
                 })
-                btnList.indexOf('add') > -1 ? (this.myAddBtn = true) : (this.myAddBtn = false) // 新增按钮
-                btnList.indexOf('edit') > -1 ? (this.myEditBtn = true) : (this.myEditBtn = false) // 编辑按钮
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
                 btnList.indexOf('delete') > -1
-                    ? (this.myDeleteBtn = true)
-                    : (this.myDeleteBtn = false) // 删除按钮
-                btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
         },
@@ -490,7 +500,6 @@ export default {
                         this.$nextTick(() => {
                             this.$refs.crud.updateDic()
                         })
-
                         let formList = res.data
                         formList.forEach(item => {
                             this.form[item.targetKey] = item.targetValue
@@ -499,7 +508,8 @@ export default {
                         this.$message.error(res.message)
                     }
                 })
-        }
+        },
+		importTing(){}
     }
 }
 </script>

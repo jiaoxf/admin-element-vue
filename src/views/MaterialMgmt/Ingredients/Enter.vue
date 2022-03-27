@@ -23,6 +23,29 @@
                     :before-open="openDialog"
                     :table-loading="loading"
                 >
+                    <template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
                     <template slot-scope="" slot="purchasedDateSearch">
                         <el-date-picker
                             v-model="form.time"
@@ -141,6 +164,10 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -284,7 +311,7 @@ export default {
                             {
                                 label: '计量单位',
                                 prop: 'measureUnit',
-								disabled: true,
+                                disabled: true,
                                 span: 8
                             },
                             {
@@ -337,7 +364,9 @@ export default {
             productIndexList: [],
             supplierNameList: [],
             meterialIndexArr: [],
-            qualityInfoList: []
+            qualityInfoList: [],
+            myExportBtn: false,
+            myImportBtn: false
         }
     },
     created() {
@@ -346,13 +375,13 @@ export default {
         this.getMaterial()
         this.getQualityInfo()
         this.getData()
-		this.setOperate()
+        this.setOperate()
     },
     mounted() {},
     computed: {},
     watch: {},
     methods: {
-		setOperate() {
+        setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
                 console.log(res)
@@ -397,15 +426,15 @@ export default {
                     ? (this.myDeleteBtn = true)
                     : (this.myDeleteBtn = false) // 删除按钮
                 btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
         },
@@ -563,13 +592,13 @@ export default {
                 .forEach(key => {
                     object[key] = obj[key]
                 })
-			this.productIndexList.forEach((element, i) => {
+            this.productIndexList.forEach((element, i) => {
                 element.targetValue = ''
             })
             let materialList = []
             Object.keys(object).map(el => {
                 this.productIndexList.forEach((item, i) => {
-					materialList = this.productIndexList
+                    materialList = this.productIndexList
                     if (item.targetKey == el) {
                         materialList[i] = {
                             targetName: item.targetName,
@@ -689,7 +718,8 @@ export default {
                 })
             }
             done()
-        }
+        },
+		importTing(){}
     }
 }
 </script>

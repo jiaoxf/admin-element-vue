@@ -1,5 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
+import JSONbig from 'json-bigint'
+const JSONbigToString = JSONbig({ storeAsString: true })
+
 import router, { resetRouter } from '@/router'
 
 import { Message } from 'element-ui'
@@ -16,7 +19,12 @@ const service = axios.create({
     // baseURL: '/api', // api的base_url
     // withCredentials: true, // 跨域请求时是否发送cookies
     crossDomain: true,
-    timeout: 10000 // 请求超时设置
+    timeout: 10000, // 请求超时设置
+    transformResponse: [
+        function(data) {
+            return JSONbigToString.parse(data)
+        }
+    ]
 })
 // 请求拦截器
 service.interceptors.request.use(
@@ -47,10 +55,10 @@ service.interceptors.response.use(
     response => {
         // let res = respone.data; // 如果返回的结果是data.data的，嫌麻烦可以用这个，return res
         if (response.data.code == 501) {
-			Message.error(response.data.message)
-			sessionStorage.clear()
-			resetRouter()
-			router.push('/login')
+            Message.error(response.data.message)
+            sessionStorage.clear()
+            resetRouter()
+            router.push('/login')
         } else if (response.data.code == 500) {
             Message.error(response.data.message)
         } else {

@@ -186,7 +186,8 @@ export default {
                 batchNumber: '', //批次号
                 beginDate: '', //生产日期起
                 endDate: '', //生产日期止
-                time: []
+                time: [],
+                planTime: this.getCurrentDay(new Date())
             },
             page1: {
                 currentPage: 1,
@@ -205,19 +206,17 @@ export default {
     },
     created() {
         let myDate = new Date()
-        let month = `${myDate.getFullYear()}-${(myDate.getMonth()+1).toString().padStart(2,'0')}`
+        let month = `${myDate.getFullYear()}-${(myDate.getMonth() + 1).toString().padStart(2, '0')}`
         this.getData(month)
     },
     mounted() {
-		this.setOperate()
-		// this.form.planTime = this.timeDefault
-	},
-    computed: {
-
+        this.setOperate()
+        // this.form.planTime = this.timeDefault
     },
+    computed: {},
     watch: {},
     methods: {
-		setOperate() {
+        setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
                 console.log(res)
@@ -262,25 +261,25 @@ export default {
                     ? (this.myDeleteBtn = true)
                     : (this.myDeleteBtn = false) // 删除按钮
                 btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
         },
         getData(month) {
-			let yearMonth = ''
-			if(month){
-				yearMonth = month
-			}else{
-				yearMonth = this.form.planTime
-			}
+            let yearMonth = ''
+            if (month) {
+                yearMonth = month
+            } else {
+                yearMonth = this.form.planTime
+            }
             this.loading = true
             this.$api
                 .statisticsYieldList({
@@ -295,7 +294,7 @@ export default {
                 })
         },
         resetData() {
-            this.form.planTime = ''
+            this.form.planTime = this.getCurrentDay(new Date())
             this.page1.currentPage = 1
             this.getData()
         },
@@ -312,6 +311,19 @@ export default {
             this.page1.currentPage = 1
             this.getData()
             done()
+        },
+        getCurrentDay(obj) {
+            var date = new Date()
+            var month = date.getMonth() + 1
+            var strDate = date.getDate()
+            if (month >= 1 && month <= 9) {
+                month = '0' + month
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = '0' + strDate
+            }
+            var currentdate = date.getFullYear() + '-' + month
+            return currentdate
         }
     }
 }

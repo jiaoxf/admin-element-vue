@@ -24,9 +24,6 @@
                     :table-loading="loading"
                     :before-open="openDialog"
                 >
-                    <template slot="menuLeft" slot-scope="{}">
-                        <el-button type="primary" icon="el-icon-folder-remove">导出</el-button>
-                    </template>
                     <template slot-scope="{ type }" slot="directiveTypeNameForm">
                         <avue-cascader
                             lazy
@@ -86,6 +83,13 @@
                             >
                             </el-option>
                         </el-select>
+                        <!-- <el-cascader
+                            :disabled="type == 'view'"
+                            :props="propsPerson"
+                            v-model="form.userIds"
+							:show-all-levels="false"
+                            clearable
+                        ></el-cascader> -->
                     </template>
                     <template slot-scope="{ type }" slot="instructFileForm">
                         <el-upload
@@ -98,14 +102,24 @@
                             :file-list="fileList"
                             :auto-upload="false"
                             :on-change="upload"
+							v-if="type != 'view'"
                         >
                             <el-button slot="trigger" size="small" type="primary"
                                 >选取文件</el-button
                             >
                         </el-upload>
                         {{ form.attchName }}
-                        <el-button type="text" v-if="type != 'add' && form.attchName" @click="downLoad()"
+                        <el-button
+                            type="text"
+                            v-if="type != 'add' && type != 'edit' && form.attchName"
+                            @click="downLoad()"
                             >下载</el-button
+                        >
+						<el-button
+                            type="text"
+                            v-if="type == 'edit' && form.attchName"
+                            @click="delFile()"
+                            >删除</el-button
                         >
                     </template>
                     <template slot-scope="{ row }" slot="menu">
@@ -159,10 +173,17 @@ export default {
                 label: 'label',
                 value: 'id'
             },
+            propsPerson: {
+                multiple: true,
+                label: 'label',
+                value: 'id',
+                lazy: true,
+                lazyLoad: this.lazyLoadPerson
+            },
             departmentNameForm: [],
             permission: {},
             option: {
-                viewBtn: false,
+                viewBtn: true,
                 addBtn: true,
                 size: 'mini',
                 border: true,
@@ -188,8 +209,8 @@ export default {
                         rules: [
                             {
                                 required: true,
-                                message: '请输入指令分类',
-                                trigger: ['change', 'blur']
+                                message: '请选择指令分类',
+                                trigger: 'blur'
                             }
                         ],
                         search: true
@@ -287,18 +308,12 @@ export default {
         this.getDepartment()
     },
     mounted() {
-        if (this.$store.state.user.userInfo.userType != 'user_dispatch') {
-            this.permission = {
-                addBtn: false,
-                viewBtn: true
-            }
-        }
-		this.setOperate()
+        this.setOperate()
     },
     computed: {},
     watch: {},
     methods: {
-		setOperate() {
+        setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
                 console.log(res)
@@ -343,17 +358,71 @@ export default {
                     ? (this.myDeleteBtn = true)
                     : (this.myDeleteBtn = false) // 删除按钮
                 btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
+        },
+        lazyLoadPerson(node, resolve) {
+            let { level } = node
+            let stop_level = 1
+            let data = node.data || {}
+            let list = []
+            let callback = () => {
+                resolve(
+                    (list || []).map(ele => {
+                        return Object.assign(ele, {
+                            leaf: level >= stop_level
+                        })
+                    })
+                )
+            }
+            if (level == 0) {
+                this.$api
+                    .commonDepartment({
+                        orgNid: this.$store.state.user.userInfo.orgNid
+                    })
+                    .then(res => {
+                        res.data.map(item => {
+                            let obj = {
+                                id: item.departmentCode,
+                                label: item.departmentName,
+                                nid: item.nid
+                            }
+                            list.push(obj)
+                        })
+                        // list = res.data.data
+                        callback()
+                    })
+            } else if (level == 1) {
+                this.$api
+                    .getUserList({
+                        orgNid: data.nid
+                    })
+                    .then(res => {
+                        console.log(res, '人员数据')
+                        res.data.map(item => {
+                            let obj = {
+                                id: item.userId,
+                                label: item.userName,
+                                departmentId: item.departmentId,
+                                departmentName: item.departmentName
+                            }
+                            list.push(obj)
+                        })
+                        // list = res.data.data
+                        callback()
+                    })
+            } else {
+                callback()
+            }
         },
         getDepartment() {
             this.$api
@@ -440,9 +509,10 @@ export default {
             this.getData()
         },
         handleSave(form, done, loading) {
+            console.log(form.userIds)
             console.log(form, '新增的数据')
             console.log(form)
-			console.log(this.form.directiveTypeId)
+            console.log(this.form.directiveTypeId)
             //构建formData
             let formData = new FormData()
             //文件部分
@@ -477,7 +547,7 @@ export default {
         },
         handleUpdate(form, index, done, loading) {
             console.log(this.form.typeName)
-			console.log(form.directiveTypeId)
+            console.log(form.directiveTypeId)
             let formData = new FormData()
             //文件部分
             // var file = document.getElementById('file').files[0]
@@ -487,7 +557,7 @@ export default {
                 directiveInfo: {
                     id: form.id,
                     directiveName: form.directiveName,
-                    directiveTypeName: form.typeName,
+                    directiveTypeName: this.form.typeName,
                     directiveContent: form.directiveContent,
                     directiveTypeId: form.directiveTypeId
                 },
@@ -595,34 +665,44 @@ export default {
             if (type == 'add') {
                 let directiveId = val.split(',')[1]
                 this.form.directiveTypeId = directiveId
+				this.$nextTick(() => {
+					this.form.typeName = this.$refs['demoCascader'].$children[0]._data.presentText
+                })
                 console.log(this.form.directiveTypeId)
             } else if (type == 'edit') {
-				console.log(val)
+                console.log(val)
                 this.form.directiveTypeId = val[1]
+				this.$nextTick(() => {
+					this.form.typeName = this.$refs['demoCascader'].$children[0]._data.presentText
+                })
+				this.form.typeName = this.$refs['demoCascader'].$children[0]._data.inputValue
+
             }
             this.form.directiveTypeName = val
-			// console.log(this.$refs["demoCascader"].getCheckedNodes()[0].pathLabels)
-			// console.log(this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label)
-			console.log(this.$refs['demoCascader'].getLabelText())
-            if (this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label) {
+            // console.log(this.$refs["demoCascader"].getCheckedNodes()[0].pathLabels)
+            // console.log(this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label)
+            /* if (this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label) {
                 this.form.typeName = this.$refs[
                     'demoCascader'
                 ].$children[0].getCheckedNodes()[0].label
                 console.log(this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label)
-            }
+            } */
         },
         openDialog(done, type) {
             console.log(this.form, '打开窗口的数据')
-            if (type == 'edit') {
-                // TODO 回显
-                console.log(this.form.departmentCode)
-                console.log(this.form.directiveTypeId)
-
+            if (type == 'edit' || type == 'view') {
                 this.form.directiveTypeName = [this.form.departmentCode, this.form.directiveTypeId]
-                // console.log(this.form.directiveTypeName)
-				this.departmentsList.forEach(item => {
-					this.getUserList(item.nid)
-				})
+                this.departmentsList.forEach(item => {
+                    this.getUserList(item.nid)
+                })
+
+                /* this.$nextTick(() => {
+                    console.log(this.$refs['demoCascader'].$children[0]._data.inputValue)
+                }) */
+                setTimeout(() => {
+					this.form.typeName = this.$refs['demoCascader'].$children[0]._data.inputValue
+                    // console.log(this.$refs['demoCascader'].$children[0]._data.inputValue)
+                }, 2000)
                 // this.$refs['demoCascader'].$children[0].getCheckedNodes()[0].label = '设备停车'
             } else if (type == 'view') {
                 let params = {
@@ -637,20 +717,26 @@ export default {
             }
             done()
         },
+        // TODO 下载文件流
         downLoad(type) {
-            console.log(this.form)
+            console.log(this.form.attchName)
             let formData = new FormData()
-            formData.append('id', this.form.id)
-            this.$api.commandDownfile(formData).then(res => {
-                if (res.code == 'SUCCESS') {
-                    this.$message.success(res.message)
-                    this.page1.currentPage = 1
-                    this.getData()
-                } else {
-                    this.$message.error(res.message)
-                }
+            formData.append('fileName', this.form.attchName)
+            this.$api.commandDownfile(formData, { responseType: 'blob' }).then(res => {
+                let url = window.URL.createObjectURL(new Blob([res]))
+                let a = document.createElement('a')
+                a.style.display = 'none'
+                a.href = url
+                a.setAttribute('download', 'excel.xls')
+                document.body.appendChild(a)
+                a.click() //执行下载
+                window.URL.revokeObjectURL(a.href)
+                document.body.removeChild(a)
             })
         },
+		delFile(){
+			console.log(1)
+		},
         dispatchCheck(row) {
             console.log(row)
             this.dialogTableVisible = true

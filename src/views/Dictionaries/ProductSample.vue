@@ -22,9 +22,33 @@
                     @search-reset="resetData"
 					:table-loading="loading"
                 >
-                    <template slot-scope="{}" slot="factoryNameForm">
+					<template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
+                    <template slot-scope="{ type }" slot="factoryNameForm">
                         <el-select
                             v-model="form.factoryName"
+							:disabled="type == 'view'"
                             placeholder="请选择分厂名称"
                             value-key="factoryCode"
                             @change="selectFactory"
@@ -57,6 +81,10 @@ export default {
             flag: false,
             data: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -129,10 +157,13 @@ export default {
                 layout: 'total,prev,pager, next, jumper',
                 pageSize: 20
             },
-            factoryList: []
+            factoryList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
+		this.setOperate()
         this.getData()
         this.getFactory()
     },
@@ -142,6 +173,44 @@ export default {
     computed: {},
     watch: {},
     methods: {
+		setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         getFactory() {
             this.$api.commonFactory({}).then(res => {
                 if (res.code == 'SUCCESS') {
@@ -256,7 +325,10 @@ export default {
             this.form = params
             this.getData()
             done()
-        }
+        },
+		importTing(){
+
+		}
     }
 }
 </script>

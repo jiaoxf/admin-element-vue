@@ -67,6 +67,7 @@
                     </el-row>
                 </el-form>
             </div>
+
             <avue-crud
                 ref="crud"
                 :option="option"
@@ -89,6 +90,29 @@
                     >
                         新增</el-button
                     >
+                </template>
+                <template slot-scope="{ }" slot="menuRight">
+                    <div style="display: flex; justify-content: end">
+                        <el-button
+                            v-if="myExportBtn"
+                            size="small"
+                            icon="el-icon-download"
+                            type="primary"
+                            style="margin-right: 10px"
+                            >导出</el-button
+                        >
+                        <el-upload
+                            v-if="myImportBtn"
+                            :auto-upload="false"
+                            :show-file-list="false"
+                            action="action"
+                            :on-change="importTing"
+                        >
+                            <el-button icon="el-icon-upload2" size="small" type="primary"
+                                >导入</el-button
+                            >
+                        </el-upload>
+                    </div>
                 </template>
                 <template slot-scope="{ row, type, size }" slot="menu">
                     <el-button
@@ -193,7 +217,9 @@ export default {
             myAddBtn: false,
             myEditBtn: false,
             myDeleteBtn: false,
-            myViewBtn: false
+            myViewBtn: false,
+            myImportBtn: false,
+            myExportBtn: false
         }
     },
     created() {},
@@ -203,6 +229,7 @@ export default {
         // this.$store.dispatch('user/getOperate', this.$route.meta.id)
         this.getData()
         this.setOperate()
+        console.log(this.$route.meta)
     },
     computed: {},
     watch: {},
@@ -216,32 +243,7 @@ export default {
                     addBtn: false,
 					viewBtn: false
                 } */
-                let resultList = [
-                    {
-                        operName: '导入', //操作名称
-                        operCode: 'import' //操作代码
-                    },
-                    {
-                        operName: '新增', //操作名称
-                        operCode: 'add' //操作代码
-                    },
-                    {
-                        operName: '编辑', //操作名称
-                        operCode: 'edit' //操作代码
-                    },
-                    {
-                        operName: '导出', //操作名称
-                        operCode: 'export' //操作代码
-                    },
-                    {
-                        operName: '删除', //操作名称
-                        operCode: 'delete' //操作代码
-                    },
-                    {
-                        operName: '查看', //操作名称
-                        operCode: 'view' //操作代码
-                    }
-                ]
+                let resultList = res.data
                 let btnList = []
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
@@ -252,15 +254,21 @@ export default {
                     ? (this.myDeleteBtn = true)
                     : (this.myDeleteBtn = false) // 删除按钮
                 btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
         },
@@ -374,6 +382,9 @@ export default {
                 sessionStorage.setItem('detailStatus', type)
                 sessionStorage.setItem('detailInfo', JSON.stringify(row))
             }
+        },
+        importTing() {
+            console.log('导入')
         }
     }
 }

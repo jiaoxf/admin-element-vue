@@ -23,7 +23,30 @@
                     :before-open="openDialog"
                     :table-loading="loading"
                 >
-					<template slot-scope="{ type }" slot="productNameSearch">
+					<template slot-scope="{}" slot="menuRight">
+                        <div style="display: flex; justify-content: end">
+                            <el-button
+                                v-if="myExportBtn"
+                                size="small"
+                                icon="el-icon-download"
+                                type="primary"
+                                style="margin-right: 10px"
+                                >导出</el-button
+                            >
+                            <el-upload
+                                v-if="myImportBtn"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                action="action"
+                                :on-change="importTing"
+                            >
+                                <el-button icon="el-icon-upload2" size="small" type="primary"
+                                    >导入</el-button
+                                >
+                            </el-upload>
+                        </div>
+                    </template>
+                    <template slot-scope="{ type }" slot="productNameSearch">
                         <el-select
                             v-model="form.productName"
                             placeholder="请选择产品名称"
@@ -166,7 +189,19 @@
                         >
                         </el-time-picker>
                     </template>
-
+					<template slot-scope="{ type }" slot="productBatchNumForm">
+                        <el-input
+                            :disabled="type == 'view'"
+                            v-model="form.productBatchNum"
+                            placeholder="请输批次号"
+                        ></el-input>
+                        <el-button type="text" v-show="type != 'view'" @click="generateNum"
+                            >生成批次号</el-button
+                        >
+                        <p class="num-tip" v-if="type != 'view'">
+                            批次号可系统生成，可输入。保存前请确保当前内容与批次号一致。
+                        </p>
+                    </template>
                     <template slot-scope="{ type }" slot="analysisDateForm">
                         <el-date-picker
                             v-model="form.analysisDate"
@@ -235,12 +270,15 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
+                editBtn: false,
+                viewBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
                 columnBtn: false,
                 refreshBtn: false,
-                viewBtn: true,
                 row: true,
                 span: 12,
                 searchShowBtn: false,
@@ -317,7 +355,7 @@ export default {
                         label: '批次号',
                         prop: 'productBatchNum',
                         display: false,
-                        width: 120,
+                        width: 150,
                         search: true
                     },
                     {
@@ -559,14 +597,16 @@ export default {
             indexStr: '',
             productIndexList: [],
             sampleDataList: [],
-            resultDataList: []
+            resultDataList: [],
+			myExportBtn: false,
+			myImportBtn: false
         }
     },
     created() {
         // this.getData()
         this.getDepartment()
         this.getProduct()
-        this.getSampleData()
+		this.setOperate()
         this.getResultData()
         this.getData()
     },
@@ -574,6 +614,44 @@ export default {
     computed: {},
     watch: {},
     methods: {
+		setOperate() {
+            let result = this.$utils.getOperate(this.$route.meta.id)
+            result.then(res => {
+                let resultList = res.data
+                let btnList = []
+                resultList.forEach(element => {
+                    btnList.push(element.operCode)
+                })
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('delete') > -1
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
+                if (
+                    this.myEditBtn == false &&
+                    this.myViewBtn == false &&
+                    this.myDeleteBtn == false
+                ) {
+                    this.permission = {
+                        menu: false
+                    }
+                }
+            })
+        },
         getProduct() {
             this.$api.commonProduct({}).then(res => {
                 this.productList = res
@@ -598,7 +676,7 @@ export default {
                     this.departmentsList = res.data
                 })
         },
-		searchProduct(val) {
+        searchProduct(val) {
             this.form.productName = val.productName
             this.form.productId = val.productId
         },
@@ -619,7 +697,12 @@ export default {
                     factoryCode: this.$store.state.user.userInfo.orgCode
                 })
                 .then(res => {
-                    this.sampleDataList = res.data
+                    console.log(res)
+                    if (res.code == 'SUCCESS') {
+                        this.sampleDataList = res.data
+                    } else {
+                        // this.$message.error(res.message)
+                    }
                 })
         },
         selectSample(val) {
@@ -673,10 +756,10 @@ export default {
                     }
                 })
         },
-		searchChange(params, done) {
+        searchChange(params, done) {
             console.log(params)
-			this.form.workingShift = params.workingShift
-			this.form.productBatch = params.productBatch
+            this.form.workingShift = params.workingShift
+            this.form.productBatch = params.productBatch
             this.form.productBatchNum = params.productBatchNum
             this.page1.currentPage = 1
             // this.form = params
@@ -743,13 +826,13 @@ export default {
                 .forEach(key => {
                     object[key] = obj[key]
                 })
-			this.productIndexList.forEach((element, i) => {
+            this.productIndexList.forEach((element, i) => {
                 element.targetValue = ''
             })
             let materialList = []
             Object.keys(object).map(el => {
                 this.productIndexList.forEach((item, i) => {
-					materialList = this.productIndexList
+                    materialList = this.productIndexList
                     if (item.targetKey == el) {
                         materialList[i] = {
                             targetName: item.targetName,
@@ -859,7 +942,7 @@ export default {
                 })
         },
         openDialog(done, type) {
-            console.log()
+			this.getSampleData()
             if (['view', 'edit'].includes(type)) {
                 this.viewProductIndex(this.form.id)
             } else {
@@ -869,10 +952,46 @@ export default {
                 })
             }
             done()
-        }
+        },
+		generateNum() {
+            if (this.form.productId == '' || this.form.productId == undefined) {
+                this.$message.error('请选择产品名称')
+                return
+            } else if (this.form.productionDate == '' || this.form.productionDate == undefined) {
+                this.$message.error('请选择生产日期')
+                return
+            } else if (this.form.workingShift == '' || this.form.workingShift == undefined) {
+                this.$message.error('请输入生产班次')
+                return
+            } else if (this.form.productBatch == '' || this.form.productBatch == undefined) {
+                this.$message.error('请输入产品批次')
+                return
+            }
+            let params = {
+                productId: this.form.productId, //产品编号
+                productionDate: this.form.productionDate, //生产日期
+                workingShift: this.form.workingShift, //生产班次
+                productBatch: this.form.productBatch //产品批次
+            }
+            this.$api.generationBatchNumber(params).then(res => {
+                if (res.code == 'SUCCESS') {
+                    this.form.productBatchNum = res.data.batchNum
+                } else {
+                    this.$message.error(res.message)
+                }
+            })
+        },
+		importTing(){
+
+		}
     }
 }
 </script>
 <style lang="scss" scoped>
 /* @import ''; // 引入公共css类*/
+.num-tip {
+    font-size: 12px;
+    color: #990000;
+	line-height: 14px;
+}
 </style>
