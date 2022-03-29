@@ -142,10 +142,35 @@
                             </el-option>
                         </el-select>
                     </template>
-                    <!-- <template slot-scope="{row,label,dic,index}" slot="menu">
-						<el-button icon="el-icon-check" @click="rowView(row, index,label,dic)">自定义菜单按钮</el-button>
-					</template> -->
+                    <template slot-scope="{ row }" slot="menu">
+                        <el-button
+                            v-if="myIndexBtn"
+                            type="text"
+                            icon="el-icon-check"
+                            @click="showDialog(row)"
+                            >约定参数</el-button
+                        >
+                    </template>
                 </avue-crud>
+                <el-dialog title="约定参数详情" :visible.sync="dialogVisible" width="80%">
+                    <el-descriptions
+                        class="margin-top"
+                        title=""
+                        :column="3"
+                        border
+                    >
+                        <el-descriptions-item
+                            v-for="(item, i) in materialInfoIndex"
+                            :key="i + 'value'"
+                        >
+                            <template slot="label"> {{ item.targetName }} </template>
+                            {{ item.targetValue }}
+                        </el-descriptions-item>
+                    </el-descriptions>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
+                    </span>
+                </el-dialog>
             </div>
         </div>
     </div>
@@ -168,6 +193,7 @@ export default {
                 editBtn: false,
                 viewBtn: false,
                 delBtn: false,
+                menuWidth: 300,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -364,8 +390,11 @@ export default {
             supplierNameList: [],
             meterialIndexArr: [],
             qualityInfoList: [],
-			myExportBtn: false,
-			myImportBtn: false
+            myExportBtn: false,
+            myImportBtn: false,
+            myIndexBtn: false,
+            materialInfoIndex: [],
+            dialogVisible: false
         }
     },
     created() {
@@ -406,6 +435,7 @@ export default {
                 btnList.indexOf('export') > -1
                     ? (this.myExportBtn = true)
                     : (this.myExportBtn = false) // 导入
+                btnList.indexOf('index') > -1 ? (this.myIndexBtn = true) : (this.myIndexBtn = false) //
                 // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
@@ -417,6 +447,23 @@ export default {
                     }
                 }
             })
+        },
+        showDialog(row, index) {
+            this.getDayProductDetail(row)
+        },
+        getDayProductDetail(row) {
+            this.$api
+                .marterialsEnterIndex({
+                    id: row.id
+                })
+                .then(res => {
+                    if (res.code == 'SUCCESS') {
+                        this.materialInfoIndex = res.data
+                        this.dialogVisible = true
+                    } else {
+                        this.$message.error(res.message)
+                    }
+                })
         },
         getMaterial() {
             this.$api
@@ -702,12 +749,19 @@ export default {
             }
             done()
         },
-		importTing(){
-
-		}
+        importTing() {}
     }
 }
 </script>
 <style lang="scss" scoped>
 /* @import ''; // 引入公共css类*/
+::v-deep .el-descriptions__header {
+    margin-top: 10px;
+}
+::v-deep .el-descriptions__title {
+    font-weight: 500;
+}
+::v-deep .el-descriptions-item__label {
+    width: 200px;
+}
 </style>

@@ -36,7 +36,7 @@ module.exports = {
         // https: true, // https
         open: true,
         // host: 'localhost',
-        // port: 3000,
+        port: 4004,
         // 跨域
         /* proxy: {
 			'/api': {
