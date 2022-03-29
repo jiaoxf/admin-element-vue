@@ -119,72 +119,65 @@ export default {
                 // addBtn: false,
                 column: [
                     {
-                        label: '分厂名称',
+                        label: '触发时间',
                         prop: 'factoryName',
-                        width: 200,
-                        fixed: true,
                         display: false,
                         search: true
                     },
                     {
-                        label: '分厂代码',
-                        prop: 'factoryCode',
+                        label: '车间',
+                        prop: 'materialName',
                         display: false,
-						hide: true
+                        search: true
                     },
-                    {
-                        label: '车间名称',
-                        prop: 'departmentName',
-                        width: 200,
-                        fixed: true,
+					{
+                        label: '工序/岗位',
+                        prop: 'materialName',
                         display: false,
                         search: true
                     },
                     {
-                        label: '车间代码',
-                        prop: 'departmentCode',
-                        display: false,
-						hide: true
-                    },
-                    {
-                        label: '产品名称',
-                        prop: 'productName',
-                        width: 200,
+                        label: '指标名称',
+                        prop: 'supplierName',
+                        searchLabelWidth: 100,
                         display: false,
                         search: true
                     },
                     {
-                        label: '产品规格',
-                        prop: 'productSize',
-                        display: false,
-                        search: true
-                    },
-                    {
-                        label: '产品编号',
-                        prop: 'productId',
-                        display: false
-                    },
-                    {
-                        label: '计量单位',
+                        label: '指标单位',
                         prop: 'measureUnit',
-                        display: false
-                    },
-                    {
-                        label: '包装规格',
-                        prop: 'packingSize',
                         display: false,
-                        width: 250
+                        search: false
                     },
                     {
-                        label: '类型',
-                        prop: 'productType',
-                        display: false
-                    },
-                    {
-                        label: '备注',
-                        prop: 'productRemark',
+                        label: '指标等级',
+                        prop: 'measureUnit',
                         display: false,
-                        width: 250
+                        search: false
+                    },
+                    {
+                        label: '指标范围',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
+                        label: '实时值',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
+                        label: '异常判定标准',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
+                        label: '事故判断标准',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
                     }
                 ],
                 group: [
@@ -271,13 +264,6 @@ export default {
                             {
                                 label: '包装规格',
                                 prop: 'packingSize',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入包装规格',
-                                        trigger: 'blur'
-                                    }
-                                ],
                                 span: 8
                             },
                             {
@@ -462,9 +448,9 @@ export default {
                     pageSize: 20
                 })
                 .then(res => {
-                    this.data = res.rows
+                    // this.data = res.rows
 					this.loading = false
-                    this.page1.total = res.total
+                    // this.page1.total = res.total
                 })
         },
         resetData() {

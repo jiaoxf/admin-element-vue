@@ -178,13 +178,13 @@ export default {
                     {
                         label: '时间（年）',
                         prop: 'planYear',
-                        search: false
+                        search: false,
+						width: 150
                     },
                     {
                         label: '名称',
                         prop: 'planName',
-                        display: false,
-                        width: 250
+                        display: false
                     },
                     {
                         label: '版本号',

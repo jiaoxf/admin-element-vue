@@ -298,13 +298,6 @@ export default {
                             {
                                 label: '包装规格',
                                 prop: 'packingSize',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入包装规格',
-                                        trigger: 'blur'
-                                    }
-                                ],
                                 span: 8
                             },
                             {

@@ -22,7 +22,9 @@
                     @search-reset="resetData"
                     :span-method="spanMethod"
                     :table-loading="loading"
-					:permission="permission"
+                    :permission="permission"
+                    :before-open="openDialog"
+                    :before-close="beforeClose"
                 >
                     <template slot-scope="{}" slot="departmentNameSearch">
                         <el-select
@@ -91,7 +93,7 @@ export default {
     components: {},
     data() {
         return {
-			permission: {},
+            permission: {},
             loading: true,
             flag: false,
             data: [],
@@ -155,13 +157,13 @@ export default {
             departmentList: [],
             searchDepartmentName: '',
             searchDepartmentCode: '',
-			myImportBtn: false,
+            myImportBtn: false,
             myExportBtn: false
         }
     },
     created() {
         this.getData()
-        this.getDepartment()
+
         this.setOperate()
     },
     mounted() {},
@@ -176,19 +178,24 @@ export default {
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
                 })
-                btnList.indexOf('add') > -1 ? (this.option.addBtn = true) : (this.option.addBtn = false) // 新增按钮
-                btnList.indexOf('edit') > -1 ? (this.option.editBtn = true) : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
                 btnList.indexOf('delete') > -1
                     ? (this.permission.delBtn = true)
                     : (this.permission.delBtn = false) // 删除按钮
-                btnList.indexOf('view') > -1 ? (this.option.viewBtn = true) : (this.option.viewBtn = false) // 查看按钮
-				btnList.indexOf('import') > -1
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
                     ? (this.myImportBtn = true)
                     : (this.myImportBtn = false) // 导出
                 btnList.indexOf('export') > -1
                     ? (this.myExportBtn = true)
                     : (this.myExportBtn = false) // 导入
-
             })
         },
         rowspan() {
@@ -208,6 +215,10 @@ export default {
                     }
                 }
             })
+        },
+        beforeClose(done) {
+            this.flag = false
+            done()
         },
         spanMethod({ row, column, rowIndex, columnIndex }) {
             // console.log(rowIndex)
@@ -245,22 +256,31 @@ export default {
             this.searchDepartmentCode = val.departmentCode
             console.log(this.form.departmentCode)
         },
-        getData() {
+        getData(status) {
             this.loading = true
-            this.$api
-                .commandTypeList({
+            let params = {}
+            if (status) {
+                params = {
+                    departmentCode: '',
+                    directiveTypeName: '',
+                    currPage: this.page1.currentPage,
+                    pageSize: 20
+                }
+            } else {
+                params = {
                     departmentCode: this.searchDepartmentCode,
                     directiveTypeName: this.form.directiveTypeName,
                     currPage: this.page1.currentPage,
                     pageSize: 20
-                })
-                .then(res => {
-                    this.form.departmentCode = ''
-                    this.data = res.rows
-                    this.loading = false
-                    this.page1.total = res.total
-                    this.rowspan()
-                })
+                }
+            }
+            this.$api.commandTypeList(params).then(res => {
+                this.form.departmentCode = ''
+                this.data = res.rows
+                this.loading = false
+                this.page1.total = res.total
+                this.rowspan()
+            })
         },
         resetData() {
             this.searchDepartmentCode = ''
@@ -285,12 +305,29 @@ export default {
                     if (res.code == 'SUCCESS') {
                         this.$message.success(res.message)
                         this.page1.currentPage = 1
-                        this.getData()
+                        this.getData('add')
+                        this.$confirm('是否继续添加?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消'
+                        })
+                            .then(() => {
+                                this.flag = true
+                                // this.$refs.crud.rowSave()
+                                if (this.flag) {
+                                    this.flag = false
+                                    loading()
+									this.searchDepartmentName = ''
+                                    this.form.departmentName = ''
+                                    this.form.directiveTypeName = ''
+                                }
+                            })
+                            .catch(() => {
+                                done()
+                            })
                     } else {
                         this.$message.error(res.message)
                     }
                 })
-            done()
         },
         handleUpdate(form, index, done, loading) {
             this.$api
@@ -344,6 +381,10 @@ export default {
         },
         importTing() {
             console.log('导入')
+        },
+        openDialog(done, type) {
+            this.getDepartment()
+            done()
         }
     }
 }

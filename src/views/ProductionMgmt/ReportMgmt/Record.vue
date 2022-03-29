@@ -76,6 +76,7 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -93,7 +94,7 @@ export default {
                 // addBtn: false,
                 column: [
                     {
-                        label: '分厂名称',
+                        label: '触发时间',
                         prop: 'factoryName',
                         display: false,
                         search: true
@@ -124,13 +125,31 @@ export default {
                         search: false
                     },
                     {
+                        label: '指标等级',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
+                        label: '指标范围',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
                         label: '实时值',
                         prop: 'measureUnit',
                         display: false,
                         search: false
                     },
                     {
-                        label: '指标单位',
+                        label: '异常判定标准',
+                        prop: 'measureUnit',
+                        display: false,
+                        search: false
+                    },
+                    {
+                        label: '事故判断标准',
                         prop: 'measureUnit',
                         display: false,
                         search: false
@@ -362,9 +381,9 @@ export default {
                     pageSize: 20
                 })
                 .then(res => {
-                    this.data = res.rows
+                    // this.data = res.rows
 					this.loading = false
-                    this.page1.total = res.total
+                    // this.page1.total = res.total
                 })
         },
         resetData() {

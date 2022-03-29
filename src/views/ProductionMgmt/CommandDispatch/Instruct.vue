@@ -11,7 +11,7 @@
                 <avue-crud
                     :permission="permission"
                     ref="crud"
-					:defaults.sync="defaults"
+                    :defaults.sync="defaults"
                     :option="option"
                     :data="data"
                     v-model="form"
@@ -27,7 +27,7 @@
                 >
                     <template slot-scope="{ type }" slot="directiveTypeNameForm">
                         <avue-cascader
-							v-if="type == 'edit' || type == 'add'"
+                            v-if="type == 'edit' || type == 'add'"
                             lazy
                             ref="demoCascader"
                             :disabled="type == 'view'"
@@ -38,9 +38,9 @@
                             v-model="form.directiveTypeName"
                             @change="changeDirectiveType($event, type)"
                         ></avue-cascader>
-						<div v-else>
-							{{ form.directiveTypeName }}
-						</div>
+                        <div v-else style="color: #606266; font-size: 12px">
+                            {{ form.directiveTypeName }}
+                        </div>
                     </template>
                     <!-- <template slot-scope="{ type }" slot="departmentNameForm">
                         <el-select
@@ -189,7 +189,7 @@ export default {
     data() {
         let _this = this
         return {
-			defaults:{},
+            defaults: {},
             loading: true,
             flag: false,
             dialogTableVisible: false,
@@ -334,10 +334,10 @@ export default {
     },
     created() {
         this.getData()
-        this.getDepartment()
     },
     mounted() {
         this.setOperate()
+        this.getDepartment()
         this.getAllUsers()
     },
     computed: {},
@@ -846,16 +846,12 @@ export default {
             if (type == 'edit') {
                 console.log(this.form.userListIds, '好的好的哈')
                 this.form.userListIds = []
-				// TODO
+                // TODO
                 this.form.userIds.forEach((item, i) => {
                     console.log(item, i, '啛啛喳喳')
                     this.form.userListIds.push([item.departmentId, item.userId])
                 })
-                /* this.form.userListIds = [
-                    ['1000100010001', '6631604e-e30e-4aab-acc4-768dcce46a7d'],
-                    ['1000100010001', 'cf18ec52-8312-4857-87d0-e794db04fdf9'],
-					['1000100010002', '340332b5-a4eb-4501-bf49-75442bbd252b']
-                ] */
+
                 // this.form.userListIds = [['1000100010001', '6631604e-e30e-4aab-acc4-768dcce46a7d']]
                 /* this.$nextTick(() => {
                     ;(this.form.userListIds = '1000100010001'),
@@ -871,7 +867,7 @@ export default {
                     ['1000100010002']
                 ] */
                 this.form.directiveTypeName = [this.form.departmentCode, this.form.directiveTypeId]
-				// TODO
+                // TODO
                 this.departmentsList.forEach(item => {
                     this.getUserList(item.nid)
                 })
@@ -900,14 +896,17 @@ export default {
                     ]
                 }) */
             } else if (type == 'view') {
-				this.option.column[5].display = false
+                this.option.column[5].display = false
                 let params = {
-                    directiveKey: this.form.directiveTypeId, //指令标识
+                    directiveKey: this.form.id, //指令标识
                     userId: this.$store.state.user.userInfo.userNid //用户标识
                 }
                 this.$api.commandSaveStatus(params).then(res => {
                     if (res.code == 'SUCCESS') {
                         console.log(res)
+                        this.$message.success(res.message)
+                    } else {
+                        this.$message.error(res.message)
                     }
                 })
             }

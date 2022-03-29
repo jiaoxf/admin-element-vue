@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<img id="img" width="320px" height="200px" src="HelloWorld.jpg" alt="" />
+	<input id="btnSave" type="button" value="另存为" onclick="saveImg()" />
+	<iframe name="frame" style="width:0;height:0"></iframe>
+</body>
+<script language='javascript' type='text/javascript'>
+	function saveImg() {
+		//将服务器上图片存放到本地的方法
+		event.returnValue = false;
+		window.location.href = 'http://www.cdraindrop.top:80/web/attach/编码规则.docx';
+		timer = setInterval(saveAs, 500)
+	}
+
+	function saveAs() {
+		if (frame.readyState != "complete") {
+			//'Saveas'表示打开“文件另存为”对话框命令
+			frame.document.execCommand('SaveAs');
+			clearInterval(timer)
+		}
+	}
+
+
+</script>
+
+</html>

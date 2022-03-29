@@ -44,6 +44,7 @@
                                     value-format="yyyy"
                                     style="width: 100%"
                                     :disabled="viewStatus"
+									@change="selectPlanYear"
                                 >
                                 </el-date-picker>
                             </el-form-item>
@@ -227,26 +228,12 @@ export default {
                         label: '产能',
                         minWidth: 150,
                         prop: 'capacity',
-                        cell: true,
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入产能',
-                                trigger: ['blur', 'change']
-                            }
-                        ]
+                        cell: true
                     },
                     {
                         label: '计量单位',
                         prop: 'measureUnit',
-                        disabled: true,
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入计量单位',
-                                trigger: ['blur', 'change']
-                            }
-                        ]
+                        disabled: true
                     },
                     {
                         label: '年目标',
@@ -621,7 +608,16 @@ export default {
                     }
                 })
             }
-        }
+        },
+		selectPlanYear(val){
+			console.log(val)
+			if(val != null || val != undefined) {
+				this.selectForm.planName = `龙蟒大地${val}年度生产计划`
+			}else{
+				this.selectForm.planName = ''
+			}
+
+		}
     },
     activated() {}
 }

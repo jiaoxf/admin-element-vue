@@ -61,10 +61,11 @@
                                 <el-date-picker
                                     v-model="selectForm.planMonth"
                                     type="month"
-                                    placeholder="计划年度"
+                                    placeholder="计划年月"
                                     value-format="yyyy-MM"
                                     style="width: 100%"
                                     :disabled="viewStatus"
+									@change="selectPlanMonth"
                                 >
                                 </el-date-picker>
                             </el-form-item>
@@ -276,14 +277,13 @@ export default {
                         label: '工序',
                         minWidth: 100,
                         prop: 'process',
-                        cell: true,
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入工序',
-                                trigger: ['blur', 'change']
-                            }
-                        ]
+                        cell: true
+                    },
+                    {
+                        label: '计量单位',
+                        minWidth: 100,
+                        prop: 'measureUnit',
+                        disabled: true
                     },
                     {
                         label: '产品规格',
@@ -298,18 +298,12 @@ export default {
                             }
                         ]
                     },
+
                     {
                         label: '包装规格',
                         minWidth: 200,
                         prop: 'packingSize',
-                        disabled: true,
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入包装规格',
-                                trigger: ['blur', 'change']
-                            }
-                        ]
+                        disabled: true
                     },
                     {
                         label: '质量指标',
@@ -350,14 +344,7 @@ export default {
                         label: '月力争目标',
                         minWidth: 100,
                         prop: 'monthStriveTarget',
-                        cell: true,
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入月力争目标',
-                                trigger: ['blur', 'change']
-                            }
-                        ]
+                        cell: true
                     },
                     {
                         label: '备注',
@@ -429,7 +416,7 @@ export default {
             this.selectForm.planMonth = this.monthInfo.planMonth
             this.selectForm.planName = this.monthInfo.planName
             this.selectForm.factoryName = this.monthInfo.factoryName
-			this.selectForm.factoryCode = this.monthInfo.factoryCode
+            this.selectForm.factoryCode = this.monthInfo.factoryCode
             this.selectForm.fictionUser = this.monthInfo.fictionUser
             this.selectForm.auditUser = this.monthInfo.auditUser
             this.selectForm.approvalUser = this.monthInfo.approvalUser
@@ -508,6 +495,7 @@ export default {
             this.data[row.$index].qualityIndex = val.productIndex
             this.data[row.$index].productSize = val.productSize
             this.data[row.$index].packingSize = val.packingSize
+			this.data[row.$index].measureUnit = val.measureUnit
         },
         selectFactory(val, row) {
             this.selectForm.factoryName = val.factoryName
@@ -515,16 +503,17 @@ export default {
             this.factoryCode = val.factoryCode
         },
         selectDepartment(val, row) {
-			this.data[row.$index].productName = ''
-			this.data[row.$index].productId = ''
+            this.data[row.$index].productName = ''
+            this.data[row.$index].productId = ''
             this.data[row.$index].qualityIndex = ''
             this.data[row.$index].productSize = ''
             this.data[row.$index].packingSize = ''
+			this.data[row.$index].measureUnit = ''
             this.data[row.$index].departmentName = val.departmentName
             this.data[row.$index].departmentCode = val.departmentCode
             this.departmentCode = val.departmentCode
-			this.productList = []
-			console.log(this.data[row.$index])
+            this.productList = []
+            console.log(this.data[row.$index])
             this.getProduct()
         },
         selectTaskType(val, row) {
@@ -604,7 +593,7 @@ export default {
                             this.$api.monthPlanAdd(params).then(res => {
                                 if (res.code == 'SUCCESS') {
                                     this.$message.success(res.message)
-                                    this.$router.push('/productionPlanMgmt/productionMonth')
+                                    this.$router.push('/productionMonth')
                                 } else {
                                     this.$message.error(res.message)
                                 }
@@ -667,7 +656,7 @@ export default {
                                 this.$api.monthPlanEdit(params).then(res => {
                                     if (res.code == 'SUCCESS') {
                                         this.$message.success(res.message)
-                                        this.$router.push('/productionPlanMgmt/productionMonth')
+                                        this.$router.push('/productionMonth')
                                     } else {
                                         this.$message.error(res.message)
                                     }
@@ -680,7 +669,16 @@ export default {
                     }
                 })
             }
-        }
+        },
+		selectPlanMonth(val){
+			console.log(val)
+			if(val != null || val != undefined) {
+				this.selectForm.planName = `${val}月生产计划`
+			}else{
+				this.selectForm.planName = ''
+			}
+
+		}
     },
     activated() {}
 }
