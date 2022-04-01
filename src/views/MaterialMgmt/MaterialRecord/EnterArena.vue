@@ -252,6 +252,7 @@ export default {
                         label: '计量单位',
                         prop: 'measureUnit',
                         display: false
+
                     },
                     {
                         label: '质量信息',
@@ -337,6 +338,7 @@ export default {
                                 label: '计量单位',
                                 prop: 'measureUnit',
                                 disabled: true,
+								placeholder:'系统自动带入',
                                 span: 8
                             },
                             {

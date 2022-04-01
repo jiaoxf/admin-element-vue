@@ -77,6 +77,7 @@
                         <el-select
                             v-model="form.productName"
                             placeholder="请选择产品名称"
+							filterable
                             value-key="productId"
                             @change="selectProduct"
                             :disabled="type == 'view'"

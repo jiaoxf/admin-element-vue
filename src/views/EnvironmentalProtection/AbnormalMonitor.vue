@@ -67,6 +67,7 @@
                     <template slot-scope="{ type }" slot="productNameForm">
                         <el-select
                             v-model="form.productName"
+							filterable
                             placeholder="请选择产品名称"
                             value-key="productId"
                             @change="selectProduct"

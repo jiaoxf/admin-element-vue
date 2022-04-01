@@ -98,6 +98,7 @@
                         <el-select
                             v-model="row.productName"
                             placeholder="请选择产品名称"
+							filterable
                             value-key="productId"
                             @change="selectProduct($event, row)"
                             :disabled="disabled"

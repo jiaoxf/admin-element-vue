@@ -242,6 +242,7 @@ export default {
                         label: '计量单位',
                         prop: 'measureUnit',
                         search: false,
+						placeholder:'系统自动带入',
                         disabled: true
                     }
                 ]

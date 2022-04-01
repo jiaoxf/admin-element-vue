@@ -324,7 +324,7 @@ export default {
                                 rules: [
                                     {
                                         required: true,
-                                        message: '请选择产品名称',
+                                        message: '请选择供应商名称',
                                         trigger: 'blur'
                                     }
                                 ],
@@ -358,6 +358,7 @@ export default {
                             {
                                 label: '计量单位',
                                 prop: 'measureUnit',
+								placeholder:'系统自动带入',
                                 disabled: true,
                                 span: 8
                             }
@@ -573,7 +574,11 @@ export default {
                 })
                 .then(res => {
                     console.log(res.data)
-                    this.supplierNameList = res.data
+					if(res.code == 'SUCCESS'){
+						this.supplierNameList = res.data
+					}else{
+						this.$message.error(res.message)
+					}
                 })
         },
         getAccessoryIndex(val) {

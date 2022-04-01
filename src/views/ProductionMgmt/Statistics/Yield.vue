@@ -21,6 +21,7 @@
                     :page.sync="page1"
                     @search-reset="resetData"
                     :table-loading="loading"
+                    :before-open="beforeOpen"
                 >
                     <template slot-scope="{}" slot="departmentNameSearch">
                         <el-select
@@ -56,7 +57,7 @@
                         <el-input
                             :disabled="type == 'view'"
                             v-model="form.productBatchNum"
-                            placeholder="请输批次号"
+                            placeholder="请输入批次号"
                         ></el-input>
                         <el-button type="text" v-show="type != 'view'" @click="generateNum"
                             >生成批次号</el-button
@@ -81,6 +82,7 @@
                         <el-select
                             v-model="form.productName"
                             placeholder="请选择产品名称"
+							filterable
                             value-key="productId"
                             @change="selectProduct"
                             :disabled="type == 'view'"
@@ -96,7 +98,11 @@
                         </el-select>
                     </template>
                     <template slot-scope="{ row }" slot="menu">
-                        <el-button v-if="myIndexBtn" icon="el-icon-check" type="text" @click="showDialog(row)"
+                        <el-button
+                            v-if="myIndexBtn"
+                            icon="el-icon-check"
+                            type="text"
+                            @click="showDialog(row)"
                             >指标</el-button
                         >
                     </template>
@@ -200,7 +206,7 @@ export default {
             defaults: {},
             // 质量指标数据
             indexArr: [],
-			myIndexBtn: false,
+            myIndexBtn: false,
             departmentList: [],
             option: {
                 size: 'mini',
@@ -221,8 +227,8 @@ export default {
                 index: true,
                 indexLabel: '序号',
                 addBtn: false,
-				editBtn: false,
-				delBtn: false,
+                editBtn: false,
+                delBtn: false,
                 column: [
                     {
                         label: '生产日期',
@@ -255,6 +261,7 @@ export default {
                         prop: 'departmentName',
                         disabled: true,
                         search: true,
+						placeholder:'系统自动带入',
                         width: 120
                     },
                     {
@@ -272,6 +279,7 @@ export default {
                     {
                         label: '产品类型',
                         prop: 'productType',
+						placeholder:'系统自动带入',
                         rules: [
                             {
                                 required: true,
@@ -322,7 +330,8 @@ export default {
                     {
                         label: '计量单位',
                         prop: 'measureUnit',
-                        disabled: true
+                        disabled: true,
+						placeholder:'系统自动带入'
                     }
                     /* {
                         label: '质量信息',
@@ -344,6 +353,7 @@ export default {
                 endDate: '', //生产日期止
                 time: [],
                 productBatchNum: ''
+
             },
             page1: {
                 currentPage: 1,
@@ -411,14 +421,40 @@ export default {
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
                 })
-                btnList.indexOf('add') > -1 ? (this.option.addBtn = true) : (this.option.addBtn = false) // 新增按钮
-                btnList.indexOf('edit') > -1 ? (this.option.editBtn = true) : (this.option.editBtn = false) // 编辑按钮
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
                 btnList.indexOf('delete') > -1
                     ? (this.option.delBtn = true)
                     : (this.option.delBtn = false) // 删除按钮
-                btnList.indexOf('view') > -1 ? (this.option.viewBtn = true) : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
                 btnList.indexOf('index') > -1 ? (this.myIndexBtn = true) : (this.myIndexBtn = false) // 查看按钮
             })
+        },
+        getCurrentDay(obj) {
+            var date = new Date()
+            var month = date.getMonth() + 1
+            var strDate = date.getDate()
+            if (month >= 1 && month <= 9) {
+                month = '0' + month
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = '0' + strDate
+            }
+            var currentdate = date.getFullYear() + '-' + month + '-' + strDate
+            return currentdate
+        },
+        beforeOpen(done, type) {
+            console.log(type)
+			if(type == 'add'){
+				this.form.productionDate = this.getCurrentDay(new Date())
+			}
+            done()
         },
         getProduct() {
             this.$api.commonProduct({}).then(res => {
@@ -560,33 +596,35 @@ export default {
             this.$confirm('检查输入日产量统计数据与批次号是否一致？', '提示', {
                 confirmButtonText: '确定',
                 type: 'warning'
-            }).then(() => {
-                let params = {
-                    productionDate: form.productionDate, //生产日期
-                    productName: form.productName, //产品名称
-                    productId: form.productId, //产品编号
-                    departmentName: form.departmentName, //车间名称
-                    departmentCode: form.departmentCode, //车间代码
-                    workingShift: form.workingShift, //生产班次
-                    productBatch: form.productBatch, //生产批次
-                    productType: form.productType, //产品类型
-                    yield: form.yield, //产量
-                    measureUnit: form.measureUnit, //单位
-                    productBatchNum: form.productBatchNum // 产品批次号
-                }
-                this.$api.statisticsYieldAdd(params).then(res => {
-                    if (res.code == 'SUCCESS') {
-                        this.$message.success(res.message)
-                        this.page1.currentPage = 1
-                        this.getData()
-                    } else {
-                        this.$message.error(res.message)
+            })
+                .then(() => {
+                    let params = {
+                        productionDate: form.productionDate, //生产日期
+                        productName: form.productName, //产品名称
+                        productId: form.productId, //产品编号
+                        departmentName: form.departmentName, //车间名称
+                        departmentCode: form.departmentCode, //车间代码
+                        workingShift: form.workingShift, //生产班次
+                        productBatch: form.productBatch, //生产批次
+                        productType: form.productType, //产品类型
+                        yield: form.yield, //产量
+                        measureUnit: form.measureUnit, //单位
+                        productBatchNum: form.productBatchNum // 产品批次号
                     }
+                    this.$api.statisticsYieldAdd(params).then(res => {
+                        if (res.code == 'SUCCESS') {
+                            this.$message.success(res.message)
+                            this.page1.currentPage = 1
+                            this.getData()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                    done()
                 })
-                done()
-            }).catch(() => {
-				done()
-			})
+                .catch(() => {
+                    done()
+                })
             /* let params = {
                 productionDate: form.productionDate, //生产日期
                 productName: form.productName, //产品名称

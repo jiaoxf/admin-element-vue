@@ -311,6 +311,7 @@ export default {
                                 label: '计量单位',
                                 prop: 'measureUnit',
                                 disabled: true,
+								placeholder:'系统自动带入',
                                 span: 8
                             },
                             {

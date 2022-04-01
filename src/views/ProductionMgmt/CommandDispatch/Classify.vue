@@ -32,6 +32,7 @@
                             placeholder="请选择车间名称"
                             value-key="departmentCode"
                             @change="searchDepartment"
+							clearable
                         >
                             <el-option
                                 v-for="item in departmentSearch"
@@ -163,7 +164,7 @@ export default {
     },
     created() {
         this.getData()
-
+		this.getDepartment()
         this.setOperate()
     },
     mounted() {},
@@ -275,7 +276,7 @@ export default {
                 }
             }
             this.$api.commandTypeList(params).then(res => {
-                this.form.departmentCode = ''
+                // this.form.departmentCode = ''
                 this.data = res.rows
                 this.loading = false
                 this.page1.total = res.total
@@ -317,7 +318,6 @@ export default {
                                     this.flag = false
                                     loading()
 									this.searchDepartmentName = ''
-                                    this.form.departmentName = ''
                                     this.form.directiveTypeName = ''
                                 }
                             })

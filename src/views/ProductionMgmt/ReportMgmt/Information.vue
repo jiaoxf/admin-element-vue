@@ -77,6 +77,7 @@ export default {
             // 质量指标数据
             indexArr: [],
             option: {
+				addBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,

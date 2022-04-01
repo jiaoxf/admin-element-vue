@@ -80,7 +80,7 @@ export default {
     },
     created() {},
     mounted() {
-        let list = [
+        /* let list = [
             {
                 id: 1000100020002,
                 pid: 100010002,
@@ -265,7 +265,7 @@ export default {
                     }
                 ]
             }
-        ]
+        ] */
         // this.menuList = this.$store.state.user.leftMenu
     },
     beforeCreate() {},

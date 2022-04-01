@@ -51,6 +51,7 @@
                             v-model="form.productName"
                             placeholder="请选择产品名称"
                             value-key="productId"
+							filterable
                             @change="searchProduct"
                             :disabled="type == 'view'"
                             clearable
@@ -69,6 +70,7 @@
                             v-model="form.productName"
                             placeholder="请选择产品名称"
                             value-key="productId"
+							filterable
                             @change="selectProduct"
                             :disabled="type == 'view'"
                             clearable
@@ -148,6 +150,7 @@
                             v-model="form.sampleName"
                             placeholder="请选择 样品名称"
                             value-key="sampleCode"
+							filterable
                             @change="selectSample"
                             :disabled="type == 'view'"
                             clearable
@@ -168,6 +171,7 @@
                             value-key="sampleCode"
                             @change="selectSample"
                             :disabled="type == 'view'"
+							filterable
                             clearable
                         >
                             <el-option
@@ -436,11 +440,13 @@ export default {
                                 label: '产品规格',
                                 prop: 'productSize',
                                 disabled: true,
+								placeholder:'系统自动带入',
                                 span: 8
                             },
                             {
                                 label: '类型',
                                 prop: 'productType',
+								placeholder:'系统自动带入',
                                 disabled: true,
                                 span: 8
                             },

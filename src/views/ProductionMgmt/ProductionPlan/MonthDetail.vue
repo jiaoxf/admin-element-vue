@@ -7,7 +7,7 @@
             </el-breadcrumb>
             <el-button
                 icon="el-icon-back"
-                @click="$router.push('/productionPlanMgmt/productionMonth')"
+                @click="$router.push('/productionMonth')"
                 size="small"
                 type="primary"
                 >返回</el-button
@@ -151,6 +151,7 @@
                         <el-select
                             v-model="row.productName"
                             placeholder="请选择产品名称"
+							filterable
                             value-key="productId"
                             @change="selectProduct($event, row)"
                             :disabled="disabled"

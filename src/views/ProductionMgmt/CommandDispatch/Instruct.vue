@@ -904,9 +904,6 @@ export default {
                 this.$api.commandSaveStatus(params).then(res => {
                     if (res.code == 'SUCCESS') {
                         console.log(res)
-                        this.$message.success(res.message)
-                    } else {
-                        this.$message.error(res.message)
                     }
                 })
             }

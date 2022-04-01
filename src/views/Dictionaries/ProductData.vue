@@ -69,6 +69,7 @@
                             v-model="form.productName"
                             placeholder="请选择产品名称"
                             value-key="productId"
+							filterable
                             @change="selectProduct"
                             :disabled="type == 'view'"
                             clearable

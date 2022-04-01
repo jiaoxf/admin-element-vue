@@ -160,6 +160,23 @@
                             </el-option>
                         </el-select>
                     </template>
+					<template slot-scope="{ type }" slot="mineTypeForm">
+                        <el-select
+                            v-model="form.mineType"
+                            placeholder="请选择 矿类型"
+                            @change="selectOreTypesList"
+                            :disabled="type == 'view'"
+                            clearable
+                        >
+                            <el-option
+                                v-for="item in oreTypesList"
+                                :key="item.dictName"
+                                :label="item.dictName"
+                                :value="item.dictName"
+                            >
+                            </el-option>
+                        </el-select>
+                    </template>
                     <template slot-scope="{ type }" slot="supplierNameForm">
                         <el-select
                             v-model="form.supplierName"
@@ -323,7 +340,7 @@ export default {
                                 rules: [
                                     {
                                         required: true,
-                                        message: '请选择产品名称',
+                                        message: '请选择供应商名称',
                                         trigger: 'blur'
                                     }
                                 ],
@@ -357,6 +374,7 @@ export default {
                             {
                                 label: '计量单位',
                                 prop: 'measureUnit',
+								placeholder:'系统自动带入',
                                 disabled: true,
                                 span: 8
                             }
@@ -461,6 +479,7 @@ export default {
             sampleDataList: [],
             resultDataList: [],
             supplierNameList: [],
+			oreTypesList: [],
 			myExportBtn: false,
 			myImportBtn: false
         }
@@ -469,6 +488,7 @@ export default {
         // this.getData()
         this.getDepartment()
         this.getMaterial()
+		this.getOreTypesInfo()
 		this.setOperate()
         this.getSampleData()
         this.getResultData()
@@ -515,6 +535,16 @@ export default {
                     }
                 }
             })
+        },
+		getOreTypesInfo() {
+            this.$api
+                .commonDict({
+                    entityCode: 'MATERIALS_USE', //实体代码（参数从字典选项参照中获取）
+                    fieldCode: 'MINE_TYPE' //属性代码（参数从字典选项参照中获取）
+                })
+                .then(res => {
+                    this.oreTypesList = res.data
+                })
         },
         getMaterial() {
             this.$api
@@ -574,6 +604,9 @@ export default {
             console.log(val)
             this.form.decisionOutcome = val
         },
+		selectOreTypesList(val){
+			this.form.mineType = val
+		},
         getMaterialInfo(materialName) {
             this.$api
                 .materialsQualityData({

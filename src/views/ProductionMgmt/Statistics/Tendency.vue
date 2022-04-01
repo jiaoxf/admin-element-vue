@@ -151,7 +151,7 @@ export default {
                         rules: [
                             {
                                 required: true,
-                                message: '请输入计量单位',
+                                message: '请输入',
                                 trigger: ['change', 'blur']
                             }
                         ]

@@ -196,6 +196,7 @@ export default {
                     {
                         label: '计量单位',
                         prop: 'measureUnit',
+						placeholder:'系统自动带入',
                         search: false,
                         disabled: true
                     }
