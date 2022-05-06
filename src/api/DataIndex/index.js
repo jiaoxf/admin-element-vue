@@ -1,19 +1,21 @@
 import service from '@/utils/http/axios'
 
-const reportMgmtInformation = {
-    alarmInfoList: data => {
+const dataIndex = {
+    homeDirectiveList: data => {
         return service({
-            url: 'web/alarmInfo/list',
+            url: 'web/home/directive/list',
             method: 'post',
             data: data
         })
     },
-    alarmInfoView: data => {
+    homeAlarmList: data => {
         return service({
-            url: 'web/alarmInfo/view',
+            url: 'web/home/alarm/list',
             method: 'post',
             data: data
         })
     }
 }
-export default reportMgmtInformation
+export default dataIndex
+
+

@@ -47,7 +47,30 @@ const productionYear = {
             data: data
             // contentType: 'multipart'
         })
-	}
+	},
+	yearPlanTemplate: data => {
+        return service({
+            url: 'web/yearPlan/template',
+            method: 'get',
+            data: data
+        })
+    },
+    yearPlanImport: data => {
+        return service({
+            url: 'web/yearPlan/import',
+            method: 'POST',
+            data: data,
+            contentType: 'multipart'
+        })
+    },
+    yearPlanExport: data => {
+        return service({
+            url: 'web/yearPlan/export',
+            method: 'POST',
+            data: data,
+            responseType: 'blob'
+        })
+    }
 
 }
 export default productionYear

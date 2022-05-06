@@ -164,7 +164,7 @@
                         <el-descriptions-item>
                             <template slot="label"> 采用时间 </template>
                             {{ productQualityInfo.samplingTime }} </el-descriptions-item
-                        >createUser
+                        >
                         <el-descriptions-item>
                             <template slot="label"> 创建用户 </template>
                             {{ productQualityInfo.createUser }}
@@ -288,7 +288,6 @@ export default {
                             }
                         ]
                     },
-
                     {
                         label: '生产批次',
                         prop: 'productBatch',

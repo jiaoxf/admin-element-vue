@@ -44,7 +44,7 @@
                                     value-format="yyyy"
                                     style="width: 100%"
                                     :disabled="viewStatus"
-									@change="selectPlanYear"
+                                    @change="selectPlanYear"
                                 >
                                 </el-date-picker>
                             </el-form-item>
@@ -67,7 +67,6 @@
                 <avue-crud
                     ref="crud"
                     :data="data"
-                    v-model="data"
                     :option="option"
                     @row-update="rowUpdate"
                     @row-save="rowSave"
@@ -98,7 +97,7 @@
                         <el-select
                             v-model="row.productName"
                             placeholder="请选择产品名称"
-							filterable
+                            filterable
                             value-key="productId"
                             @change="selectProduct($event, row)"
                             :disabled="disabled"
@@ -368,6 +367,7 @@ export default {
         } else if (this.status == 'edit') {
             this.loading = true
             this.detailInfo = JSON.parse(sessionStorage.getItem('detailInfo'))
+			console.log(this.detailInfo)
             this.detailId = this.detailInfo.id
             this.selectForm.planYear = this.detailInfo.planYear
             this.selectForm.planName = this.detailInfo.planName
@@ -470,16 +470,49 @@ export default {
             this.getProduct()
         },
         async getData() {
+            /* this.data = [
+                {
+                    factoryCode: 'LY',
+                    november: 10000,
+                    departmentCode: 'LS',
+                    productSize: '22-3-29',
+                    remark: '测试数据',
+                    april: 10000,
+                    productName: '饲料级磷酸氢钙',
+                    capacity: 120000,
+                    september: 10000,
+                    yearPlanTarget: 120000,
+                    december: 10000,
+                    departmentName: '磷酸车间',
+                    productId: '01',
+                    may: 10000,
+                    august: 10000,
+                    february: 10000,
+                    factoryName: '磷化工',
+                    july: 10000,
+                    measureUnit: 'T',
+                    march: 10000,
+                    june: 10000,
+                    january: 10000,
+                    verdict: '',
+                    october: 10000,
+                    $cellEdit: false,
+                    id: 0
+                }
+            ] */
             await this.$api
                 .productionYearDetail({
                     id: this.detailId
                 })
                 .then(res => {
+					console.log(res.data)
                     res.data.forEach((item, i) => {
                         item.$cellEdit = false
                         item.id = i
                     })
-                    this.data = res.data
+					this.data = res.data
+                    // this.data = res.data
+					console.log(this.data)
                     this.loading = false
                 })
             /* if (this.status == 'edit') {
@@ -610,15 +643,14 @@ export default {
                 })
             }
         },
-		selectPlanYear(val){
-			console.log(val)
-			if(val != null || val != undefined) {
-				this.selectForm.planName = `龙蟒大地${val}年度生产计划`
-			}else{
-				this.selectForm.planName = ''
-			}
-
-		}
+        selectPlanYear(val) {
+            console.log(val)
+            if (val != null || val != undefined) {
+                this.selectForm.planName = `龙蟒大地${val}年度生产计划`
+            } else {
+                this.selectForm.planName = ''
+            }
+        }
     },
     activated() {}
 }

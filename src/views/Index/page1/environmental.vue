@@ -1,14 +1,14 @@
 <template>
     <div class="ring">
         <div class="ring-title">
-            <span>调度指令名称</span>
-            <span>时间</span>
+            <span>报警点位</span>
+            <span>触发时间</span>
         </div>
         <vue-seamless-scroll :data="dataList" class="warp" :class-option="classOption">
             <ul class="item">
                 <li v-for="(item, index) in dataList" :key="index">
-                    <span class="title-text" v-text="item.directiveName" @click="push()"></span>
-                    <span class="date-text" v-text="item.issueDate"></span>
+                    <span class="title-text" v-text="item.alarmPoint" @click="push()"></span>
+                    <span class="date-text" v-text="item.triggerTime"></span>
                 </li>
             </ul>
         </vue-seamless-scroll>

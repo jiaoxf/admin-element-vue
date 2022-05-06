@@ -21,7 +21,6 @@ export default {
                         fontSize: 10
                     }
                 },
-
                 legend: {
                     top: '25%',
                     right: '7%',

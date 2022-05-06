@@ -13,6 +13,7 @@ import Avue from '@smallwei/avue'
 import '@smallwei/avue/lib/index.css'
 import utils from '@/utils/utils'
 import img from '@/utils/img'
+import { GLOBLE_CONFIG } from './config'
 
 
 Vue.use(Avue)
@@ -22,7 +23,7 @@ Vue.prototype.$echarts = function(el) {
 }
 Vue.prototype.$images = img
 Vue.prototype.$utils = utils
-
+Vue.prototype.$baseUrl = GLOBLE_CONFIG.host
 Vue.config.productionTip = false
 
 import api from '@/api/index'

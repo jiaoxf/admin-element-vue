@@ -13,54 +13,54 @@
                     :option="option"
                     :data="data"
                     v-model="form"
-                    @row-save="handleSave"
-                    @row-update="handleUpdate"
-                    @row-del="handleDel"
                     @search-change="searchChange"
                     @current-change="currentChange"
                     :page.sync="page1"
                     @search-reset="resetData"
                     :before-open="openDialog"
-					:table-loading="loading"
+                    :table-loading="loading"
                 >
-                    <template slot-scope="{ type }" slot="factoryNameForm">
-                        <el-select
-                            v-model="form.factoryName"
-                            placeholder="请选择 分厂名称"
-                            value-key="factoryCode"
-                            @change="selectFactory"
-                            :disabled="type == 'view'"
+                    <!-- <template slot-scope="{ row }" slot="menu">
+                        <el-button icon="el-icon-edit-outline" type="text" @click="dispose(row)"
+                            >处理</el-button
                         >
-                            <el-option
-                                v-for="item in factoryList"
-                                :key="item.factoryCode"
-                                :label="item.factoryName"
-                                :value="item"
-                            >
-                            </el-option>
-                        </el-select>
+                    </template> -->
+                    <template slot="alarmType" slot-scope="{ row }">
+                        <div v-if="row.alarmType === 'high'" class="text-orange">高限</div>
+                        <div v-else-if="row.alarmType === 'low'" class="text-orange">低限</div>
+                        <div v-else-if="row.alarmType === 'ultraHigh'" class="text-super">
+                            超高限
+                        </div>
+                        <div v-else-if="row.alarmType === 'ultraLow'" class="text-super">
+                            超低限
+                        </div>
+                        <div v-else>-</div>
                     </template>
-                    <template slot-scope="{ type }" slot="materialNameForm">
-                        <el-select
-                            v-model="form.materialName"
-                            placeholder="请选择原料名称"
-                            value-key="materialId"
-                            @change="selectMaterial"
-                            :disabled="type == 'view'"
-                        >
-                            <el-option
-                                v-for="item in materialNameList"
-                                :key="item.materialName"
-                                :label="item.materialName"
-                                :value="item"
-                            >
-                            </el-option>
-                        </el-select>
+                    <template slot="alarmTypeForm" slot-scope="{}">
+                        <div v-if="form.alarmType === 'high'" class="text-orange-form">高限</div>
+                        <div v-else-if="form.alarmType === 'low'" class="text-orange-form">
+                            低限
+                        </div>
+                        <div v-else-if="form.alarmType === 'ultraHigh'" class="text-super-form">
+                            超高限
+                        </div>
+                        <div v-else-if="form.alarmType === 'ultraLow'" class="text-super-form">
+                            超低限
+                        </div>
+                        <div v-else>-</div>
+                    </template>
+                    <template slot="pointLocationSearch" slot-scope="{}">
+                        <el-cascader
+                            :options="options"
+                            :props="{ checkStrictly: true }"
+                            v-model="form.pointLocation"
+                            clearable
+                            @change="changePT"
+                        ></el-cascader>
                     </template>
                 </avue-crud>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -70,14 +70,16 @@ export default {
     components: {},
     data() {
         return {
-			loading: true,
+            loading: false,
             flag: false,
             data: [],
             defaults: {},
             // 质量指标数据
             indexArr: [],
             option: {
-				addBtn: false,
+                addBtn: false,
+                editBtn: false,
+                delBtn: false,
                 size: 'mini',
                 labelWidth: 150,
                 border: true,
@@ -95,133 +97,195 @@ export default {
                 // addBtn: false,
                 column: [
                     {
+                        label: '告警类型',
+                        prop: 'alarmType',
+                        display: false
+                    },
+                    {
+                        label: '指标等级',
+                        prop: 'alarmLevel',
+                        display: false,
+                        overHidden: true
+                    },
+                    {
                         label: '触发时间',
-                        prop: 'factoryName',
+                        prop: 'triggerTime',
+                        overHidden: true,
+                        display: false,
+                        width: 160
+                    },
+                    {
+                        label: '点位位置',
+                        prop: 'pointLocation',
+                        width: 230,
+                        display: false,
+                        overHidden: true,
+                        search: true
+                    },
+                    {
+                        label: '点位标识',
+                        prop: 'pointId',
+                        width: 100,
+                        display: false,
+                        overHidden: true,
+                        search: true
+                    },
+                    {
+                        label: '点位名称',
+                        prop: 'pointName',
+                        width: 150,
+                        overHidden: true,
                         display: false,
                         search: true
                     },
                     {
-                        label: '车间',
-                        prop: 'materialName',
-                        display: false,
-                        search: true
-                    },
-					{
-                        label: '工序/岗位',
-                        prop: 'materialName',
-                        display: false,
-                        search: true
-                    },
-                    {
-                        label: '指标名称',
-                        prop: 'supplierName',
-                        searchLabelWidth: 100,
-                        display: false,
-                        search: true
-                    },
-                    {
-                        label: '指标单位',
-                        prop: 'measureUnit',
+                        label: '实时值',
+                        prop: 'realValue',
                         display: false,
                         search: false
                     },
                     {
-                        label: '指标等级',
-                        prop: 'measureUnit',
+                        label: '指标单位',
+                        prop: 'unit',
                         display: false,
                         search: false
                     },
                     {
                         label: '指标范围',
-                        prop: 'measureUnit',
-                        display: false,
-                        search: false
-                    },
-                    {
-                        label: '实时值',
-                        prop: 'measureUnit',
+                        prop: 'alarmRange',
                         display: false,
                         search: false
                     },
                     {
                         label: '异常判定标准',
-                        prop: 'measureUnit',
+                        prop: 'abnormalStandard',
                         display: false,
+                        width: 120,
                         search: false
                     },
                     {
                         label: '事故判断标准',
-                        prop: 'measureUnit',
+                        prop: 'accidentStandard',
                         display: false,
+                        width: 120,
                         search: false
                     }
                 ],
                 group: [
                     {
-                        label: '原料信息',
-                        prop: 'jbxx',
-                        icon: 'el-icon-box',
+                        label: '告警信息',
+                        prop: 'gjxx',
+                        icon: 'el-icon-document-copy',
                         arrow: false,
                         column: [
                             {
-                                label: '分厂名称',
-                                prop: 'factoryName',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入分厂名称',
-                                        trigger: 'blur'
-                                    }
-                                ]
+                                label: '触发时间',
+                                prop: 'triggerTime',
+                                span: 8
                             },
                             {
-                                label: '原料名称',
-                                prop: 'materialName',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入原料名称',
-                                        trigger: 'blur'
-                                    }
-                                ]
+                                label: '告警类型',
+                                prop: 'alarmType',
+                                span: 8
                             },
                             {
-                                label: '供应商名称',
-                                prop: 'supplierName',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入供应商名称',
-                                        trigger: 'blur'
-                                    }
-                                ]
+                                label: '告警等级',
+                                prop: 'alarmLevel',
+                                span: 8
                             },
                             {
-                                label: '计量单位',
-                                prop: 'measureUnit',
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入计量单位',
-                                        trigger: 'blur'
-                                    }
-                                ]
+                                label: '点位位置',
+                                prop: 'pointLocation',
+                                span: 8
+                            },
+                            {
+                                label: '点位标识',
+                                prop: 'pointId',
+                                span: 8
+                            },
+                            {
+                                label: '点位名称',
+                                prop: 'pointName',
+                                span: 8
+                            },
+                            {
+                                label: '实时值',
+                                prop: 'realValue',
+                                span: 8
+                            },
+                            {
+                                label: '指标单位',
+                                prop: 'unit',
+                                span: 8
+                            },
+                            {
+                                label: '指标范围',
+                                prop: 'alarmRange',
+                                span: 8
+                            },
+                            {
+                                label: '异常判定标准',
+                                prop: 'abnormalStandard',
+                                span: 8
+                            },
+                            {
+                                label: '事故判定标准',
+                                prop: 'accidentStandard',
+                                span: 8
                             }
                         ]
                     },
                     {
-                        label: '质量检验指标',
+                        label: '告警阈值',
+                        prop: 'gjyz',
+                        icon: 'el-icon-odometer',
                         arrow: false,
-                        prop: 'tksq',
-                        icon: 'el-icon-finished',
-                        formslot: true,
-                        column: this.indexArr
+                        column: [
+                            {
+                                label: '高限',
+                                prop: 'high',
+                                span: 6
+                            },
+                            {
+                                label: '高限等级',
+                                prop: 'highLevel',
+                                span: 6
+                            },
+                            {
+                                label: '超高限',
+                                prop: 'ultraHigh',
+                                span: 6
+                            },
+                            {
+                                label: '超高限等级',
+                                prop: 'ultraHighLevel',
+                                span: 6
+                            },
+                            {
+                                label: '低限',
+                                prop: 'low',
+                                span: 6
+                            },
+                            {
+                                label: '低限等级',
+                                prop: 'lowLevel',
+                                span: 6
+                            },
+                            {
+                                label: '超低限',
+                                prop: 'ultraLow',
+                                span: 6
+                            },
+                            {
+                                label: '超低限等级',
+                                prop: 'ultraLowLevel',
+                                span: 6
+                            }
+                        ]
                     }
                 ]
             },
             spanArr: [],
-            // 合并单元格的
-            key: 'name',
             form: {
                 factoryName: '', //分厂名称
                 materialName: '',
@@ -237,161 +301,93 @@ export default {
             factoryList: [],
             materialNameList: [],
             indexStr: '',
-            productIndexList: []
+            productIndexList: [],
+            options: []
         }
     },
     created() {
-        // this.getData()
-        this.getMaterial()
-        this.getFactory()
         this.getData()
-		this.setOperate()
+        this.getAlarmLocationOption()
+		setOperate()
     },
     mounted() {},
     computed: {},
     watch: {},
     methods: {
-		setOperate() {
+        setOperate() {
             let result = this.$utils.getOperate(this.$route.meta.id)
             result.then(res => {
-                console.log(res)
-                /* this.permission = {
-                    delBtn: false,
-                    addBtn: false,
-					viewBtn: false
-                } */
-                let resultList = [
-                    {
-                        operName: '导入', //操作名称
-                        operCode: 'import' //操作代码
-                    },
-                    {
-                        operName: '新增', //操作名称
-                        operCode: 'add' //操作代码
-                    },
-                    {
-                        operName: '编辑', //操作名称
-                        operCode: 'edit' //操作代码
-                    },
-                    {
-                        operName: '导出', //操作名称
-                        operCode: 'export' //操作代码
-                    },
-                    {
-                        operName: '删除', //操作名称
-                        operCode: 'delete' //操作代码
-                    },
-                    {
-                        operName: '查看', //操作名称
-                        operCode: 'view' //操作代码
-                    }
-                ]
+                let resultList = res.data
                 let btnList = []
                 resultList.forEach(element => {
                     btnList.push(element.operCode)
                 })
-                btnList.indexOf('add') > -1 ? (this.myAddBtn = true) : (this.myAddBtn = false) // 新增按钮
-                btnList.indexOf('edit') > -1 ? (this.myEditBtn = true) : (this.myEditBtn = false) // 编辑按钮
+                btnList.indexOf('add') > -1
+                    ? (this.option.addBtn = true)
+                    : (this.option.addBtn = false) // 新增按钮
+                btnList.indexOf('edit') > -1
+                    ? (this.option.editBtn = true)
+                    : (this.option.editBtn = false) // 编辑按钮
                 btnList.indexOf('delete') > -1
-                    ? (this.myDeleteBtn = true)
-                    : (this.myDeleteBtn = false) // 删除按钮
-                btnList.indexOf('view') > -1 ? (this.myViewBtn = true) : (this.myViewBtn = false) // 查看按钮
-				// 如果都没有权限
+                    ? (this.option.delBtn = true)
+                    : (this.option.delBtn = false) // 删除按钮
+                btnList.indexOf('view') > -1
+                    ? (this.option.viewBtn = true)
+                    : (this.option.viewBtn = false) // 查看按钮
+                btnList.indexOf('import') > -1
+                    ? (this.myImportBtn = true)
+                    : (this.myImportBtn = false) // 导出
+                btnList.indexOf('export') > -1
+                    ? (this.myExportBtn = true)
+                    : (this.myExportBtn = false) // 导入
+                // 如果都没有权限
                 if (
                     this.myEditBtn == false &&
                     this.myViewBtn == false &&
                     this.myDeleteBtn == false
                 ) {
                     this.permission = {
-						menu: false
-					}
+                        menu: false
+                    }
                 }
             })
         },
-        getMaterial() {
-            this.$api
-                .commonMaterial({
-                    materialType: 'YL'
-                })
-                .then(res => {
-                    this.materialNameList = res.data
-                })
-        },
-        getFactory() {
-            this.$api.commonFactory({}).then(res => {
-                this.factoryList = res.data
+        getAlarmLocationOption() {
+            this.$api.alarmLocationOption().then(res => {
+                this.options = res.data
             })
         },
-        selectMaterial(val) {
-            this.form.materialName = val.materialName
-            this.form.materialId = val.materialId
-            this.getMaterialIndex(this.form.materialId)
-        },
-        selectFactory(val) {
-            this.form.factoryCode = val.factoryCode
-            this.form.factoryName = val.factoryName
-        },
-        getMaterialIndex(val) {
-            this.indexArr = []
-            this.$api
-                .getMaterialIndex({
-                    id: val
-                })
-                .then(res => {
-                    if (res.code == 'SUCCESS') {
-                        let productIndexArr = res.data
-                        this.productIndexList = res.data
-                        this.indexStr = productIndexArr[0].targetKey.substring(0, 3)
-                        productIndexArr.forEach((item, i) => {
-                            this.indexArr[i] = {
-                                label: item.targetName,
-                                prop: item.targetKey,
-                                index: item.targetKey,
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: `请输入${item.targetName}`,
-                                        trigger: 'blur'
-                                    }
-                                ],
-                                span: 8
-                            }
-                        })
-                        this.option.group[1].column = this.indexArr
-                        this.$nextTick(() => {
-                            this.$refs.crud.updateDic()
-                        })
-                    } else if (res.code == 'FAIL') {
-                        this.$message.error(res.message)
-                        this.option.group[1].column = []
-                        this.$nextTick(() => {
-                            this.$refs.crud.updateDic()
-                        })
-                    }
-                })
-        },
         getData() {
-			this.loading = true
-            this.$api
-                .rawDataList({
-                    factoryName: this.form.factoryName, //分厂名称
-                    materialName: this.form.materialName,
-                    supplierName: this.form.supplierName,
-                    measureUnit: this.form.measureUnit,
+            this.loading = true
+            let params = {}
+            if (this.form.pointLocation == undefined) {
+                params = {
+                    pointId: this.form.pointId,
+                    pointName: this.form.pointName,
                     currPage: this.page1.currentPage,
                     pageSize: 20
-                })
-                .then(res => {
-                    // this.data = res.rows
-					this.loading = false
-                    // this.page1.total = res.total
-                })
+                }
+            } else {
+                params = {
+                    factoryDictId: this.form.pointLocation[0] ? this.form.pointLocation[0] : '',
+                    departmentDictId: this.form.pointLocation[1] ? this.form.pointLocation[1] : '',
+                    workDictId: this.form.pointLocation[2] ? this.form.pointLocation[2] : '',
+                    pointId: this.form.pointId,
+                    pointName: this.form.pointName,
+                    currPage: this.page1.currentPage,
+                    pageSize: 20
+                }
+            }
+            this.$api.alarmInfoList(params).then(res => {
+                this.data = res.rows
+                this.loading = false
+                this.page1.total = res.total
+            })
         },
         resetData() {
-            this.form.factoryName = ''
-            this.form.materialName = ''
-            this.form.supplierName = ''
-            this.form.measureUnit
+            this.form.pointLocation = ''
+            this.form.pointId = ''
+            this.form.pointName = ''
             this.page1.currentPage = 1
             this.getData()
         },
@@ -399,164 +395,57 @@ export default {
             this.page1.currentPage = val
             this.getList()
         },
-        // 获取表单   obj: 表单对象，str : 产品指标前3位
-        filterProductData(obj, str) {
-            const object = {}
-            Object.keys(obj)
-                .filter(key => key.indexOf(str) == -1)
-                .forEach(key => {
-                    object[key] = obj[key]
-                })
-            return object
-        },
-        fileterMaterialIndexList(obj, str) {
-            const object = {}
-            Object.keys(obj)
-                .filter(key => key.indexOf(str) != -1)
-                .forEach(key => {
-                    object[key] = obj[key]
-                })
-            let materialList = []
-            Object.keys(object).map(el => {
-                this.productIndexList.forEach((item, i) => {
-                    if (item.targetKey == el) {
-                        materialList[i] = {
-                            targetName: item.targetName,
-                            targetKey: item.targetKey,
-                            targetValue: object[el]
-                        }
-                    }
-                })
-            })
-            return materialList
-        },
-        handleSave(form, done, loading) {
-            let productDataList = this.filterProductData(this.form, this.indexStr)
-            let materialIndexList = this.fileterMaterialIndexList(this.form, this.indexStr)
-            let params = {
-                materialData: productDataList,
-                materialIndexList: materialIndexList
-            }
-            this.$api.rawDataAdd(params).then(res => {
-                if (res.code == 'SUCCESS') {
-                    this.$message.success(res.message)
-                    this.page1.currentPage = 1
-                    this.getData()
-                } else {
-                    this.$message.error(res.message)
-                }
-            })
-            done()
-        },
-        handleUpdate(form, index, done, loading) {
-            let productDataList = this.filterProductData(this.form, this.indexStr)
-            let materialIndexList = this.fileterMaterialIndexList(this.form, this.indexStr)
-
-            let params = {
-                materialData: productDataList,
-                materialIndexList: materialIndexList
-            }
-            this.$api
-                .rawDataEdit({
-                    id: form.id,
-                    ...params
-                })
-                .then(res => {
-                    if (res.code == 'SUCCESS') {
-                        this.$message.success(res.message)
-                        this.page1.currentPage = 1
-                        this.getData()
-                    } else {
-                        this.$message.error(res.message)
-                    }
-                })
-            done()
-        },
-        handleDel(form, row, index) {
-            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            })
-                .then(() => {
-                    this.$api
-                        .rawDataDel({
-                            ids: form.id
-                        })
-                        .then(res => {
-                            if (res.code == 'SUCCESS') {
-                                this.$message.success(res.message)
-                                this.page1.currentPage = 1
-                                this.getData()
-                            } else {
-                                this.$message.error(res.message)
-                            }
-                        })
-                })
+        changePT(val) {
+            console.log(val)
+            console.log(this.form.pointLocation)
         },
         searchChange(params, done) {
             console.log(params)
+            this.form.pointId = params.pointId
+            this.form.pointName = params.pointName
             this.page1.currentPage = 1
-            this.form = params
             this.getData()
             done()
         },
-        viewProductIndex(projectId) {
-            this.indexArr = []
-            this.$api
-                .getMaterialIndexForm({
-                    id: projectId
-                })
-                .then(res => {
-                    if (res.code == 'SUCCESS') {
-                        let productIndexArr = res.data
-                        this.productIndexList = res.data
-                        this.indexStr = productIndexArr[0].targetKey.substring(0, 3)
-                        productIndexArr.forEach((item, i) => {
-                            this.indexArr[i] = {
-                                label: item.targetName,
-                                prop: item.targetKey,
-                                index: item.targetKey,
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: `请输入${item.targetName}`,
-                                        trigger: 'blur'
-                                    }
-                                ],
-                                span: 8
-                            }
-                        })
-                        this.option.group[1].column = this.indexArr
-                        this.$nextTick(() => {
-                            this.$refs.crud.updateDic()
-                        })
-
-                        let formList = res.data
-                        formList.forEach(item => {
-                            this.form[item.targetKey] = item.targetValue
-                        })
-                    } else {
-                        this.$message.error(res.message)
-                    }
-                })
-        },
         openDialog(done, type) {
-            console.log()
+            console.log(this.form.id)
             if (['view', 'edit'].includes(type)) {
-                // this.getMaterialIndex(this.form.id)
-                this.viewProductIndex(this.form.id)
-            } else {
-                this.option.group[1].column = []
-                this.$nextTick(() => {
-                    this.$refs.crud.updateDic()
-                })
+                this.getViewData(this.form.id)
             }
             done()
+        },
+        getViewData(id) {
+            this.$api
+                .alarmInfoView({
+                    id: id
+                })
+                .then(res => {
+					this.form.high = res.data.high || '-'//高限等级
+                    this.form.highLevel = res.data.highLevel || '-'//高限等级
+                    this.form.ultraLowLevel = res.data.ultraLowLevel || '-' //超低限等级
+                    this.form.lowLevel = res.data.lowLevel || '-'
+					this.form.ultraHigh = res.data.ultraHigh || '-'//超高限值
+					this.form.low = res.data.low || '-'//低限值
+					this.form.ultraHighLevel = res.data.ultraHighLevel || '-'//超高限等级
+					this.form.ultraLow = res.data.ultraLow || '-'//超低限值
+                })
+        },
+        dispose(row) {
+            // console.log(row)
+            this.$confirm('是否处理？', '提示', {
+                confirmButtonText: '确定',
+                type: 'warning'
+            })
+                .then(() => {
+                    console.log('处理')
+                    this.$message.success('处理成功')
+                })
+                .catch(() => {})
         }
     }
 }
 </script>
 <style lang="scss" scoped>
 /* @import ''; // 引入公共css类*/
+@import './index.scss';
 </style>

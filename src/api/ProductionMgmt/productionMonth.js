@@ -55,6 +55,29 @@ const productionMonth = {
             data: data
             // contentType: 'multipart'
         })
+    },
+	monthPlanTemplate: data => {
+        return service({
+            url: 'web/monthPlan/template',
+            method: 'get',
+            data: data
+        })
+    },
+    monthPlanImport: data => {
+        return service({
+            url: 'web/monthPlan/import',
+            method: 'POST',
+            data: data,
+            contentType: 'multipart'
+        })
+    },
+    monthPlanExport: data => {
+        return service({
+            url: 'web/monthPlan/export',
+            method: 'POST',
+            data: data,
+            responseType: 'blob'
+        })
     }
 }
 export default productionMonth

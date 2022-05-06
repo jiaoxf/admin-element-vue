@@ -39,6 +39,29 @@ const materialYield = {
             data: data
             // contentType: 'multipart'
         })
-	}
+	},
+    materialsYieldTemplate: data => {
+        return service({
+            url: 'web/materialsYield/template',
+            method: 'get',
+            data: data
+        })
+    },
+    materialsYieldImport: data => {
+        return service({
+            url: 'web/materialsYield/import',
+            method: 'POST',
+            data: data,
+            contentType: 'multipart'
+        })
+    },
+    materialsYieldExport: data => {
+        return service({
+            url: 'web/materialsYield/export',
+            method: 'POST',
+            data: data,
+            responseType: 'blob'
+        })
+    }
 }
 export default materialYield

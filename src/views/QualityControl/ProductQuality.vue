@@ -38,7 +38,7 @@
                                 :auto-upload="false"
                                 :show-file-list="false"
                                 action="action"
-                                :on-change="importTing"
+                                :on-change="importFunction"
                             >
                                 <el-button icon="el-icon-upload2" size="small" type="primary"
                                     >导入</el-button
@@ -987,7 +987,7 @@ export default {
                 }
             })
         },
-		importTing(){
+		importFunction(){
 
 		}
     }

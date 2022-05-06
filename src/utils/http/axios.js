@@ -1,6 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
 import JSONbig from 'json-bigint'
+import { GLOBLE_CONFIG } from '../../config'
+
 const JSONbigToString = JSONbig({ storeAsString: true })
 
 import router, { resetRouter } from '@/router'
@@ -15,11 +17,11 @@ const contentTypes = {
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: 'http://www.cdraindrop.top', // api的base_url
+    baseURL: GLOBLE_CONFIG.host, // api的base_url
     // baseURL: '/api', // api的base_url
     // withCredentials: true, // 跨域请求时是否发送cookies
     crossDomain: true,
-    timeout: 10000, // 请求超时设置
+	timeout: 10000, // 请求超时设置
     transformResponse: [
         function(data) {
             return JSONbigToString.parse(data)
@@ -28,12 +30,12 @@ const service = axios.create({
 })
 // 请求拦截器
 service.interceptors.request.use(
-    config => {
+	config => {
         if (config.contentType && config.contentType == 'multipart') {
             config.headers = {
                 'Content-Type': contentTypes.multipart
             }
-        }
+		}
         config.headers['token'] = sessionStorage.getItem('login-user')
         if (!config.data) {
             config.data = {}
@@ -52,7 +54,7 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-    response => {
+	response => {
         // let res = respone.data; // 如果返回的结果是data.data的，嫌麻烦可以用这个，return res
         if (response.data.code == 501) {
             Message.error(response.data.message)

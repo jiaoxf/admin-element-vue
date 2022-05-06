@@ -31,6 +31,29 @@ const sampleCode = {
             data: data
             // contentType: 'multipart'
         })
+    },
+    sampleCodeTemplate: data => {
+        return service({
+            url: 'web/sampleCode/template',
+            method: 'get',
+            data: data
+        })
+    },
+    sampleCodeImport: data => {
+        return service({
+            url: 'web/sampleCode/import',
+            method: 'POST',
+            data: data,
+            contentType: 'multipart'
+        })
+    },
+    sampleCodeExport: data => {
+        return service({
+            url: 'web/sampleCode/export',
+            method: 'POST',
+            data: data,
+            responseType: 'blob'
+        })
     }
 }
 export default sampleCode

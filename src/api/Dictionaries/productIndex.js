@@ -47,6 +47,29 @@ const productIndex = {
 			data: data
 			// contentType: 'multipart'
 		})
-	}
+	},
+    productIndexTemplate: data => {
+        return service({
+            url: 'web/productIndex/template',
+            method: 'get',
+            data: data
+        })
+    },
+    productIndexImport: data => {
+        return service({
+            url: 'web/productIndex/import',
+            method: 'POST',
+            data: data,
+            contentType: 'multipart'
+        })
+    },
+    productIndexExport: data => {
+        return service({
+            url: 'web/productIndex/export',
+            method: 'POST',
+            data: data,
+            responseType: 'blob'
+        })
+    }
 }
 export default productIndex

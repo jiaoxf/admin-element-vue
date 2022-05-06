@@ -120,7 +120,6 @@
                 <avue-crud
                     ref="crud"
                     :data="data"
-                    v-model="data"
                     :option="option"
                     @row-update="rowUpdate"
                     @row-save="rowSave"

@@ -22,6 +22,8 @@ import sampleCode from './Dictionaries/sampleCode'
 import productData from './Dictionaries/productData'
 // 产品样编码
 import common from './Dictionaries/common'
+// 槽参数
+import grooveParameters from './Dictionaries/grooveParameters'
 
 /**
  * 生产管理
@@ -42,6 +44,9 @@ import statisticsTendency from './ProductionMgmt/statisticsTendency'
 import reportMgmtInformation from './ProductionMgmt/reportMgmtInformation.js'
 // 报警记录
 import reportMgmtRecord from './ProductionMgmt/reportMgmtRecord'
+// 报警配置
+import reportConfig from './ProductionMgmt/reportConfig'
+
 
 /**
  * 物料管理
@@ -78,6 +83,11 @@ import ingredientsQuality from './QualityMgmt/ingredientsQuality'
 import abnormalMonitor from './EnvironmentalMgmt/abnormalMonitor'
 // 指标异常记录
 import abnormalRecord from './EnvironmentalMgmt/abnormalRecord'
+// import reportConfig from './ProductionMgmt/reportConfig';
+
+
+// 主页相关接口
+import dataIndex from './DataIndex/index'
 
 const api = {
 	...layout,
@@ -104,7 +114,12 @@ const api = {
 	...productQuality,
 	...materialsQuality,
 	...ingredientsQuality,
-	...statisticsTendency
+	...statisticsTendency,
+	...reportConfig,
+	...reportMgmtRecord,
+	...reportMgmtInformation,
+	...grooveParameters,
+	...dataIndex
 }
 
 export default api

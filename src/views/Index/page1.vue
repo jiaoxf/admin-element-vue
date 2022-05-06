@@ -57,12 +57,12 @@
                     <web-pies ref="chart7"></web-pies>
                 </div>
                 <div class="rightTop-2">
-                    <span class="title"><span class="title-6">调度指令</span></span>
+                    <span class="title"><span class="title-6">调度指令信息</span></span>
                     <span class="angle1"></span>
                     <span class="angle2"></span>
                     <span class="angle3"></span>
                     <span class="angle4"></span>
-                    <ring ref="chart9" :data="data5"></ring>
+                    <ring ref="chart9" :myData="data5"></ring>
                 </div>
                 <div class="rightTop-3">
                     <span class="title"><span class="title-8">视频监控</span></span>
@@ -73,12 +73,12 @@
 					<iframe class="iframe-vedio" src="http://172.28.1.1:3000/?%E8%A7%86%E9%A2%91" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="rightTop-4">
-                    <span class="title"><span class="title-8">环保指令报警</span></span>
+                    <span class="title"><span class="title-8">指标报警信息</span></span>
                     <span class="angle1"></span>
                     <span class="angle2"></span>
                     <span class="angle3"></span>
                     <span class="angle4"></span>
-                    <ring ref="chart9" :data="data5"></ring>
+                    <environmental ref="chart10" :myData="alarmData"></environmental>
                 </div>
             </el-col>
         </div>
@@ -91,6 +91,7 @@ const webPies = () => import('./page1/webPies.vue')
 const ring = () => import('./page1/ring')
 const lineBar = () => import('./page1/lineBar')
 const brokenLine = () => import('./page1/brokenLine')
+const environmental  = () => import('./page1/environmental.vue')
 export default {
     name: 'page1',
     props: {
@@ -101,7 +102,8 @@ export default {
         webPies, // 世界地图
         ring, // 圆环
         lineBar, //柱图
-        brokenLine
+        brokenLine,
+		environmental // 环保
     },
     data() {
         return {
@@ -221,46 +223,7 @@ export default {
                 ]
             },
             // 环形图数据
-            data5: {
-                title: '环形图数据1',
-                data: [
-                    {
-                        value: 335,
-                        name: '模拟1',
-                        itemStyle: {
-                            color: '#252448'
-                        }
-                    },
-                    {
-                        value: 310,
-                        name: '模拟2',
-                        itemStyle: {
-                            color: '#2ca8fe'
-                        }
-                    },
-                    {
-                        value: 234,
-                        name: '模拟3',
-                        itemStyle: {
-                            color: '#feed2c'
-                        }
-                    },
-                    {
-                        value: 135,
-                        name: '其他',
-                        itemStyle: {
-                            color: '#2871ea'
-                        }
-                    },
-                    {
-                        value: 200,
-                        name: '模拟4',
-                        itemStyle: {
-                            color: '#fe672c'
-                        }
-                    }
-                ]
-            },
+            data5: [],
             // 环形数据2
             data6: {
                 title: '热词传播次数',
@@ -480,10 +443,26 @@ export default {
                     value: 20
                 }
             ],
+			alarmData:[],
             resizeFn: null
         }
     },
-    methods: {},
+    methods: {
+		getHomeDirectiveList(){
+			this.$api.homeDirectiveList().then(res => {
+                if (res.code == 'SUCCESS') {
+					this.data5 = res.data
+                }
+            })
+		},
+		getHomeAlarmList(){
+			this.$api.homeAlarmList().then(res => {
+                if (res.code == 'SUCCESS') {
+					this.alarmData = res.data
+                }
+            })
+		}
+	},
     watch: {
         selectRangeDate: function() {
             for (let i = 1; i < 18; i++) {
@@ -499,6 +478,8 @@ export default {
             }
         }, 500)
         window.addEventListener('resize', this.resizeFn)
+		this.getHomeDirectiveList() // 调度指令
+		this.getHomeAlarmList()  // 指标报警信息
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.resizeFn)
